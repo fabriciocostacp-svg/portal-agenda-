@@ -1,0 +1,4243 @@
+
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Portal Itirapina</title>
+    <meta
+      name="description"
+      content="Guia local de Itirapina: encontre empresas, contatos úteis, horários de ônibus e previsão do tempo."
+    />
+    <meta name="theme-color" content="#0b1518" />
+
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=Space+Grotesk:wght@400;500;700&display=swap");
+
+      :root {
+        --bg: #0b1518;
+        --bg-soft: #12242a;
+        --card: #102028;
+        --line: #2f5a61;
+        --text: #ecf7f4;
+        --muted: #b3d2cd;
+        --accent: #ffd166;
+        --accent-2: #06d6a0;
+        --info: #2f98ff;
+        --btn-bg: rgba(255, 255, 255, 0.05);
+        --btn-border: rgba(255, 255, 255, 0.16);
+        --btn-hover-bg: linear-gradient(135deg, #f0a202, var(--accent));
+        --btn-hover-text: #1f1300;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Space Grotesk", sans-serif;
+        background:
+          radial-gradient(
+            circle at 8% 0%,
+            rgba(255, 209, 102, 0.25),
+            transparent 32%
+          ),
+          radial-gradient(
+            circle at 84% 14%,
+            rgba(6, 214, 160, 0.22),
+            transparent 40%
+          ),
+          linear-gradient(160deg, #071013 0%, var(--bg) 40%, #09161a 100%);
+        color: var(--text);
+        min-height: 100vh;
+      }
+
+      .hero {
+        max-width: 1160px;
+        margin: 0 auto;
+        padding: 28px 160px 8px;
+        animation: slideFade 600ms ease;
+      }
+
+      .hero-kicker {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 12px;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        font-size: 12px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--muted);
+        background: rgba(255, 255, 255, 0.05);
+      }
+
+      .hero h1 {
+        margin: 14px 0 6px;
+        font-family: "Archivo", sans-serif;
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        font-size: clamp(1.8rem, 2.2vw, 2.8rem);
+        text-align: center;
+      }
+
+      .hero p {
+        margin: 0;
+        color: var(--muted);
+        max-width: 640px;
+      }
+
+      .visitas-pill {
+        display: block;
+        width: fit-content;
+        margin: 16px auto 0;
+        padding: 12px 24px;
+        border-radius: 999px;
+        border: 1.5px solid rgba(255, 209, 102, 0.7);
+        background: linear-gradient(
+          135deg,
+          rgba(255, 209, 102, 0.28),
+          rgba(255, 255, 255, 0.06)
+        );
+        color: #ffd166;
+        font-weight: 800;
+        font-size: 17px;
+        letter-spacing: 0.04em;
+        text-shadow: 0 1px 8px rgba(255, 209, 102, 0.35);
+        box-shadow:
+          0 0 0 1px rgba(255, 209, 102, 0.22),
+          0 0 18px rgba(255, 209, 102, 0.15),
+          0 14px 28px rgba(0, 0, 0, 0.28);
+      }
+
+      .clima-wrap {
+        max-width: 1160px;
+        margin: 0 auto;
+        padding: 8px 160px 4px;
+        animation: slideFade 700ms ease;
+      }
+
+      .clima {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 14px;
+        padding: 14px;
+      }
+
+      .clima-topo {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        margin-bottom: 10px;
+      }
+
+      .clima-cidade {
+        font-family: "Archivo", sans-serif;
+        font-size: 1rem;
+      }
+
+      .clima-atual {
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      .clima-atualizado {
+        color: var(--muted);
+        font-size: 12px;
+        margin-top: 2px;
+      }
+
+      .clima-lista {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px;
+      }
+
+      .clima-dia {
+        background: rgba(0, 0, 0, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        padding: 8px;
+        text-align: center;
+        font-size: 13px;
+      }
+
+      .clima-dia strong {
+        display: block;
+        margin-top: 4px;
+      }
+
+      .menu {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        padding: 20px 12px 16px;
+        flex-wrap: wrap;
+        animation: slideFade 780ms ease;
+      }
+
+      .menu button,
+      .menu a {
+        background: var(--btn-bg);
+        border: 1px solid var(--btn-border);
+        padding: 10px 16px;
+        color: var(--text);
+        border-radius: 12px;
+        cursor: pointer;
+        font-family: inherit;
+        font-weight: 700;
+        font-size: 14px;
+        line-height: 1.2;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition:
+          transform 180ms ease,
+          background 180ms ease,
+          border-color 180ms ease,
+          color 180ms ease,
+          box-shadow 180ms ease;
+      }
+
+      .menu-label-mobile {
+        display: none;
+      }
+
+      .menu button:hover,
+      .menu a:hover {
+        transform: translateY(-1px);
+        background: var(--btn-hover-bg);
+        border-color: transparent;
+        color: var(--btn-hover-text);
+      }
+
+      .menu button.active-btn {
+        background: var(--btn-bg);
+        color: var(--text);
+        border-color: rgba(255, 209, 102, 0.85);
+        box-shadow: 0 0 0 1px rgba(255, 209, 102, 0.25);
+      }
+
+      .menu button.active-btn:hover {
+        background: var(--btn-hover-bg);
+        border-color: transparent;
+        color: var(--btn-hover-text);
+        box-shadow: 0 10px 18px rgba(0, 0, 0, 0.18);
+      }
+
+      .busca {
+        text-align: center;
+        margin: 0 auto 18px;
+        max-width: 1160px;
+        padding: 0 160px;
+        animation: slideFade 950ms ease;
+      }
+
+      .busca input {
+        width: 100%;
+        padding: 14px 16px;
+        border-radius: 14px;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        background: rgba(8, 19, 24, 0.7);
+        color: var(--text);
+        font-family: inherit;
+        outline: none;
+      }
+
+      .busca input::placeholder {
+        color: #a8c6c1;
+      }
+
+      .busca input:focus {
+        border-color: rgba(255, 209, 102, 0.75);
+        box-shadow: 0 0 0 3px rgba(255, 209, 102, 0.2);
+      }
+
+      .secao {
+        display: none;
+        padding: 8px 20px 110px;
+      }
+
+      .active {
+        display: block;
+      }
+
+      .grid {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 16px;
+        max-width: 1160px;
+        margin: 0 auto;
+        padding: 8px 140px 20px;
+      }
+
+      .card {
+        width: min(220px, 100%);
+        background: linear-gradient(
+          180deg,
+          rgba(16, 32, 40, 0.95),
+          rgba(10, 20, 25, 0.94)
+        );
+        border-radius: 16px;
+        padding: 14px;
+        text-align: center;
+        border: 2px solid rgba(255, 209, 102, 0.58);
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.08),
+          0 14px 22px rgba(0, 0, 0, 0.3);
+        transform: translateY(8px);
+        opacity: 0;
+        animation: cardRise 460ms ease forwards;
+        transition:
+          transform 180ms ease,
+          box-shadow 180ms ease,
+          border-color 180ms ease,
+          background 180ms ease;
+      }
+
+      .card:hover {
+        transform: translateY(-3px) scale(1.02);
+        border-color: rgba(255, 209, 102, 0.98);
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.1),
+          0 18px 28px rgba(0, 0, 0, 0.34),
+          0 0 0 2px rgba(255, 209, 102, 0.28),
+          0 0 18px rgba(255, 209, 102, 0.22);
+        background: linear-gradient(
+          180deg,
+          rgba(20, 39, 48, 0.98),
+          rgba(12, 24, 30, 0.96)
+        );
+      }
+
+      .card:hover h3 {
+        color: var(--accent);
+      }
+
+      .card:hover .categoria {
+        border-color: rgba(255, 209, 102, 0.28);
+        background: rgba(255, 209, 102, 0.12);
+      }
+
+      .card.patrocinado {
+        border: 1.5px solid rgba(255, 209, 102, 0.95);
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.1),
+          0 14px 22px rgba(0, 0, 0, 0.3),
+          0 0 0 1.5px rgba(255, 209, 102, 0.35),
+          0 0 22px rgba(255, 209, 102, 0.24);
+        background: linear-gradient(
+          180deg,
+          rgba(34, 34, 18, 0.95),
+          rgba(18, 24, 18, 0.94)
+        );
+      }
+
+      .card.vip {
+        border-color: rgba(47, 152, 255, 0.95);
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.12),
+          0 14px 22px rgba(0, 0, 0, 0.3),
+          0 0 0 1px rgba(47, 152, 255, 0.4),
+          0 0 24px rgba(47, 152, 255, 0.24);
+      }
+
+      .card img {
+        width: 84px;
+        height: 84px;
+        object-fit: contain;
+        margin-bottom: 10px;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.06);
+        transition:
+          transform 180ms ease,
+          background 180ms ease,
+          box-shadow 180ms ease;
+      }
+
+      .card:hover img {
+        transform: translateY(-2px) scale(1.04);
+        background: rgba(255, 209, 102, 0.14);
+        box-shadow: 0 10px 18px rgba(0, 0, 0, 0.18);
+      }
+
+      .card h3 {
+        margin: 6px 0 10px;
+        font-family: "Archivo", sans-serif;
+        font-size: 1.03rem;
+      }
+
+      .card-funcionamento {
+        margin: -2px 0 8px;
+        font-size: 12px;
+        color: #c5dfda;
+      }
+
+      .card-descricao {
+        margin: 2px 0 10px;
+        padding: 8px 10px;
+        border-radius: 10px;
+        border: 1px dashed rgba(255, 255, 255, 0.2);
+        background: rgba(255, 209, 102, 0.08);
+        color: #f4dca7;
+        font-size: 12px;
+        line-height: 1.4;
+        max-height: 0;
+        opacity: 0;
+        overflow: hidden;
+        transition:
+          max-height 220ms ease,
+          opacity 200ms ease,
+          margin 180ms ease,
+          padding 180ms ease;
+      }
+
+      .card:hover .card-descricao,
+      .card:focus-within .card-descricao {
+        max-height: 160px;
+        opacity: 1;
+      }
+
+      .btn {
+        display: block;
+        background: var(--btn-bg);
+        border: 1px solid var(--btn-border);
+        padding: 10px;
+        border-radius: 10px;
+        margin-top: 10px;
+        color: var(--text);
+        text-decoration: none;
+        font-weight: 700;
+        transition:
+          transform 180ms ease,
+          background 180ms ease,
+          border-color 180ms ease,
+          color 180ms ease,
+          box-shadow 180ms ease;
+      }
+
+      .btn:hover {
+        transform: translateY(-1px);
+        background: var(--btn-hover-bg);
+        border-color: transparent;
+        color: var(--btn-hover-text);
+        box-shadow: 0 10px 18px rgba(0, 0, 0, 0.18);
+      }
+
+      .categoria {
+        display: inline-block;
+        font-size: 12px;
+        color: #d5e7e4;
+        background: rgba(255, 255, 255, 0.07);
+        border: 1px solid rgba(255, 255, 255, 0.13);
+        border-radius: 999px;
+        padding: 4px 8px;
+        margin-bottom: 8px;
+      }
+
+      .btn.disabled {
+        background: #4f6467;
+        color: #d4dddd;
+        border-color: rgba(255, 255, 255, 0.1);
+        pointer-events: none;
+        opacity: 0.75;
+      }
+
+      .estado-vazio {
+        display: none;
+        text-align: center;
+        color: var(--muted);
+        border: 1px dashed rgba(255, 255, 255, 0.24);
+        border-radius: 14px;
+        padding: 24px;
+        margin: 8px 160px 0;
+        background: rgba(255, 255, 255, 0.03);
+      }
+
+      .rodape-fixo {
+        position: fixed;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: 12px;
+        z-index: 1100;
+        display: flex;
+        gap: 0;
+        background: rgba(7, 16, 20, 0.92);
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        border-radius: 999px;
+        padding: 6px;
+        backdrop-filter: blur(6px);
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.28);
+        opacity: 1;
+        visibility: visible;
+        transition:
+          opacity 220ms ease,
+          transform 220ms ease,
+          visibility 220ms ease;
+      }
+
+      .rodape-fixo.oculto {
+        opacity: 0;
+        visibility: hidden;
+        transform: translateX(-50%) translateY(12px);
+        pointer-events: none;
+      }
+
+      .rodape-btn {
+        border: none;
+        border-radius: 999px;
+        padding: 10px 18px;
+        font-family: inherit;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .rodape-btn.inicio {
+        background: rgba(255, 255, 255, 0.12);
+        color: var(--text);
+      }
+
+      .rodape-btn.saiba {
+        background: linear-gradient(135deg, #2f98ff, #62b9ff);
+        color: #03223d;
+      }
+
+      .sobre-wrap {
+        position: fixed;
+        inset: 0;
+        background: rgba(2, 8, 12, 0.75);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 1250;
+        padding: 14px;
+      }
+
+      .sobre-wrap.active {
+        display: flex;
+      }
+
+      .sobre-card {
+        width: min(560px, 100%);
+        background: linear-gradient(180deg, #102028, #0d1a20);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 16px;
+        padding: 16px;
+      }
+
+      .sobre-card h3 {
+        margin: 0 0 8px;
+        font-family: "Archivo", sans-serif;
+      }
+
+      .sobre-card p {
+        margin: 0 0 12px;
+        color: var(--muted);
+      }
+
+      .sobre-acoes {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .sobre-btn {
+        border: none;
+        border-radius: 10px;
+        padding: 10px 12px;
+        font-family: inherit;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .sobre-btn.admin {
+        background: linear-gradient(135deg, #2f98ff, #62b9ff);
+        color: #03223d;
+      }
+
+      .sobre-btn.fechar {
+        background: rgba(255, 255, 255, 0.1);
+        color: var(--text);
+      }
+
+      .acesso-local-wrap {
+        position: fixed;
+        inset: 0;
+        background: rgba(2, 8, 12, 0.8);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 1260;
+        padding: 14px;
+      }
+
+      .acesso-local-wrap.active {
+        display: flex;
+      }
+
+      .acesso-local-card {
+        width: min(420px, 100%);
+        background: linear-gradient(180deg, #102028, #0d1a20);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 16px;
+        padding: 16px;
+      }
+
+      .acesso-local-card h3 {
+        margin: 0 0 6px;
+        font-family: "Archivo", sans-serif;
+      }
+
+      .acesso-local-card p {
+        margin: 0 0 12px;
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .acesso-local-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .acesso-local-grid label {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        font-size: 13px;
+        color: var(--muted);
+      }
+
+      .acesso-local-grid input {
+        width: 100%;
+        padding: 10px 12px;
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        background: rgba(8, 19, 24, 0.7);
+        color: var(--text);
+        font-family: inherit;
+      }
+
+      .acesso-local-acoes {
+        margin-top: 12px;
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .acesso-local-btn {
+        border: none;
+        border-radius: 10px;
+        padding: 10px 12px;
+        font-family: inherit;
+        font-weight: 800;
+        cursor: pointer;
+      }
+
+      .acesso-local-btn.entrar {
+        background: linear-gradient(135deg, #2f98ff, #62b9ff);
+        color: #03223d;
+      }
+
+      .acesso-local-btn.cancelar {
+        background: rgba(255, 255, 255, 0.1);
+        color: var(--text);
+      }
+
+      .acesso-local-msg {
+        margin-top: 8px;
+        color: #ffc7c7;
+        min-height: 18px;
+        font-size: 13px;
+      }
+
+      .admin-wrap {
+        position: fixed;
+        inset: 0;
+        background: rgba(2, 8, 12, 0.75);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 1200;
+        padding: 14px;
+      }
+
+      .admin-wrap.active {
+        display: flex;
+      }
+
+      .admin-card {
+        width: min(780px, 100%);
+        max-height: 92vh;
+        overflow: auto;
+        background: linear-gradient(180deg, #102028, #0d1a20);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 16px;
+        padding: 16px;
+      }
+
+      .admin-topo {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 12px;
+      }
+
+      .admin-topo h2 {
+        margin: 0;
+        font-family: "Archivo", sans-serif;
+      }
+
+      .admin-topo-acoes {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+
+      .admin-fechar {
+        background: transparent;
+        color: var(--text);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 10px;
+        padding: 8px 10px;
+        cursor: pointer;
+        font-family: inherit;
+      }
+
+      .admin-sair {
+        background: rgba(255, 255, 255, 0.08);
+        color: var(--text);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 10px;
+        padding: 8px 10px;
+        cursor: pointer;
+        font-family: inherit;
+        display: none;
+      }
+
+      .admin-login {
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 12px;
+        padding: 12px;
+        background: rgba(255, 255, 255, 0.03);
+        margin-bottom: 12px;
+      }
+
+      .admin-login h3 {
+        margin: 0 0 8px;
+        font-size: 1rem;
+      }
+
+      .admin-login-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .admin-login-grid label {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        font-size: 13px;
+        color: var(--muted);
+      }
+
+      .admin-login-grid input {
+        width: 100%;
+        padding: 10px 12px;
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        background: rgba(8, 19, 24, 0.7);
+        color: var(--text);
+        font-family: inherit;
+      }
+
+      .admin-login-actions {
+        margin-top: 10px;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .admin-entrar {
+        background: linear-gradient(135deg, #2f98ff, #62b9ff);
+        color: #03223d;
+        border: none;
+        border-radius: 10px;
+        padding: 10px 12px;
+        font-weight: 800;
+        cursor: pointer;
+        font-family: inherit;
+      }
+
+      .admin-hidden {
+        display: none;
+      }
+
+      .admin-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .admin-grid .full {
+        grid-column: 1 / -1;
+      }
+
+      .admin-grid label {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        font-size: 13px;
+        color: var(--muted);
+      }
+
+      .admin-grid input,
+      .admin-grid select,
+      .admin-grid textarea {
+        width: 100%;
+        padding: 10px 12px;
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        background: rgba(8, 19, 24, 0.7);
+        color: var(--text);
+        font-family: inherit;
+      }
+
+      .admin-grid textarea {
+        min-height: 90px;
+        resize: vertical;
+      }
+
+      #adminPlano {
+        font-weight: 700;
+        transition:
+          background 160ms ease,
+          border-color 160ms ease,
+          box-shadow 160ms ease,
+          color 160ms ease;
+      }
+
+      #adminPlano.plano-basico {
+        background: rgba(255, 255, 255, 0.06);
+        border-color: rgba(255, 255, 255, 0.2);
+        color: #d8ebe7;
+      }
+
+      #adminPlano.plano-standard {
+        background: linear-gradient(
+          135deg,
+          rgba(255, 209, 102, 0.25),
+          rgba(255, 209, 102, 0.1)
+        );
+        border-color: rgba(255, 209, 102, 0.55);
+        color: #ffe8b7;
+      }
+
+      #adminPlano.plano-vip {
+        background: linear-gradient(
+          135deg,
+          rgba(47, 152, 255, 0.35),
+          rgba(80, 200, 255, 0.2)
+        );
+        border-color: rgba(47, 152, 255, 0.85);
+        color: #d8efff;
+        box-shadow: 0 0 0 2px rgba(47, 152, 255, 0.22);
+      }
+
+      .admin-telefone-wrap {
+        display: flex;
+        align-items: center;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 10px;
+        background: rgba(8, 19, 24, 0.7);
+      }
+
+      .admin-telefone-prefixo {
+        padding: 10px 10px 10px 12px;
+        color: var(--muted);
+        border-right: 1px solid rgba(255, 255, 255, 0.12);
+        font-size: 13px;
+      }
+
+      .admin-telefone-wrap input {
+        border: none;
+        background: transparent;
+        box-shadow: none;
+      }
+
+      .admin-telefone-wrap input:focus {
+        outline: none;
+      }
+
+      .admin-actions {
+        margin-top: 12px;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .admin-salvar {
+        background: linear-gradient(135deg, #06d6a0, #52f2c5);
+        color: #04291f;
+        border: none;
+        border-radius: 10px;
+        padding: 10px 12px;
+        font-weight: 800;
+        cursor: pointer;
+        font-family: inherit;
+      }
+
+      .admin-salvar-secundario {
+        background: rgba(255, 255, 255, 0.1);
+        color: var(--text);
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        border-radius: 10px;
+        padding: 10px 12px;
+        font-weight: 800;
+        cursor: pointer;
+        font-family: inherit;
+      }
+
+      .admin-msg {
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .lista {
+        max-width: 900px;
+        margin: auto;
+        line-height: 1.8;
+        color: var(--muted);
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 14px;
+        padding: 20px;
+      }
+
+      .cep-wrap {
+        max-width: 900px;
+        margin: 0 auto;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 14px;
+        padding: 14px;
+      }
+
+      .cep-busca {
+        width: 100%;
+        padding: 12px;
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        background: rgba(8, 19, 24, 0.7);
+        color: var(--text);
+        font-family: inherit;
+        margin-bottom: 12px;
+      }
+
+      .cep-lista {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .cep-item {
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 12px;
+        background: rgba(8, 19, 24, 0.65);
+        padding: 10px;
+      }
+
+      .cep-item strong {
+        display: block;
+        margin-bottom: 6px;
+      }
+
+      .cep-item span {
+        display: block;
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .sidebar {
+        position: fixed;
+        top: 0;
+        height: 100%;
+        width: 120px;
+        overflow: hidden;
+        z-index: 999;
+      }
+
+      .sidebar.left {
+        left: 0;
+      }
+
+      .sidebar.right {
+        right: 0;
+      }
+
+      .scroll {
+        display: flex;
+        flex-direction: column;
+        animation: scroll 25s linear infinite;
+      }
+
+      .sidebar.right .scroll {
+        animation-direction: reverse;
+      }
+
+      .mini-card {
+        background: rgba(16, 32, 40, 0.85);
+        margin: 10px;
+        padding: 10px;
+        border-radius: 10px;
+        text-align: center;
+        border: 1px solid rgba(255, 209, 102, 0.5);
+      }
+
+      .mini-card img {
+        width: 60px;
+        height: 60px;
+        object-fit: contain;
+      }
+
+      .mini-nome {
+        font-size: 10px;
+        margin: 6px 0 0;
+      }
+
+      @keyframes scroll {
+        0% {
+          transform: translateY(0);
+        }
+        100% {
+          transform: translateY(-100%);
+        }
+      }
+
+      @keyframes slideFade {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes cardRise {
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      @media (max-width: 900px) {
+        .sidebar {
+          display: none;
+        }
+
+        .hero,
+        .busca,
+        .clima-wrap {
+          padding-left: 14px;
+          padding-right: 14px;
+        }
+
+        .hero {
+          padding-top: 18px;
+        }
+
+        .menu {
+          display: grid;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: 8px;
+          padding: 16px 10px 14px;
+          max-width: 1160px;
+          margin: 0 auto;
+        }
+
+        .menu button,
+        .menu a {
+          min-width: 0;
+          width: 100%;
+          padding: 11px 10px;
+          font-size: 13px;
+        }
+
+        .grid {
+          margin: 0;
+          padding: 8px 10px 20px;
+          gap: 12px;
+        }
+
+        .card {
+          width: calc(50% - 8px);
+          min-width: 156px;
+          padding: 12px;
+        }
+
+        .card-descricao {
+          max-height: 160px;
+          opacity: 1;
+        }
+
+        .estado-vazio {
+          margin: 8px 12px 0;
+        }
+
+        .lista {
+          padding: 16px;
+        }
+
+        .rodape-fixo {
+          left: 50%;
+          right: auto;
+          transform: translateX(-50%);
+          bottom: 8px;
+          border-radius: 999px;
+        }
+
+        .rodape-btn {
+          padding: 9px 14px;
+          font-size: 13px;
+        }
+
+        .cep-lista {
+          grid-template-columns: 1fr;
+        }
+
+        .admin-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .admin-login-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 560px) {
+        .menu {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 6px;
+          padding: 14px 10px 12px;
+        }
+
+        .menu button,
+        .menu a {
+          padding: 10px 8px;
+          font-size: 12px;
+          border-radius: 10px;
+        }
+
+        .menu-label-desktop {
+          display: none;
+        }
+
+        .menu-label-mobile {
+          display: inline;
+        }
+
+        .card {
+          width: 100%;
+        }
+
+        .hero h1 {
+          font-size: 1.7rem;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- ESCADA -->
+    <div class="sidebar left"><div class="scroll" id="leftScroll"></div></div>
+    <div class="sidebar right"><div class="scroll" id="rightScroll"></div></div>
+
+    <header class="hero">
+      <span class="hero-kicker">Guia local de Itirapina</span>
+      <h1>Tudo da cidade em um portal só</h1>
+      <p>
+        Encontre empresas, contatos úteis e horários de ônibus com busca rápida
+        e acesso direto.
+      </p>
+      <div class="visitas-pill" id="contadorVisitas">527 visitas</div>
+    </header>
+
+    <section class="clima-wrap">
+      <div class="clima" id="climaBox">
+        <div class="clima-topo">
+          <div class="clima-cidade">Previsão do tempo em Itirapina</div>
+          <div class="clima-atual" id="climaAtual">Carregando...</div>
+        </div>
+        <div class="clima-atualizado" id="climaAtualizado"></div>
+        <div class="clima-lista" id="climaLista"></div>
+      </div>
+    </section>
+
+    <!-- MENU -->
+    <div class="menu">
+      <button
+        class="active-btn"
+        data-secao="empresas"
+        onclick="mostrar('empresas', this)"
+      >
+        🏢 <span class="menu-label-desktop">Empresas</span
+        ><span class="menu-label-mobile">Emp.</span>
+      </button>
+      <button data-secao="onibus" onclick="mostrar('onibus', this)">
+        🚌 <span class="menu-label-desktop">Ônibus</span
+        ><span class="menu-label-mobile">Ônibus</span>
+      </button>
+      <button data-secao="cepnovo" onclick="mostrar('cepnovo', this)">
+        📮 <span class="menu-label-desktop">CEP Novo</span
+        ><span class="menu-label-mobile">CEP</span>
+      </button>
+      <button type="button" class="menu-acao saiba" id="btnSaibaMais">
+        ℹ️ <span class="menu-label-desktop">Saiba mais</span
+        ><span class="menu-label-mobile">Saiba +</span>
+      </button>
+      <a
+        class="menu-acao anuncie"
+        href="https://wa.me/5519999717781?text=Ol%C3%A1%2C%20quero%20anunciar%20no%20Portal%20Itirapina."
+        target="_blank"
+        rel="noopener noreferrer"
+        >🚀 <span class="menu-label-desktop">Anuncie</span
+        ><span class="menu-label-mobile">Anunciar</span></a
+      >
+    </div>
+
+    <!-- BUSCA -->
+    <div class="busca">
+      <input
+        type="text"
+        id="busca"
+        placeholder="Buscar por nome, categoria ou telefone..."
+        autocomplete="off"
+      />
+    </div>
+
+    <!-- EMPRESAS -->
+    <div id="empresas" class="secao active">
+      <div class="grid" id="grid"></div>
+      <div class="estado-vazio" id="estadoVazio">
+        Nenhuma empresa encontrada.
+      </div>
+    </div>
+
+    <!-- TELEFONES -->
+    <div id="telefones" class="secao">
+      <div class="lista">
+        ALMOXARIFADO 3575-1526 / 3575-2527<br /><br />
+        APAE 3575-1090<br /><br />
+        ASSOCIAÇÃO COMERCIAL 3575-1443<br /><br />
+        BIBLIOTECA 3575-1852<br /><br />
+        BROA 3575-1060 / 3575-1351<br /><br />
+        CÂMARA 3575-1186 / 3575-3006<br /><br />
+        CARTÓRIO 3575-4186<br /><br />
+        CASA AGRICULTURA 3575-1305<br /><br />
+        CENTRO SAÚDE 3575-9030<br /><br />
+        DELEGACIA 3575-1333<br /><br />
+        ELEKTRO 08007010102<br /><br />
+        HOSPITAL 3575-9200<br /><br />
+        POLÍCIA 190<br /><br />
+        PREFEITURA 3575-9000<br /><br />
+        TÁXI 3575-1017 / 3575-1300<br /><br />
+        SANTA CASA LIMEIRA (19)3446-6100<br /><br />
+        SANTA CASA RIO CLARO (19)3535-7000<br /><br />
+      </div>
+    </div>
+
+    <!-- ÔNIBUS -->
+    <div id="onibus" class="secao">
+      <div class="lista">
+        <b>SEGUNDA A SEXTA</b><br /><br />
+
+        Itirapina → São Carlos<br />
+        05:50 • 08:00 • 12:00 • 15:05 • 17:10<br /><br />
+
+        São Carlos → Itirapina<br />
+        07:00 • 11:00 • 13:00 • 16:05 • 18:30<br /><br />
+
+        <b>SÁBADO</b><br /><br />
+
+        Itirapina → São Carlos<br />
+        08:00 • 15:00 • 17:10<br /><br />
+
+        São Carlos → Itirapina<br />
+        07:00 • 13:00 • 16:05<br />
+      </div>
+    </div>
+
+    <div id="cepnovo" class="secao">
+      <div class="cep-wrap">
+        <input
+          class="cep-busca"
+          id="cepBusca"
+          type="text"
+          placeholder="Buscar por rua, bairro ou CEP..."
+          autocomplete="off"
+        />
+        <div class="cep-lista" id="cepLista"></div>
+      </div>
+    </div>
+
+    <footer class="rodape-fixo">
+      <button class="rodape-btn inicio" id="btnInicio">🏠 Início</button>
+    </footer>
+
+    <div class="sobre-wrap" id="sobreWrap">
+      <div class="sobre-card">
+        <h3>Portal Itirapina</h3>
+        <p>
+          Guia local com empresas, contatos úteis, horários de ônibus e previsão
+          do tempo. Para mais informações, procure o administrador clicando no
+          botão Anuncie.
+        </p>
+        <div class="sobre-acoes">
+          <button class="sobre-btn admin" id="abrirAdminNoSobre">
+            🔐 Área Admin
+          </button>
+          <button class="sobre-btn fechar" id="fecharSobre">Fechar</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="acesso-local-wrap" id="acessoLocalWrap">
+      <div class="acesso-local-card">
+        <h3>Acesso Local</h3>
+        <p>Informe usuário e senha para abrir a Área Admin.</p>
+        <form id="acessoLocalForm">
+          <div class="acesso-local-grid">
+            <label>
+              Usuário
+              <input type="text" id="acessoLocalUsuario" autocomplete="off" />
+            </label>
+            <label>
+              Senha
+              <input
+                type="password"
+                id="acessoLocalSenha"
+                autocomplete="current-password"
+              />
+            </label>
+          </div>
+          <div class="acesso-local-acoes">
+            <button type="submit" class="acesso-local-btn entrar">
+              Entrar
+            </button>
+            <button
+              type="button"
+              class="acesso-local-btn cancelar"
+              id="acessoLocalCancelar"
+            >
+              Cancelar
+            </button>
+          </div>
+          <div class="acesso-local-msg" id="acessoLocalMsg"></div>
+        </form>
+      </div>
+    </div>
+
+    <div class="admin-wrap" id="adminWrap">
+      <div class="admin-card">
+        <div class="admin-topo">
+          <h2>Cadastro de Clientes</h2>
+          <div class="admin-topo-acoes">
+            <button class="admin-sair" id="adminSair">Sair</button>
+            <button class="admin-fechar" id="adminFechar">Fechar</button>
+          </div>
+        </div>
+
+        <div class="admin-login" id="adminLoginBox">
+          <h3>Acesso restrito</h3>
+          <div class="admin-login-grid">
+            <label>
+              E-mail admin
+              <input type="email" id="adminUsuario" autocomplete="username" />
+            </label>
+            <label>
+              Senha
+              <input
+                type="password"
+                id="adminSenha"
+                autocomplete="current-password"
+              />
+            </label>
+          </div>
+          <div class="admin-login-actions">
+            <button type="button" class="admin-entrar" id="adminEntrar">
+              Entrar
+            </button>
+            <span class="admin-msg" id="adminLoginMsg"></span>
+          </div>
+        </div>
+
+        <form id="adminForm" class="admin-hidden">
+          <div class="admin-grid">
+            <label>
+              Nome do cliente
+              <input type="text" id="adminNome" required />
+            </label>
+
+            <label>
+              Plano
+              <select id="adminPlano" required>
+                <option value="basico">Básico - R$ 19,90</option>
+                <option value="standard">Standart - R$ 27,90</option>
+                <option value="vip">VIP - R$ 39,90</option>
+              </select>
+            </label>
+
+            <label>
+              Categoria
+              <select id="adminCategoria" required>
+                <option value="Alimentação">Alimentação</option>
+                <option value="Saúde">Saúde</option>
+                <option value="Roupa">Roupa</option>
+                <option value="Serviços">Serviços</option>
+                <option value="Beleza">Beleza</option>
+                <option value="Eventos">Eventos</option>
+                <option value="Artesanato">Artesanato</option>
+                <option value="Automóveis">Automóveis</option>
+                <option value="Uber">Uber</option>
+                <option value="Internet">Internet</option>
+                <option value="Perfumaria">Perfumaria</option>
+                <option value="Seguros">Seguros</option>
+                <option value="Associação">Associação</option>
+                <option value="Bebidas">Bebidas</option>
+                <option value="Gráfica">Gráfica</option>
+                <option value="Marketing">Marketing</option>
+                <option value="Montagem">Montagem</option>
+                <option value="Sobremesas">Sobremesas</option>
+                <option value="Outros">Outros</option>
+              </select>
+            </label>
+
+            <label>
+              Telefone (DDD + número)
+              <div class="admin-telefone-wrap">
+                <span class="admin-telefone-prefixo">+55</span>
+                <input
+                  type="text"
+                  id="adminTelefone"
+                  required
+                  placeholder="19999999999"
+                />
+              </div>
+            </label>
+
+            <label class="full">
+              Endereço
+              <input type="text" id="adminEndereco" />
+            </label>
+
+            <label>
+              Instagram (URL)
+              <input
+                type="text"
+                id="adminInstagram"
+                placeholder="https://instagram.com/..."
+              />
+            </label>
+
+            <label>
+              Site (URL)
+              <input type="text" id="adminSite" placeholder="https://..." />
+            </label>
+
+            <label class="full">
+              Logo por URL
+              <input
+                type="text"
+                id="adminLogoUrl"
+                placeholder="https://.../logo.jpg"
+              />
+            </label>
+
+            <label class="full">
+              Ou enviar imagem do logo
+              <input type="file" id="adminLogoArquivo" accept="image/*" />
+            </label>
+
+            <label class="full">
+              Descrição do serviço (mostrada no card)
+              <textarea
+                id="adminDescricao"
+                placeholder="Ex.: Levamos o buffet completo até você..."
+              ></textarea>
+            </label>
+          </div>
+
+          <div class="admin-actions">
+            <button type="submit" class="admin-salvar">Salvar cliente</button>
+            <button
+              type="button"
+              class="admin-salvar-secundario"
+              id="adminSalvarDescricao"
+            >
+              Salvar só descrição
+            </button>
+            <span class="admin-msg" id="adminMsg"></span>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+      /* EMPRESAS */
+      const STORAGE_EMPRESAS = "portal_itirapina_empresas";
+      const STORAGE_VISITAS = "portal_itirapina_visitas";
+      const STORAGE_DESCRICOES = "portal_itirapina_descricoes";
+      const SUPABASE_URL = "https://upvppojjkuwtbndjyugl.supabase.co";
+      const SUPABASE_ANON_KEY =
+        "sb_publishable_hO4aymyOY4NunXbbDCPubw_Oz3U6ES-";
+      const SUPABASE_TABLE = "empresas";
+
+      const supabaseClient =
+        SUPABASE_URL && SUPABASE_ANON_KEY && window.supabase
+          ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+          : null;
+
+      let descricoesCustomizadas = carregarDescricoesStorage();
+
+      const empresasPadrao = [
+        {
+          nome: "FL Conecta",
+          logo: "assets/01.jpeg",
+          tel: "5519999717781",
+          instagram: "https://instagram.com/flconecta",
+          categoria: "Marketing",
+          palavrasChave: ["marketing", "midias", "publicidade", "social media"],
+          patrocinado: true,
+        },
+        {
+          nome: "Julia Corretora",
+          logo: "assets/JULIA.jpeg",
+          tel: "5519999322673",
+          categoria: "Seguros",
+          patrocinado: true,
+        },
+        {
+          nome: "Clinica Bem Viver",
+          logo: "assets/clinica.jpeg",
+          tel: "5519997731179",
+          endereco: "Avenida 2, nº 29 - Centro, Itirapina - SP",
+          categoria: "Saúde",
+          palavrasChave: ["clinica", "medico", "saude", "unimed", "iamspe"],
+          plano: "vip",
+          patrocinado: true,
+        },
+        {
+          nome: "Rotisseria Arte do Sabor",
+          logo: "assets/rotisseria.jpeg",
+          tel: "5519998507034",
+          endereco: "Rua 2 nº 409 - Centro, Itirapina - SP",
+          categoria: "Alimentação",
+          palavrasChave: ["restaurante", "comida", "marmita", "rotisseria"],
+        },
+        {
+          nome: "Gordo Lanches",
+          logo: "assets/gordo.jpeg",
+          tel: "5519997913079",
+          endereco: "Av. Perimetral, 721 - Jardim Nova Itirapina, Itirapina",
+          instagram: "https://instagram.com/gordolanchesitirapina",
+          categoria: "Alimentação",
+          funcionamento: "Quarta a domingo, das 18:30 às 22:40",
+          palavrasChave: ["lanches", "hamburguer", "lanche", "gordo"],
+        },
+        {
+          nome: "Depósito de Bebida Alves",
+          logo: "assets/alves.jpeg",
+          tel: "5519996662084",
+          categoria: "Bebidas",
+          palavrasChave: [
+            "deposito",
+            "bebidas",
+            "cerveja",
+            "agua",
+            "refrigerante",
+          ],
+        },
+        {
+          nome: "Lolana Lavanderia",
+          logo: "assets/lolana.jpeg",
+          tel: "5519997579086",
+          endereco: "Rua Cinco n°752 Vila Garbi (esquina com Av. 6)",
+          categoria: "Serviços",
+          palavrasChave: ["lavanderia", "lavar roupa", "roupas"],
+        },
+        {
+          nome: "Margem Zero Gráfica",
+          logo: "assets/grafica.jpeg",
+          tel: "5519990195526",
+          categoria: "Gráfica",
+          palavrasChave: ["grafica", "impressao", "cartao", "banner"],
+        },
+        {
+          nome: "Criando Sonhos",
+          logo: "assets/criando-sonhos.jpeg",
+          tel: "5516992513881",
+          categoria: "Eventos",
+        },
+        {
+          nome: "APIB",
+          logo: "assets/logo apib.jpeg",
+          tel: "5519990000000",
+          categoria: "Associação",
+        },
+        {
+          nome: "Vitale Crochê",
+          logo: "assets/vitale.jpeg",
+          tel: "5519991457752",
+          categoria: "Artesanato",
+        },
+        {
+          nome: "Sempre Bella",
+          logo: "assets/SEMPRE BELA.jpeg",
+          tel: "5519997168481",
+          categoria: "Beleza",
+          palavrasChave: ["perfumaria", "cosmeticos", "beleza"],
+        },
+        {
+          nome: "Cheiro de Amor",
+          logo: "assets/cheiro-de-amor.jpeg",
+          tel: "5519996983282",
+          categoria: "Perfumaria",
+          palavrasChave: ["perfumaria", "perfume", "cosmeticos"],
+        },
+        {
+          nome: "Sorvete Americano",
+          logo: "assets/sorvete.jpeg",
+          tel: "5519997216659",
+          categoria: "Sobremesas",
+        },
+        {
+          nome: "Limp Gel",
+          logo: "assets/limp-gel.jpeg",
+          tel: "5519997216659",
+          categoria: "Serviços",
+          plano: "basico",
+          palavrasChave: ["servicos", "limpeza", "limp gel"],
+        },
+        {
+          nome: "Impulsiona Veículos",
+          logo: "assets/impulsionaveiculos.jpeg",
+          tel: "5519981301140",
+          site: "https://impulsionaveiculos.com.br",
+          categoria: "Automóveis",
+          palavrasChave: ["veiculos", "carros", "automoveis"],
+          patrocinado: true,
+        },
+        {
+          nome: "Valdecir Alves",
+          logo: "assets/valdecir.jpeg",
+          tel: "551999474489",
+          categoria: "Uber",
+          plano: "basico",
+          palavrasChave: ["uber", "motorista", "particular", "corridas"],
+        },
+        {
+          nome: "EC Escavações",
+          logo: "assets/ec-escavaçoes.jpeg",
+          tel: "5519998174773",
+          categoria: "Construção",
+          palavrasChave: [
+            "escavacoes",
+            "piscinas",
+            "alicerces",
+            "terraplenagem",
+          ],
+        },
+        {
+          nome: "Gu Espetaria e Choperia",
+          logo: "assets/gu.jpeg",
+          tel: "5519996150744",
+          categoria: "Alimentação",
+          palavrasChave: ["espetaria", "choperia", "petiscos", "eventos"],
+        },
+        {
+          nome: "Buffet em Casa Gourmet",
+          logo: "assets/buffet.jpeg",
+          tel: "551997750869",
+          categoria: "Eventos",
+          instagram: "https://instagram.com/buffetemcasagourmet",
+          descricao:
+            "Levamos o buffet completo até você! 🏠<br>🍱 Cardápios Gourmet | Garçons | Logística Completa<br>🎉 Casamentos, Aniversários e Eventos Corporativos",
+          palavrasChave: [
+            "buffet",
+            "casamentos",
+            "aniversarios",
+            "eventos corporativos",
+            "gourmet",
+            "gastronomia",
+            "@buffetemcasagourmet",
+          ],
+        },
+        {
+          nome: "Iara Ponfilio",
+          logo: "assets/iara-uber.jpeg",
+          tel: "5519997606453",
+          categoria: "Uber",
+          palavrasChave: ["uber", "motorista", "conveniencias", "servicos"],
+        },
+      ];
+
+      const cepNovoDados = [
+        {
+          logradouro: "Avenida 2",
+          bairro: "Centro",
+          cep: "13530-001",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Avenida 1",
+          bairro: "Centro",
+          cep: "13530-003",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Avenida 3",
+          bairro: "Centro",
+          cep: "13530-005",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Avenida 5",
+          bairro: "Centro",
+          cep: "13530-007",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Avenida 7",
+          bairro: "Centro",
+          cep: "13530-009",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Avenida 9",
+          bairro: "Centro",
+          cep: "13530-011",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Avenida 9A",
+          bairro: "Centro",
+          cep: "13530-013",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Avenida 11",
+          bairro: "Centro",
+          cep: "13530-015",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 7",
+          bairro: "Centro",
+          cep: "13530-017",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 7A",
+          bairro: "Centro",
+          cep: "13530-019",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 6",
+          bairro: "Centro",
+          cep: "13530-021",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 5",
+          bairro: "Centro",
+          cep: "13530-023",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 4",
+          bairro: "Centro",
+          cep: "13530-025",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 3",
+          bairro: "Centro",
+          cep: "13530-027",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 2",
+          bairro: "Centro",
+          cep: "13530-029",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 1",
+          bairro: "Centro",
+          cep: "13530-031",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Avenida Vereador José Roberto Marino",
+          bairro: "Jardim Lemos",
+          cep: "13530-040",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 2",
+          bairro: "Jardim Lemos",
+          cep: "13530-042",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 3",
+          bairro: "Jardim Lemos",
+          cep: "13530-044",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 4",
+          bairro: "Jardim Lemos",
+          cep: "13530-046",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 5",
+          bairro: "Jardim Lemos",
+          cep: "13530-048",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 6",
+          bairro: "Jardim Lemos",
+          cep: "13530-050",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 7",
+          bairro: "Jardim Lemos",
+          cep: "13530-052",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua José de Ponte",
+          bairro: "Jardim dos Eucaliptos",
+          cep: "13530-110",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua Armélio Guariento",
+          bairro: "Jardim dos Eucaliptos",
+          cep: "13530-112",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua Luiz Ferreira Salles",
+          bairro: "Jardim dos Eucaliptos",
+          cep: "13530-114",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua Leopoldo Lucas",
+          bairro: "Jardim dos Eucaliptos",
+          cep: "13530-116",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Avenida Padre José Aparecido Chio",
+          bairro: "Jardim dos Eucaliptos",
+          cep: "13530-118",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua Gentil Firmino Correa",
+          bairro: "Jardim dos Eucaliptos",
+          cep: "13530-120",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 1",
+          bairro: "Jardim dos Indaiás",
+          cep: "13530-130",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 2",
+          bairro: "Jardim dos Indaiás",
+          cep: "13530-132",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 3",
+          bairro: "Jardim dos Indaiás",
+          cep: "13530-134",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 4",
+          bairro: "Jardim dos Indaiás",
+          cep: "13530-136",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Avenida José Bacciotti",
+          bairro: "Jardim dos Indaiás",
+          cep: "13530-138",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 7 B",
+          bairro: "Vila Santa Cruz",
+          cep: "13530-140",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 7 C",
+          bairro: "Vila Santa Cruz",
+          cep: "13530-142",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 7 D",
+          bairro: "Vila Santa Cruz",
+          cep: "13530-144",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 8",
+          bairro: "Vila Santa Cruz",
+          cep: "13530-146",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Avenida 23",
+          bairro: "Vila Santa Cruz",
+          cep: "13530-148",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Avenida 21",
+          bairro: "Vila Santa Cruz",
+          cep: "13530-150",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Avenida 19",
+          bairro: "Vila Santa Cruz",
+          cep: "13530-152",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Avenida 17",
+          bairro: "Vila Santa Cruz",
+          cep: "13530-154",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Avenida 15",
+          bairro: "Vila Santa Cruz",
+          cep: "13530-156",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Avenida 13",
+          bairro: "Vila Santa Cruz",
+          cep: "13530-158",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Avenida 11",
+          bairro: "Vila Santa Cruz",
+          cep: "13530-160",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Avenida 9",
+          bairro: "Vila Santa Cruz",
+          cep: "13530-162",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 5",
+          bairro: "Vila Cianelli",
+          cep: "13530-170",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 6",
+          bairro: "Vila Cianelli",
+          cep: "13530-172",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 7",
+          bairro: "Vila Cianelli",
+          cep: "13530-174",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 8",
+          bairro: "Vila Cianelli",
+          cep: "13530-176",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 9",
+          bairro: "Vila Cianelli",
+          cep: "13530-178",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Avenida Cianelli",
+          bairro: "Vila Cianelli",
+          cep: "13530-180",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 10",
+          bairro: "Vila Cianelli",
+          cep: "13530-182",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 11",
+          bairro: "Vila Cianelli",
+          cep: "13530-184",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 12",
+          bairro: "Vila Cianelli",
+          cep: "13530-186",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Avenida 9",
+          bairro: "Vila Cianelli",
+          cep: "13530-188",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Avenida 7",
+          bairro: "Vila Cianelli",
+          cep: "13530-190",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Avenida 5",
+          bairro: "Vila Cianelli",
+          cep: "13530-192",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Avenida 3",
+          bairro: "Vila Cianelli",
+          cep: "13530-194",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Avenida 1",
+          bairro: "Vila Cianelli",
+          cep: "13530-186",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Avenida 2",
+          bairro: "Vila Cianelli",
+          cep: "13530-188",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Avenida 4",
+          bairro: "Vila Cianelli",
+          cep: "13530-200",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua Coaracy",
+          bairro: "Parque das Garças",
+          cep: "13530-240",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua Potira",
+          bairro: "Parque das Garças",
+          cep: "13530-242",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua Caiapós",
+          bairro: "Parque das Garças",
+          cep: "13530-244",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua Tupiniquins",
+          bairro: "Parque das Garças",
+          cep: "13530-246",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua Cataguases",
+          bairro: "Parque das Garças",
+          cep: "13530-248",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua Jaguaruçu",
+          bairro: "Parque das Garças",
+          cep: "13530-250",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Avenida Marginal A",
+          bairro: "Parque das Garças",
+          cep: "13530-252",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Avenida Otoniel Augusto Rodrigues",
+          bairro: "Jardim Nova Itirapina",
+          cep: "13530-260",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Avenida Marginal A",
+          bairro: "Jardim Nova Itirapina",
+          cep: "13530-262",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua Bororós",
+          bairro: "Jardim Nova Itirapina",
+          cep: "13530-264",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua Tupiniquins",
+          bairro: "Jardim Nova Itirapina",
+          cep: "13530-268",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua Jaguaruçu",
+          bairro: "Jardim Nova Itirapina",
+          cep: "13530-268",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua Araribóia",
+          bairro: "Jardim Nova Itirapina",
+          cep: "13530-270",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua Jurupari",
+          bairro: "Jardim Nova Itirapina",
+          cep: "13530-272",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua Aimorés",
+          bairro: "Jardim Nova Itirapina",
+          cep: "13530-274",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Avenida Perimetral",
+          bairro: "Jardim Nova Itirapina",
+          cep: "13530-276",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua Oitibó",
+          bairro: "Jardim Nova Itirapina",
+          cep: "13530-278",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua Caiapós",
+          bairro: "Jardim Nova Itirapina",
+          cep: "13530-280",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua Ceci",
+          bairro: "Jardim Nova Itirapina",
+          cep: "13530-282",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua Jaci",
+          bairro: "Jardim Nova Itirapina",
+          cep: "13530-284",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua Cataguases",
+          bairro: "Jardim Nova Itirapina",
+          cep: "13530-286",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua Carijós",
+          bairro: "Jardim Nova Itirapina",
+          cep: "13530-288",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua Tupi",
+          bairro: "Jardim Nova Itirapina",
+          cep: "13530-290",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua Tapajós",
+          bairro: "Jardim Nova Itirapina",
+          cep: "13530-292",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua Baturete",
+          bairro: "Jardim Nova Itirapina",
+          cep: "13530-294",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua Jurema",
+          bairro: "Jardim Nova Itirapina",
+          cep: "18530-296",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua Iracema",
+          bairro: "Jardim Nova Itirapina",
+          cep: "13530-298",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Avenida Perimetral",
+          bairro: "Jardim Progresso",
+          cep: "13530-300",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 3",
+          bairro: "Jardim Progresso",
+          cep: "13530-302",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 1",
+          bairro: "Jardim Progresso",
+          cep: "13530-304",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 2",
+          bairro: "Jardim Progresso",
+          cep: "13530-306",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rodovia Engenheiro Paulo Nilo Romano",
+          bairro: "Zona Industrial I",
+          cep: "13530-350",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Estrada Municipal Doutor Fernando de Arruda Botelho",
+          bairro: "Vila Pinhal",
+          cep: "13530-450",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Estrada Municipal Doutor Fernando de Arruda Botelho",
+          bairro: "Balneário Santo Antônio",
+          cep: "13530-460",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 6",
+          bairro: "Vila Fepasa",
+          cep: "13531-000",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua C",
+          bairro: "Vila Fepasa",
+          cep: "13531-002",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua A",
+          bairro: "Vila Fepasa",
+          cep: "13531-004",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua B",
+          bairro: "Vila Fepasa",
+          cep: "13531-006",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 1",
+          bairro: "Vila Fepasa",
+          cep: "13531-008",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 1",
+          bairro: "Vila Garbi",
+          cep: "13531-010",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 2",
+          bairro: "Vila Garbi",
+          cep: "13531-012",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 3",
+          bairro: "Vila Garbi",
+          cep: "13531-014",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 4",
+          bairro: "Vila Garbi",
+          cep: "13531-016",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 5",
+          bairro: "Vila Garbi",
+          cep: "13531-018",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Avenida 4",
+          bairro: "Vila Garbi",
+          cep: "13531-020",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Avenida 6",
+          bairro: "Vila Garbi",
+          cep: "13531-022",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Avenida 8",
+          bairro: "Vila Garbi",
+          cep: "13531-024",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Avenida 10",
+          bairro: "Vila Garbi",
+          cep: "13531-026",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Avenida 10",
+          bairro: "Vila Monte Alegre",
+          cep: "13531-030",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Avenida 10A",
+          bairro: "Vila Monte Alegre",
+          cep: "13531-032",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Avenida 10B",
+          bairro: "Vila Monte Alegre",
+          cep: "13531-034",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Avenida 12",
+          bairro: "Vila Monte Alegre",
+          cep: "13531-036",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Avenida 14",
+          bairro: "Vila Monte Alegre",
+          cep: "13531-038",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Avenida José Geraldo Parise Bianchini",
+          bairro: "Vila Monte Alegre",
+          cep: "13531-040",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 5",
+          bairro: "Vila Monte Alegre",
+          cep: "13531-042",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 4",
+          bairro: "Vila Monte Alegre",
+          cep: "13531-044",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 3",
+          bairro: "Vila Monte Alegre",
+          cep: "13531-046",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Avenida 1",
+          bairro: "Residencial Dallas",
+          cep: "13531-080",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Avenida 2",
+          bairro: "Residencial Dallas",
+          cep: "13531-082",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Avenida 3",
+          bairro: "Residencial Dallas",
+          cep: "13531-084",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 1",
+          bairro: "Residencial Dallas",
+          cep: "13531-086",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 2",
+          bairro: "Residencial Dallas",
+          cep: "13531-088",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 3",
+          bairro: "Residencial Dallas",
+          cep: "13531-090",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 4",
+          bairro: "Residencial Dallas",
+          cep: "13531-092",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 2",
+          bairro: "Jardim Europa",
+          cep: "13531-100",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 3",
+          bairro: "Jardim Europa",
+          cep: "13531-102",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 4",
+          bairro: "Jardim Europa",
+          cep: "13531-104",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 5",
+          bairro: "Jardim Europa",
+          cep: "13531-106",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 1",
+          bairro: "Jardim Europa",
+          cep: "13531-108",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 6",
+          bairro: "Jardim Europa",
+          cep: "13531-110",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Avenida Governador Mário Covas",
+          bairro: "Distrito Industrial",
+          cep: "13531-120",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Avenida 2",
+          bairro: "Distrito Industrial",
+          cep: "13531-122",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Avenida 1",
+          bairro: "Distrito Industrial",
+          cep: "13531-124",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Avenida 3",
+          bairro: "Distrito Industrial",
+          cep: "13531-126",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Avenida 5",
+          bairro: "Distrito Industrial",
+          cep: "13531-128",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Avenida 6",
+          bairro: "Distrito Industrial",
+          cep: "13531-130",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 1",
+          bairro: "Distrito Industrial",
+          cep: "13531-132",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 2",
+          bairro: "Distrito Industrial",
+          cep: "13531-134",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua Euvira Gobbi",
+          bairro: "Jardim Gobbi II",
+          cep: "13531-140",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua Amélia Andriolli Gobbi",
+          bairro: "Jardim Gobbi II",
+          cep: "13531-142",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua Ercília Gobbi",
+          bairro: "Jardim Gobbi II",
+          cep: "13531-144",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua Guido Gobbi",
+          bairro: "Jardim Gobbi II",
+          cep: "13531-146",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua Humberto Gobbi",
+          bairro: "Jardim Gobbi II",
+          cep: "13531-148",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua Dionysio Gobbi",
+          bairro: "Jardim Gobbi",
+          cep: "13531-150",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua Rosângela Aparecida Grossi",
+          bairro: "Jardim Gobbi",
+          cep: "13531-152",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua Jandira Grossi",
+          bairro: "Jardim Gobbi",
+          cep: "13531-154",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua Antônio Grossi",
+          bairro: "Jardim Gobbi",
+          cep: "13531-156",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua José Grossi",
+          bairro: "Jardim Gobbi",
+          cep: "13531-158",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua Sebastião Grossi",
+          bairro: "Jardim Gobbi",
+          cep: "13531-160",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Avenida Vereador Evaldo José Nalin",
+          bairro: "Jardim Gobbi",
+          cep: "13531-162",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 1",
+          bairro: "Jardim do Sol",
+          cep: "13531-170",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 2",
+          bairro: "Jardim do Sol",
+          cep: "13531-172",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 3",
+          bairro: "Jardim do Sol",
+          cep: "13531-174",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 4",
+          bairro: "Jardim do Sol",
+          cep: "13531-176",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 5",
+          bairro: "Jardim do Sol",
+          cep: "13531-178",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua A",
+          bairro: "Jardim do Sol",
+          cep: "13531-180",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua B",
+          bairro: "Jardim do Sol",
+          cep: "13531-182",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua C",
+          bairro: "Jardim do Sol",
+          cep: "13531-184",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 1",
+          bairro: "Jardim América",
+          cep: "13531-190",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 12",
+          bairro: "Jardim América",
+          cep: "13531-192",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 13",
+          bairro: "Jardim América",
+          cep: "13531-194",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 14",
+          bairro: "Jardim América",
+          cep: "13531-196",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 15",
+          bairro: "Jardim América",
+          cep: "13531-198",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 2",
+          bairro: "Jardim América",
+          cep: "13531-200",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 3",
+          bairro: "Jardim América",
+          cep: "13531-202",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 4",
+          bairro: "Jardim América",
+          cep: "13531-204",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 5",
+          bairro: "Jardim América",
+          cep: "13531-206",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 6",
+          bairro: "Jardim América",
+          cep: "13531-208",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 7",
+          bairro: "Jardim América",
+          cep: "13531-210",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 8",
+          bairro: "Jardim América",
+          cep: "13531-212",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 9",
+          bairro: "Jardim América",
+          cep: "13531-214",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 10",
+          bairro: "Jardim América",
+          cep: "13531-216",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 11",
+          bairro: "Jardim América",
+          cep: "13531-218",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Avenida Marginal",
+          bairro: "Planalto Serra Verde",
+          cep: "13531-350",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 2",
+          bairro: "Planalto Serra Verde",
+          cep: "13531-352",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 4",
+          bairro: "Planalto Serra Verde",
+          cep: "13531-354",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 6",
+          bairro: "Planalto Serra Verde",
+          cep: "13531-356",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 8",
+          bairro: "Planalto Serra Verde",
+          cep: "13531-358",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 10",
+          bairro: "Planalto Serra Verde",
+          cep: "13531-360",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 12",
+          bairro: "Planalto Serra Verde",
+          cep: "13531-362",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 14",
+          bairro: "Planalto Serra Verde",
+          cep: "13531-364",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 16",
+          bairro: "Planalto Serra Verde",
+          cep: "13531-366",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 18",
+          bairro: "Planalto Serra Verde",
+          cep: "13531-368",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 20",
+          bairro: "Planalto Serra Verde",
+          cep: "13531-370",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 22",
+          bairro: "Planalto Serra Verde",
+          cep: "13531-372",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 24",
+          bairro: "Planalto Serra Verde",
+          cep: "13531-374",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 9",
+          bairro: "Planalto Serra Verde",
+          cep: "13531-376",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 5",
+          bairro: "Planalto Serra Verde",
+          cep: "13531-378",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 7",
+          bairro: "Planalto Serra Verde",
+          cep: "13531-380",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 3",
+          bairro: "Planalto Serra Verde",
+          cep: "13531-382",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua 1",
+          bairro: "Planalto Serra Verde",
+          cep: "13531-384",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Área Rural",
+          bairro: "Área Rural de Itirapina",
+          cep: "13532-899",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua Família Guimarães",
+          bairro: "Centro (Itaqueri da Serra)",
+          cep: "13533-000",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Rua Família Feltrin",
+          bairro: "Centro (Itaqueri da Serra)",
+          cep: "13533-002",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Avenida Família Ferreira",
+          bairro: "Centro (Itaqueri da Serra)",
+          cep: "13533-004",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Avenida Família Baldissera",
+          bairro: "Centro (Itaqueri da Serra)",
+          cep: "13533-006",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Avenida Família Leite",
+          bairro: "Centro (Itaqueri da Serra)",
+          cep: "13533-008",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Avenida Família Simões",
+          bairro: "Centro (Itaqueri da Serra)",
+          cep: "13533-010",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+        {
+          logradouro: "Área Rural",
+          bairro: "Área Rural de Itaqueri da Serra",
+          cep: "13533-899",
+          cidade: "Itirapina",
+          estado: "SP",
+        },
+      ];
+
+      function planoParaPatrocinio(plano) {
+        return plano === "standard" || plano === "vip";
+      }
+
+      function normalizarEmpresa(empresa) {
+        const plano =
+          empresa.plano || (empresa.patrocinado ? "standard" : "basico");
+        const descricao = String(empresa.descricao || "").trim();
+        return {
+          ...empresa,
+          descricao: descricao || undefined,
+          plano,
+          patrocinado: planoParaPatrocinio(plano),
+        };
+      }
+
+      function carregarDescricoesStorage() {
+        try {
+          const bruto = localStorage.getItem(STORAGE_DESCRICOES);
+          if (!bruto) return {};
+          const mapa = JSON.parse(bruto);
+          if (!mapa || typeof mapa !== "object" || Array.isArray(mapa)) {
+            return {};
+          }
+          return mapa;
+        } catch (erro) {
+          return {};
+        }
+      }
+
+      function salvarDescricoesStorage(mapa) {
+        localStorage.setItem(STORAGE_DESCRICOES, JSON.stringify(mapa));
+      }
+
+      function chaveDescricaoEmpresa(nome) {
+        return normalizarTexto(nome);
+      }
+
+      function obterDescricaoCustomizada(nome) {
+        const chave = chaveDescricaoEmpresa(nome);
+        return String(descricoesCustomizadas[chave] || "").trim();
+      }
+
+      function salvarDescricaoCustomizada(nome, descricao) {
+        const chave = chaveDescricaoEmpresa(nome);
+        if (!chave) return;
+        const texto = String(descricao || "").trim();
+
+        if (texto) {
+          descricoesCustomizadas[chave] = texto;
+        } else {
+          delete descricoesCustomizadas[chave];
+        }
+
+        salvarDescricoesStorage(descricoesCustomizadas);
+      }
+
+      function carregarEmpresasStorage() {
+        try {
+          const bruto = localStorage.getItem(STORAGE_EMPRESAS);
+          if (!bruto) {
+            const iniciais = empresasPadrao.map(normalizarEmpresa);
+            localStorage.setItem(STORAGE_EMPRESAS, JSON.stringify(iniciais));
+            return iniciais;
+          }
+          const lista = JSON.parse(bruto);
+          if (!Array.isArray(lista)) throw new Error("Formato inválido");
+          return lista.map(normalizarEmpresa);
+        } catch (erro) {
+          return empresasPadrao.map(normalizarEmpresa);
+        }
+      }
+
+      function salvarEmpresasStorage(lista) {
+        localStorage.setItem(STORAGE_EMPRESAS, JSON.stringify(lista));
+      }
+
+      let empresas = [];
+
+      function supabaseConfigurado() {
+        return Boolean(supabaseClient);
+      }
+
+      function normalizarPalavrasChave(valor) {
+        if (Array.isArray(valor)) return valor;
+        if (!valor) return [];
+        if (typeof valor === "string") {
+          return valor
+            .split(",")
+            .map((item) => item.trim())
+            .filter(Boolean);
+        }
+        return [];
+      }
+
+      function mapearEmpresaBanco(registro) {
+        return normalizarEmpresa({
+          ...registro,
+          palavrasChave: normalizarPalavrasChave(
+            registro.palavras_chave ?? registro.palavrasChave,
+          ),
+        });
+      }
+
+      function mapearEmpresaParaBanco(empresa) {
+        return {
+          nome: empresa.nome,
+          logo: empresa.logo,
+          tel: empresa.tel,
+          categoria: empresa.categoria,
+          endereco: empresa.endereco || null,
+          instagram: empresa.instagram || null,
+          site: empresa.site || null,
+          plano: empresa.plano,
+          patrocinado: Boolean(empresa.patrocinado),
+          palavras_chave: normalizarPalavrasChave(empresa.palavrasChave),
+        };
+      }
+
+      function aplicarAjustesEmpresas(lista) {
+        const base = (lista || [])
+          .filter(
+            (empresa) => normalizarTexto(empresa.nome) !== "claudio montador",
+          )
+          .map((empresa) => {
+            const nome = normalizarTexto(empresa.nome);
+            if (
+              nome === "lolana lavanderia" &&
+              !String(empresa.endereco || "").trim()
+            ) {
+              return {
+                ...empresa,
+                endereco: "Rua Cinco n°752 Vila Garbi (esquina com Av. 6)",
+              };
+            }
+            if (nome === "fl conecta") {
+              return {
+                ...empresa,
+                categoria: "Marketing",
+              };
+            }
+            if (
+              nome === "rotisseria arte do sabor" &&
+              !String(empresa.endereco || "").trim()
+            ) {
+              return {
+                ...empresa,
+                endereco: "Rua 2 nº 409 - Centro, Itirapina - SP",
+              };
+            }
+            if (
+              nome === "gordo lanches" &&
+              !String(empresa.funcionamento || "").trim()
+            ) {
+              return {
+                ...empresa,
+                funcionamento: "Quarta a domingo, das 18:30 às 22:40",
+              };
+            }
+            return empresa;
+          });
+
+        const existeValdecir = base.some(
+          (empresa) => normalizarTexto(empresa.nome) === "valdecir alves",
+        );
+        const existeLimpGel = base.some(
+          (empresa) => normalizarTexto(empresa.nome) === "limp gel",
+        );
+
+        if (!existeValdecir) {
+          base.unshift(
+            normalizarEmpresa({
+              nome: "Valdecir Alves",
+              logo: "assets/valdecir.jpeg",
+              tel: "551999474489",
+              categoria: "Uber",
+              plano: "basico",
+              palavrasChave: ["uber", "motorista", "particular", "corridas"],
+            }),
+          );
+        }
+
+        if (!existeLimpGel) {
+          base.unshift(
+            normalizarEmpresa({
+              nome: "Limp Gel",
+              logo: "assets/limp-gel.jpeg",
+              tel: "5519997216659",
+              categoria: "Serviços",
+              plano: "basico",
+              palavrasChave: ["servicos", "limpeza", "limp gel"],
+            }),
+          );
+        }
+
+        const existeAlves = base.some(
+          (empresa) =>
+            normalizarTexto(empresa.nome) === "deposito de bebida alves",
+        );
+        const existeGordo = base.some(
+          (empresa) => normalizarTexto(empresa.nome) === "gordo lanches",
+        );
+
+        if (!existeAlves) {
+          base.push(
+            normalizarEmpresa({
+              nome: "Depósito de Bebida Alves",
+              logo: "assets/alves.jpeg",
+              tel: "5519996662084",
+              categoria: "Bebidas",
+              palavrasChave: [
+                "deposito",
+                "bebidas",
+                "cerveja",
+                "agua",
+                "refrigerante",
+              ],
+            }),
+          );
+        }
+
+        if (!existeGordo) {
+          base.push(
+            normalizarEmpresa({
+              nome: "Gordo Lanches",
+              logo: "assets/gordo.jpeg",
+              tel: "5519997913079",
+              endereco:
+                "Av. Perimetral, 721 - Jardim Nova Itirapina, Itirapina",
+              instagram: "https://instagram.com/gordolanchesitirapina",
+              categoria: "Alimentação",
+              funcionamento: "Quarta a domingo, das 18:30 às 22:40",
+              palavrasChave: ["lanches", "hamburguer", "lanche", "gordo"],
+            }),
+          );
+        }
+
+        const extrasObrigatorios = [
+          {
+            nome: "EC Escavações",
+            logo: "assets/ec-escavaçoes.jpeg",
+            tel: "5519998174773",
+            categoria: "Construção",
+            plano: "basico",
+            palavrasChave: [
+              "escavacoes",
+              "piscinas",
+              "alicerces",
+              "terraplenagem",
+            ],
+          },
+          {
+            nome: "Gu Espetaria e Choperia",
+            logo: "assets/gu.jpeg",
+            tel: "5519996150744",
+            categoria: "Alimentação",
+            plano: "basico",
+            palavrasChave: ["espetaria", "choperia", "petiscos", "eventos"],
+          },
+          {
+            nome: "Iara Ponfilio",
+            logo: "assets/iara-uber.jpeg",
+            tel: "5519997606453",
+            categoria: "Uber",
+            plano: "basico",
+            palavrasChave: ["uber", "motorista", "conveniencias", "servicos"],
+          },
+        ];
+
+        extrasObrigatorios.forEach((extra) => {
+          const existe = base.some(
+            (empresa) =>
+              normalizarTexto(empresa.nome) === normalizarTexto(extra.nome),
+          );
+          if (!existe) {
+            base.push(normalizarEmpresa(extra));
+          }
+        });
+
+        return base;
+      }
+
+      function obterDescricaoServico(empresa) {
+        const nome = normalizarTexto(empresa.nome);
+        const descricaoCustomizada = obterDescricaoCustomizada(empresa.nome);
+        if (descricaoCustomizada) return descricaoCustomizada;
+
+        if (String(empresa.descricao || "").trim()) {
+          return String(empresa.descricao).trim();
+        }
+
+        const descricoesPorNome = {
+          "fl conecta":
+            "Estratégias de marketing digital e social media para fortalecer sua marca.",
+          "julia corretora":
+            "Consultoria em seguros para proteger sua família, patrimônio e negócio.",
+          "clinica bem viver":
+            "A sua saúde em boas mãos com atendimento humanizado e dedicado.",
+          "rotisseria arte do sabor":
+            "Refeições e marmitas com sabor caseiro para facilitar seu dia a dia.",
+          "gordo lanches":
+            "Lanches artesanais caprichados para matar a fome com muito sabor.",
+          "deposito de bebida alves":
+            "Bebidas geladas para seu dia a dia, churrasco e confraternizações.",
+          "lolana lavanderia":
+            "Lavanderia prática e cuidadosa para roupas limpas e bem tratadas.",
+          "margem zero grafica":
+            "Impressos e materiais gráficos com qualidade para sua divulgação.",
+          "criando sonhos":
+            "Decoração e produção para transformar seu evento em momento especial.",
+          apib: "Associação local com apoio à comunidade e ações de integração.",
+          "vitale croche":
+            "Peças em crochê feitas à mão com carinho, estilo e exclusividade.",
+          "sempre bella":
+            "Perfumaria e cosméticos para realçar sua beleza todos os dias.",
+          "cheiro de amor":
+            "Fragrâncias e cosméticos para presentear e se cuidar com charme.",
+          "sorvete americano":
+            "O sabor da infância na sua festa, com alegria para todas as idades.",
+          "limp gel":
+            "Limpeza profissional de pisos e pedras para renovar seus ambientes.",
+          "impulsiona veiculos":
+            "Compra, venda e oportunidades em veículos com atendimento de confiança.",
+          "valdecir alves":
+            "Motorista particular com corridas seguras, pontuais e confortáveis.",
+          "ec escavacoes":
+            "Serviços de escavações, abertura de piscinas e execução de alicerces.",
+          "gu espetaria e choperia":
+            "Espetaria e choperia para encontros, festas e eventos em geral.",
+          "iara ponfilio":
+            "Serviço de Baby Uber, corridas urbanas e conveniências com atendimento dedicado.",
+        };
+
+        const descricaoNome = descricoesPorNome[nome];
+        if (descricaoNome) return descricaoNome;
+
+        if (empresa.categoria === "Uber") {
+          return "Transporte particular com foco em pontualidade e segurança.";
+        }
+
+        if (empresa.categoria === "Alimentação") {
+          return "Opções de alimentação para o dia a dia e eventos locais.";
+        }
+
+        if (empresa.categoria === "Eventos") {
+          return "Soluções completas para eventos sociais e corporativos.";
+        }
+
+        if (empresa.categoria === "Serviços") {
+          return "Atendimento de serviços gerais com suporte local em Itirapina.";
+        }
+
+        return "Atendimento local com qualidade e suporte para o que você precisa.";
+      }
+
+      function iniciarContadorVisitas() {
+        const alvo = document.getElementById("contadorVisitas");
+        if (!alvo) return;
+        let total = Number(localStorage.getItem(STORAGE_VISITAS));
+        if (!Number.isFinite(total) || total < 527) {
+          total = 527;
+        }
+        total += 1;
+        localStorage.setItem(STORAGE_VISITAS, String(total));
+        alvo.textContent = `${total} visitas`;
+      }
+
+      function renderizarCepNovo(lista) {
+        const cepLista = document.getElementById("cepLista");
+        if (!cepLista) return;
+        cepLista.innerHTML = "";
+
+        (lista || []).forEach((item) => {
+          cepLista.innerHTML += `
+<div class="cep-item">
+  <strong>${item.logradouro}</strong>
+  <span>Bairro: ${item.bairro}</span>
+  <span>CEP: ${item.cep}</span>
+  <span>${item.cidade} - ${item.estado}</span>
+</div>`;
+        });
+
+        if (!lista || !lista.length) {
+          cepLista.innerHTML =
+            '<div class="cep-item"><strong>Nenhum CEP encontrado.</strong></div>';
+        }
+      }
+
+      function iniciarCepNovo() {
+        const cepBusca = document.getElementById("cepBusca");
+        renderizarCepNovo(cepNovoDados);
+        if (!cepBusca) return;
+
+        cepBusca.addEventListener("input", function () {
+          const termo = normalizarTexto(this.value);
+          const filtrada = cepNovoDados.filter(
+            (item) =>
+              normalizarTexto(item.logradouro).includes(termo) ||
+              normalizarTexto(item.bairro).includes(termo) ||
+              normalizarTexto(item.cep).includes(termo),
+          );
+          renderizarCepNovo(filtrada);
+        });
+      }
+
+      async function carregarEmpresasBanco() {
+        const { data, error } = await supabaseClient
+          .from(SUPABASE_TABLE)
+          .select("*")
+          .order("patrocinado", { ascending: false })
+          .order("nome", { ascending: true });
+
+        if (error) throw error;
+        return (data || []).map(mapearEmpresaBanco);
+      }
+
+      async function inserirEmpresaBanco(empresa) {
+        const { error } = await supabaseClient
+          .from(SUPABASE_TABLE)
+          .insert(mapearEmpresaParaBanco(empresa));
+        if (error) throw error;
+      }
+
+      function mensagemErroSupabase(erro) {
+        if (!erro) return "Falha de conexão com o banco.";
+        if (typeof erro === "string") return erro;
+        if (erro.message) return erro.message;
+        return "Falha de conexão com o banco.";
+      }
+
+      function exibirErroConexaoBanco(erro) {
+        const msg = mensagemErroSupabase(erro);
+        const estadoVazio = document.getElementById("estadoVazio");
+        if (estadoVazio) {
+          estadoVazio.textContent = `Sem conexão com Supabase: ${msg}`;
+          estadoVazio.style.display = "block";
+        }
+      }
+
+      async function inicializarEmpresas() {
+        if (supabaseConfigurado()) {
+          try {
+            empresas = aplicarAjustesEmpresas(await carregarEmpresasBanco());
+            carregar(empresas);
+            criarEscada();
+            return;
+          } catch (erro) {
+            console.error("Falha ao carregar empresas do Supabase:", erro);
+            empresas = [];
+            carregar(empresas);
+            criarEscada();
+            exibirErroConexaoBanco(erro);
+            return;
+          }
+        }
+
+        empresas = aplicarAjustesEmpresas(carregarEmpresasStorage());
+        salvarEmpresasStorage(empresas);
+        carregar(empresas);
+        criarEscada();
+      }
+
+      function normalizarTelefone(tel) {
+        return String(tel || "").replace(/\D/g, "");
+      }
+
+      function telefoneValido(tel) {
+        const limpo = normalizarTelefone(tel);
+        return limpo.length >= 12;
+      }
+
+      function normalizarTexto(texto) {
+        return String(texto || "")
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "")
+          .toLowerCase()
+          .trim();
+      }
+
+      function escaparHtml(valor) {
+        return String(valor ?? "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/\"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+      }
+
+      function urlHttpSegura(url) {
+        if (!url) return "";
+        try {
+          const parsed = new URL(String(url), window.location.origin);
+          if (parsed.protocol === "http:" || parsed.protocol === "https:") {
+            return parsed.href;
+          }
+        } catch (erro) {
+          return "";
+        }
+        return "";
+      }
+
+      function logoSegura(logo) {
+        const valor = String(logo || "").trim();
+        if (!valor) return "assets/01.jpeg";
+        if (valor.startsWith("data:image/")) return valor;
+
+        const urlSegura = urlHttpSegura(valor);
+        if (urlSegura) return urlSegura;
+
+        if (
+          valor.startsWith("assets/") ||
+          valor.startsWith("./assets/") ||
+          valor.startsWith("/assets/")
+        ) {
+          return valor;
+        }
+
+        return "assets/01.jpeg";
+      }
+
+      function descricaoTempo(codigo) {
+        const mapa = {
+          0: "Céu limpo",
+          1: "Predominantemente limpo",
+          2: "Parcial nublado",
+          3: "Nublado",
+          45: "Nevoeiro",
+          48: "Nevoeiro",
+          51: "Garoa",
+          53: "Garoa",
+          55: "Garoa forte",
+          61: "Chuva fraca",
+          63: "Chuva",
+          65: "Chuva forte",
+          71: "Granizo",
+          80: "Pancadas",
+          81: "Pancadas",
+          82: "Tempestade",
+          95: "Tempestade",
+        };
+        return mapa[codigo] || "Variável";
+      }
+
+      function emojiTempo(codigo) {
+        if (codigo === 0) return "☀️";
+        if (codigo >= 1 && codigo <= 3) return "⛅";
+        if (codigo === 45 || codigo === 48) return "🌫️";
+        if ((codigo >= 51 && codigo <= 55) || (codigo >= 61 && codigo <= 65))
+          return "🌧️";
+        if (codigo >= 80 && codigo <= 82) return "🌦️";
+        if (codigo >= 95) return "⛈️";
+        return "🌡️";
+      }
+
+      async function carregarClima() {
+        const climaAtual = document.getElementById("climaAtual");
+        const climaAtualizado = document.getElementById("climaAtualizado");
+        const climaLista = document.getElementById("climaLista");
+
+        try {
+          const url =
+            "https://api.open-meteo.com/v1/forecast?latitude=-22.2528&longitude=-47.8169&current=temperature_2m,weather_code,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=America%2FSao_Paulo&forecast_days=4";
+          const resposta = await fetch(url);
+          if (!resposta.ok) throw new Error("Falha ao carregar clima");
+          const dados = await resposta.json();
+
+          const atual = dados.current;
+          climaAtual.textContent = `${emojiTempo(atual.weather_code)} ${Math.round(atual.temperature_2m)}°C • ${descricaoTempo(atual.weather_code)}`;
+          climaAtualizado.textContent = `Atualizado às ${new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}`;
+
+          climaLista.innerHTML = "";
+          for (let i = 1; i <= 3; i += 1) {
+            const data = new Date(dados.daily.time[i] + "T12:00:00");
+            const dia = data
+              .toLocaleDateString("pt-BR", { weekday: "short" })
+              .replace(".", "");
+            const max = Math.round(dados.daily.temperature_2m_max[i]);
+            const min = Math.round(dados.daily.temperature_2m_min[i]);
+            const cod = dados.daily.weather_code[i];
+
+            climaLista.innerHTML += `
+<div class="clima-dia">
+  ${dia}
+  <strong>${emojiTempo(cod)} ${max}° / ${min}°</strong>
+  <div>${descricaoTempo(cod)}</div>
+</div>`;
+          }
+        } catch (erro) {
+          climaAtual.textContent =
+            "Não foi possível carregar a previsão agora.";
+          climaAtualizado.textContent = "";
+          climaLista.innerHTML = "";
+        }
+      }
+
+      function arquivoParaDataUrl(arquivo) {
+        return new Promise((resolve, reject) => {
+          const leitor = new FileReader();
+          leitor.onload = () => resolve(leitor.result);
+          leitor.onerror = () => reject(new Error("Falha ao ler arquivo"));
+          leitor.readAsDataURL(arquivo);
+        });
+      }
+
+      /* CARDS */
+      function carregar(lista) {
+        const grid = document.getElementById("grid");
+        const estadoVazio = document.getElementById("estadoVazio");
+        grid.innerHTML = "";
+        estadoVazio.style.display = lista.length ? "none" : "block";
+
+        const prioridade = {
+          "valdecir alves": 0,
+          "limp gel": 1,
+        };
+
+        const ordenada = [...lista].sort((a, b) => {
+          const nomeA = normalizarTexto(a.nome);
+          const nomeB = normalizarTexto(b.nome);
+          const ordemA =
+            prioridade[nomeA] !== undefined ? prioridade[nomeA] : 999;
+          const ordemB =
+            prioridade[nomeB] !== undefined ? prioridade[nomeB] : 999;
+
+          if (ordemA !== ordemB) return ordemA - ordemB;
+
+          return (
+            Number(Boolean(b.patrocinado)) - Number(Boolean(a.patrocinado))
+          );
+        });
+
+        ordenada.forEach((e) => {
+          const telefone = normalizarTelefone(e.tel);
+          const temWhatsApp = telefoneValido(telefone);
+          const temLigacao = telefone.length >= 10;
+          const nomeSeguro = escaparHtml(e.nome);
+          const categoriaSegura = escaparHtml(e.categoria || "");
+          const funcionamentoSeguro = escaparHtml(e.funcionamento || "");
+          const descricaoServico = escaparHtml(obterDescricaoServico(e));
+          const logoSeguro = logoSegura(e.logo);
+          const siteSeguro = urlHttpSegura(e.site);
+          const instagramSeguro = urlHttpSegura(e.instagram);
+          const hrefWhatsApp = temWhatsApp
+            ? `https://wa.me/${telefone}?text=${encodeURIComponent(
+                `Olá ${e.nome}, vi seu anúncio no Portal Itirapina e gostaria de mais informações.`,
+              )}`
+            : "#";
+          const hrefLigacao = temLigacao ? `tel:+${telefone}` : "#";
+          const hrefMapa = e.endereco
+            ? `https://maps.google.com/?q=${encodeURIComponent(e.endereco)}`
+            : "#";
+
+          grid.innerHTML += `
+<div class="card ${e.patrocinado ? "patrocinado" : ""} ${e.plano === "vip" ? "vip" : ""}">
+<img src="${logoSeguro}" alt="Logo ${nomeSeguro}" loading="lazy">
+${categoriaSegura ? `<div class="categoria">${categoriaSegura}</div>` : ""}
+<h3>${nomeSeguro}</h3>
+${funcionamentoSeguro ? `<div class="card-funcionamento">${funcionamentoSeguro}</div>` : ""}
+<div class="card-descricao">${descricaoServico}</div>
+
+<a class="btn ligar ${temLigacao ? "" : "disabled"}" href="${hrefLigacao}" ${temLigacao ? "" : 'aria-disabled="true"'}>
+${temLigacao ? "Ligar" : "Ligação indisponível"}
+</a>
+
+<a class="btn ${temWhatsApp ? "" : "disabled"}" href="${hrefWhatsApp}" ${temWhatsApp ? 'target="_blank" rel="noopener noreferrer"' : 'aria-disabled="true"'}>
+${temWhatsApp ? "WhatsApp" : "WhatsApp indisponível"}
+</a>
+
+${siteSeguro ? `<a class="btn site" href="${siteSeguro}" target="_blank" rel="noopener noreferrer">Ver Site</a>` : ""}
+${instagramSeguro ? `<a class="btn instagram" href="${instagramSeguro}" target="_blank" rel="noopener noreferrer">Instagram</a>` : ""}
+${e.endereco ? `<a class="btn site" href="${hrefMapa}" target="_blank" rel="noopener noreferrer">📍 Localização</a>` : ""}
+
+</div>`;
+        });
+      }
+
+      function iniciarAdmin() {
+        const btnInicio = document.getElementById("btnInicio");
+        const btnSaibaMais = document.getElementById("btnSaibaMais");
+        const sobreWrap = document.getElementById("sobreWrap");
+        const abrirAdminNoSobre = document.getElementById("abrirAdminNoSobre");
+        const fecharSobre = document.getElementById("fecharSobre");
+        const adminWrap = document.getElementById("adminWrap");
+        const adminFechar = document.getElementById("adminFechar");
+        const adminSair = document.getElementById("adminSair");
+        const adminLoginBox = document.getElementById("adminLoginBox");
+        const adminUsuario = document.getElementById("adminUsuario");
+        const adminSenha = document.getElementById("adminSenha");
+        const adminEntrar = document.getElementById("adminEntrar");
+        const adminLoginMsg = document.getElementById("adminLoginMsg");
+        const adminForm = document.getElementById("adminForm");
+        const adminMsg = document.getElementById("adminMsg");
+        const adminPlano = document.getElementById("adminPlano");
+        const adminDescricao = document.getElementById("adminDescricao");
+        const adminSalvarDescricao = document.getElementById(
+          "adminSalvarDescricao",
+        );
+        const acessoLocalWrap = document.getElementById("acessoLocalWrap");
+        const acessoLocalForm = document.getElementById("acessoLocalForm");
+        const acessoLocalUsuario =
+          document.getElementById("acessoLocalUsuario");
+        const acessoLocalSenha = document.getElementById("acessoLocalSenha");
+        const acessoLocalMsg = document.getElementById("acessoLocalMsg");
+        const acessoLocalCancelar = document.getElementById(
+          "acessoLocalCancelar",
+        );
+        let tentativasFalhasLogin = 0;
+        let bloqueioLoginAte = 0;
+        const CHAVE_ACESSO_LOCAL = "portal_itirapina_acesso_local_ok_ate";
+        const ACESSO_LOCAL_TTL_MS = 30 * 60 * 1000;
+
+        function acessoLocalValido() {
+          const ate = Number(sessionStorage.getItem(CHAVE_ACESSO_LOCAL) || 0);
+          return Number.isFinite(ate) && Date.now() < ate;
+        }
+
+        function marcarAcessoLocal() {
+          sessionStorage.setItem(
+            CHAVE_ACESSO_LOCAL,
+            String(Date.now() + ACESSO_LOCAL_TTL_MS),
+          );
+        }
+
+        function abrirAdminComProtecaoLocal() {
+          if (acessoLocalValido()) {
+            adminLoginMsg.textContent = "";
+            adminWrap.classList.add("active");
+            aplicarEstadoAdmin();
+            return;
+          }
+          acessoLocalMsg.textContent = "";
+          acessoLocalUsuario.value = "";
+          acessoLocalSenha.value = "";
+          acessoLocalWrap.classList.add("active");
+        }
+
+        function aplicarCorPlanoSelecionado() {
+          adminPlano.classList.remove(
+            "plano-basico",
+            "plano-standard",
+            "plano-vip",
+          );
+          if (adminPlano.value === "vip") {
+            adminPlano.classList.add("plano-vip");
+          } else if (adminPlano.value === "standard") {
+            adminPlano.classList.add("plano-standard");
+          } else {
+            adminPlano.classList.add("plano-basico");
+          }
+        }
+
+        adminPlano.addEventListener("change", aplicarCorPlanoSelecionado);
+        aplicarCorPlanoSelecionado();
+
+        async function adminLogado() {
+          if (!supabaseConfigurado()) return false;
+          const {
+            data: { session },
+          } = await supabaseClient.auth.getSession();
+          return Boolean(session);
+        }
+
+        async function aplicarEstadoAdmin() {
+          if (await adminLogado()) {
+            adminLoginBox.classList.add("admin-hidden");
+            adminForm.classList.remove("admin-hidden");
+            adminSair.style.display = "inline-block";
+          } else {
+            adminLoginBox.classList.remove("admin-hidden");
+            adminForm.classList.add("admin-hidden");
+            adminSair.style.display = "none";
+          }
+        }
+
+        aplicarEstadoAdmin();
+
+        btnInicio.addEventListener("click", () => {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+
+        btnSaibaMais.addEventListener("click", () => {
+          sobreWrap.classList.add("active");
+        });
+
+        fecharSobre.addEventListener("click", () => {
+          sobreWrap.classList.remove("active");
+        });
+
+        sobreWrap.addEventListener("click", (event) => {
+          if (event.target === sobreWrap) {
+            sobreWrap.classList.remove("active");
+          }
+        });
+
+        abrirAdminNoSobre.addEventListener("click", () => {
+          sobreWrap.classList.remove("active");
+          abrirAdminComProtecaoLocal();
+        });
+
+        acessoLocalCancelar.addEventListener("click", () => {
+          acessoLocalWrap.classList.remove("active");
+          acessoLocalMsg.textContent = "";
+        });
+
+        acessoLocalWrap.addEventListener("click", (event) => {
+          if (event.target === acessoLocalWrap) {
+            acessoLocalWrap.classList.remove("active");
+            acessoLocalMsg.textContent = "";
+          }
+        });
+
+        acessoLocalForm.addEventListener("submit", async (event) => {
+          event.preventDefault();
+          const usuario = acessoLocalUsuario.value.trim();
+          const senha = acessoLocalSenha.value;
+
+          if (!usuario || !senha) {
+            acessoLocalMsg.textContent = "Preencha usuário e senha.";
+            return;
+          }
+
+          acessoLocalMsg.textContent = "Validando...";
+
+          try {
+            const resposta = await fetch("/api/admin/local-login", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ usuario, senha }),
+            });
+
+            if (!resposta.ok) {
+              const payload = await resposta.json().catch(() => ({}));
+              acessoLocalMsg.textContent =
+                payload.error || "Usuário ou senha inválidos.";
+              return;
+            }
+
+            marcarAcessoLocal();
+            acessoLocalWrap.classList.remove("active");
+            adminLoginMsg.textContent = "";
+            adminWrap.classList.add("active");
+            aplicarEstadoAdmin();
+          } catch (erro) {
+            acessoLocalMsg.textContent =
+              "Falha ao validar acesso local. Tente novamente.";
+          }
+        });
+
+        adminFechar.addEventListener("click", () => {
+          adminWrap.classList.remove("active");
+        });
+
+        adminWrap.addEventListener("click", (event) => {
+          if (event.target === adminWrap) {
+            adminWrap.classList.remove("active");
+          }
+        });
+
+        adminEntrar.addEventListener("click", async () => {
+          const agora = Date.now();
+          if (agora < bloqueioLoginAte) {
+            const segundos = Math.ceil((bloqueioLoginAte - agora) / 1000);
+            adminLoginMsg.textContent = `Muitas tentativas. Tente novamente em ${segundos}s.`;
+            return;
+          }
+
+          const usuario = adminUsuario.value.trim();
+          const senha = adminSenha.value;
+          if (!usuario || !senha) {
+            adminLoginMsg.textContent = "Preencha e-mail e senha.";
+            return;
+          }
+
+          if (!supabaseConfigurado()) {
+            adminLoginMsg.textContent = "Supabase não configurado.";
+            return;
+          }
+
+          adminLoginMsg.textContent = "Entrando...";
+
+          const { error } = await supabaseClient.auth.signInWithPassword({
+            email: usuario,
+            password: senha,
+          });
+
+          if (error) {
+            tentativasFalhasLogin += 1;
+            if (tentativasFalhasLogin >= 5) {
+              bloqueioLoginAte = Date.now() + 60 * 1000;
+              tentativasFalhasLogin = 0;
+              adminLoginMsg.textContent =
+                "Muitas tentativas inválidas. Aguarde 60s.";
+              return;
+            }
+            adminLoginMsg.textContent = "E-mail ou senha inválidos.";
+            return;
+          }
+
+          tentativasFalhasLogin = 0;
+          bloqueioLoginAte = 0;
+          adminLoginMsg.textContent = "Acesso liberado.";
+          adminSenha.value = "";
+          aplicarEstadoAdmin();
+        });
+
+        adminSair.addEventListener("click", async () => {
+          if (supabaseConfigurado()) {
+            await supabaseClient.auth.signOut();
+          }
+          adminMsg.textContent = "";
+          adminLoginMsg.textContent = "Sessão encerrada.";
+          aplicarEstadoAdmin();
+        });
+
+        adminSalvarDescricao.addEventListener("click", async () => {
+          if (!(await adminLogado())) {
+            adminMsg.textContent = "Faça login para editar descrições.";
+            return;
+          }
+
+          const nome = document.getElementById("adminNome").value.trim();
+          const descricao = adminDescricao.value.trim();
+
+          if (!nome) {
+            adminMsg.textContent =
+              "Informe o nome da empresa para salvar a descrição.";
+            return;
+          }
+
+          salvarDescricaoCustomizada(nome, descricao);
+          carregar(empresas);
+          criarEscada();
+          adminMsg.textContent = descricao
+            ? "Descrição salva com sucesso."
+            : "Descrição removida com sucesso.";
+        });
+
+        adminForm.addEventListener("submit", async (event) => {
+          event.preventDefault();
+
+          if (!(await adminLogado())) {
+            adminMsg.textContent = "Faça login para cadastrar.";
+            return;
+          }
+
+          adminMsg.textContent = "Salvando...";
+
+          const nome = document.getElementById("adminNome").value.trim();
+          const plano = document.getElementById("adminPlano").value;
+          const categoria = document.getElementById("adminCategoria").value;
+          const telInformado = normalizarTelefone(
+            document.getElementById("adminTelefone").value,
+          );
+          const tel = telInformado.startsWith("55")
+            ? telInformado
+            : `55${telInformado}`;
+          const endereco = document
+            .getElementById("adminEndereco")
+            .value.trim();
+          const instagram = document
+            .getElementById("adminInstagram")
+            .value.trim();
+          const site = document.getElementById("adminSite").value.trim();
+          const descricao = adminDescricao.value.trim();
+          const logoUrl = document.getElementById("adminLogoUrl").value.trim();
+          const logoArquivo =
+            document.getElementById("adminLogoArquivo").files[0];
+
+          if (!nome || !tel) {
+            adminMsg.textContent = "Preencha nome e telefone.";
+            return;
+          }
+
+          const instagramSeguro = urlHttpSegura(instagram);
+          const siteSeguro = urlHttpSegura(site);
+
+          if (instagram && !instagramSeguro) {
+            adminMsg.textContent =
+              "Instagram inválido. Use URL iniciando com http:// ou https://.";
+            return;
+          }
+
+          if (site && !siteSeguro) {
+            adminMsg.textContent =
+              "Site inválido. Use URL iniciando com http:// ou https://.";
+            return;
+          }
+
+          let logo = logoSegura(logoUrl);
+          if (logoArquivo) {
+            try {
+              logo = await arquivoParaDataUrl(logoArquivo);
+            } catch (erro) {
+              adminMsg.textContent = "Não foi possível ler a imagem enviada.";
+              return;
+            }
+          }
+
+          const novo = normalizarEmpresa({
+            nome,
+            logo,
+            tel,
+            categoria,
+            plano,
+            descricao: descricao || undefined,
+            endereco: endereco || undefined,
+            instagram: instagramSeguro || undefined,
+            site: siteSeguro || undefined,
+            palavrasChave: [categoria, nome],
+          });
+
+          salvarDescricaoCustomizada(nome, descricao);
+
+          try {
+            if (supabaseConfigurado()) {
+              await inserirEmpresaBanco(novo);
+              empresas = await carregarEmpresasBanco();
+            } else {
+              empresas.push(novo);
+              salvarEmpresasStorage(empresas);
+            }
+
+            carregar(empresas);
+            criarEscada();
+          } catch (erro) {
+            adminMsg.textContent = "Erro ao salvar no banco de dados.";
+            return;
+          }
+
+          adminForm.reset();
+          aplicarCorPlanoSelecionado();
+          adminMsg.textContent = supabaseConfigurado()
+            ? "Cliente cadastrado no banco com sucesso."
+            : "Cliente cadastrado com sucesso.";
+        });
+
+        if (supabaseConfigurado()) {
+          supabaseClient.auth.onAuthStateChange(() => {
+            aplicarEstadoAdmin();
+          });
+        }
+      }
+
+      function iniciarBotaoInicioFixo() {
+        const rodape = document.querySelector(".rodape-fixo");
+        if (!rodape) return;
+
+        function atualizarVisibilidade() {
+          const alturaDocumento = document.documentElement.scrollHeight;
+          const posicaoAtual = window.scrollY + window.innerHeight;
+          const mostrar = posicaoAtual >= alturaDocumento - 180;
+          rodape.classList.toggle("oculto", !mostrar);
+        }
+
+        atualizarVisibilidade();
+        window.addEventListener("scroll", atualizarVisibilidade, {
+          passive: true,
+        });
+      }
+
+      iniciarContadorVisitas();
+      carregarClima();
+      iniciarCepNovo();
+      iniciarAdmin();
+      iniciarBotaoInicioFixo();
+      inicializarEmpresas();
+
+      /* BUSCA */
+      document.getElementById("busca").addEventListener("input", function () {
+        const valor = normalizarTexto(this.value);
+        const valorNumero = normalizarTelefone(this.value);
+        let filtrado = empresas.filter(
+          (e) =>
+            normalizarTexto(e.nome).includes(valor) ||
+            normalizarTexto(e.categoria).includes(valor) ||
+            normalizarTexto(obterDescricaoServico(e)).includes(valor) ||
+            (e.palavrasChave || []).some((termo) =>
+              normalizarTexto(termo).includes(valor),
+            ) ||
+            (valorNumero.length > 0 &&
+              normalizarTelefone(e.tel).includes(valorNumero)),
+        );
+        carregar(filtrado);
+      });
+
+      /* MENU */
+      function mostrar(secao, botao) {
+        document
+          .querySelectorAll(".secao")
+          .forEach((s) => s.classList.remove("active"));
+        document.getElementById(secao).classList.add("active");
+
+        if (secao === "cepnovo") {
+          const cepBusca = document.getElementById("cepBusca");
+          if (cepBusca) {
+            cepBusca.value = "";
+          }
+          renderizarCepNovo(cepNovoDados);
+        }
+
+        document
+          .querySelectorAll(".menu button")
+          .forEach((btn) => btn.classList.remove("active-btn"));
+        if (!botao) {
+          botao = document.querySelector(`.menu button[data-secao="${secao}"]`);
+        }
+        if (botao) {
+          botao.classList.add("active-btn");
+        }
+      }
+
+      /* ESCADA */
+      function criarEscada() {
+        const left = document.getElementById("leftScroll");
+        const right = document.getElementById("rightScroll");
+
+        left.innerHTML = "";
+        right.innerHTML = "";
+
+        const vitrine = [...empresas, ...empresas];
+
+        vitrine.forEach((e) => {
+          const nomeSeguro = escaparHtml(e.nome);
+          const logoSeguro = logoSegura(e.logo);
+          let mini = `
+<div class="mini-card">
+<img src="${logoSeguro}" alt="Mini logo ${nomeSeguro}" loading="lazy">
+<p class="mini-nome">${nomeSeguro}</p>
+</div>`;
+          left.innerHTML += mini;
+          right.innerHTML += mini;
+        });
+      }
+    </script>
+  </body>
+</html>

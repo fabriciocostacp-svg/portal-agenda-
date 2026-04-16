@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portal Itirapina & Broa</title>
+
+<style>
+body{
+  margin:0;
+  font-family:Arial;
+  background:linear-gradient(180deg,#0b3d3d,#062c2c);
+  color:white;
+  text-align:center;
+}
+
+h1{margin-top:20px;}
+
+.menu{
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.menu button{
+  padding:10px;
+  border:none;
+  border-radius:20px;
+  background:#0aa;
+  color:white;
+  cursor:pointer;
+}
+
+input{
+  padding:12px;
+  border-radius:20px;
+  border:none;
+  width:260px;
+  margin:20px 0;
+}
+
+.container{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+  gap:20px;
+  padding:20px;
+}
+
+.card{
+  background:#1c1c1c;
+  border-radius:15px;
+  padding:15px;
+}
+
+.card img{
+  width:100px;
+  height:100px;
+  object-fit:contain;
+  background:#000;
+  border-radius:10px;
+}
+
+.btn{
+  display:block;
+  margin-top:8px;
+  padding:10px;
+  border-radius:10px;
+  text-decoration:none;
+  color:white;
+  background:#0aa;
+}
+
+.vip{
+  border:2px solid gold;
+}
+
+.secao{display:none;}
+.ativa{display:block;}
+</style>
+</head>
+
+<body>
+
+<h1>Portal Itirapina & Broa</h1>
+
+<div class="menu">
+<button onclick="trocar('empresas')">Empresas</button>
+<button onclick="trocar('cep')">CEP</button>
+<button onclick="trocar('telefones')">Telefones</button>
+<button onclick="trocar('onibus')">Ônibus</button>
+</div>
+
+<input id="busca" placeholder="Buscar empresa...">
+
+<!-- EMPRESAS -->
+<div id="empresas" class="secao ativa">
+<div class="container" id="lista"></div>
+</div>
+
+<!-- CEP -->
+<div id="cep" class="secao">
+<input id="buscaCep" placeholder="Buscar rua ou bairro">
+<div class="container" id="listaCep"></div>
+</div>
+
+<!-- TELEFONES -->
+<div id="telefones" class="secao">
+<div class="container">
+<a class="card" href="tel:35751526">ALMOXARIFADO</a>
+<a class="card" href="tel:35751090">APAE</a>
+<a class="card" href="tel:190">POLÍCIA</a>
+<a class="card" href="tel:35759200">HOSPITAL</a>
+<a class="card" href="tel:35759000">PREFEITURA</a>
+</div>
+</div>
+
+<!-- ÔNIBUS -->
+<div id="onibus" class="secao">
+<div class="container">
+<div class="card">
+<b>Itirapina → São Carlos</b><br>
+05:50 • 08:00 • 12:00 • 15:05 • 17:10
+</div>
+<div class="card">
+<b>São Carlos → Itirapina</b><br>
+07:00 • 11:00 • 13:00 • 16:05 • 18:30
+</div>
+</div>
+</div>
+
+<script>
+
+/* TROCAR SEÇÃO */
+function trocar(id){
+  document.querySelectorAll(".secao").forEach(s=>s.classList.remove("ativa"));
+  document.getElementById(id).classList.add("ativa");
+}
+
+/* EMPRESAS COMPLETAS */
+const empresas=[
+{nome:"FL Conecta",logo:"assets/conecta.jpeg",tel:"5519999717781",instagram:"https://instagram.com/flconectadigital",maps:"https://maps.google.com",vip:true},
+{nome:"Julia Corretora",logo:"assets/julia.jpeg",tel:"5519999322673"},
+{nome:"Clinica Bem Viver",logo:"assets/clinica.jpeg",tel:"5519997731179",maps:"https://maps.google.com"},
+{nome:"Rotisseria Arte do Sabor",logo:"assets/rotisseria.jpeg",tel:"5519998507034"},
+{nome:"Gordo Lanches",logo:"assets/gordo.jpeg",tel:"5519997913079"},
+{nome:"Deposito Alves",logo:"assets/deposito.jpeg",tel:"5519996662084"},
+{nome:"Lolana Lavanderia",logo:"assets/lolana.jpeg",tel:"5519997579086"},
+{nome:"Margem Zero Grafica",logo:"assets/grafica.jpeg",tel:"5519990195526"},
+{nome:"Criando Sonhos",logo:"assets/criando-sonhos.jpeg",tel:"5516992513881"},
+{nome:"APIB",logo:"assets/apib.jpeg",tel:"5519990000000"},
+{nome:"Sempre Bela",logo:"assets/sempre-bela.jpeg",tel:"5519997168481"},
+{nome:"Cheiro de Amor",logo:"assets/cheiro-de-amor.jpeg",tel:"5519996983282"},
+{nome:"Sorvete Americano",logo:"assets/sorvete.jpeg",tel:"5519997216659"},
+{nome:"Limp Gel",logo:"assets/limpgel.jpeg",tel:"5519997216659"},
+{nome:"Impulsiona Veiculos",logo:"assets/impulsiona.jpeg",tel:"5519981301140",vip:true},
+{nome:"Valdecir Alves",logo:"assets/valdecir.jpeg",tel:"551999474489"},
+{nome:"EC Escavacoes",logo:"assets/escavacoes.jpeg",tel:"5519998174773"},
+{nome:"Gu Espetaria",logo:"assets/espetaria.jpeg",tel:"5519996150744"},
+{nome:"Buffet em Casa",logo:"assets/buffet.jpeg",tel:"551997750869"},
+{nome:"Iara Ponfilio",logo:"assets/iara.jpeg",tel:"5519997606453"}
+];
+
+/* RENDER EMPRESAS */
+function render(lista){
+  const div=document.getElementById("lista");
+  div.innerHTML="";
+  lista.forEach(e=>{
+    div.innerHTML+=`
+    <div class="card ${e.vip?"vip":""}">
+      <img src="${e.logo}" onerror="this.src='https://via.placeholder.com/100'">
+      <h3>${e.nome}</h3>
+      <a class="btn" href="https://wa.me/${e.tel}" target="_blank">WhatsApp</a>
+      <a class="btn" href="tel:${e.tel}">Ligar</a>
+      ${e.instagram?`<a class="btn" href="${e.instagram}" target="_blank">Instagram</a>`:""}
+      ${e.maps?`<a class="btn" href="${e.maps}" target="_blank">📍 Localização</a>`:""}
+    </div>`;
+  });
+}
+
+render(empresas);
+
+/* BUSCA */
+document.getElementById("busca").addEventListener("input",e=>{
+  const termo=e.target.value.toLowerCase();
+  render(empresas.filter(x=>x.nome.toLowerCase().includes(termo)));
+});
+
+/* CEP COMPLETO FUNCIONANDO */
+const ceps=[
+{rua:"Rua 4",bairro:"Centro",cep:"13530-025"},
+{rua:"Rua 7",bairro:"Centro",cep:"13530-047"},
+{rua:"Avenida 1",bairro:"Centro",cep:"13530-003"},
+{rua:"Avenida 2",bairro:"Centro",cep:"13530-001"}
+];
+
+function renderCep(lista){
+  const div=document.getElementById("listaCep");
+  div.innerHTML="";
+  lista.forEach(c=>{
+    div.innerHTML+=`
+    <div class="card">
+      <h3>${c.rua}</h3>
+      <p>${c.bairro}</p>
+      <p>${c.cep}</p>
+    </div>`;
+  });
+}
+
+window.onload = () => renderCep(ceps);
+
+document.getElementById("buscaCep").addEventListener("input",e=>{
+  const termo=e.target.value.toLowerCase();
+  renderCep(ceps.filter(c=>c.rua.toLowerCase().includes(termo) || c.bairro.toLowerCase().includes(termo)));
+});
+
+</script>
+
+</body>
+</html>

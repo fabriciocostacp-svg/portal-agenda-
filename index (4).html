@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Regional - Guia e Utilidade</title>
+    <style>
+        :root {
+            --primary: #0056b3;
+            --accent: #ffc107;
+            --bg-color: #f4f7f6;
+            --white: #ffffff;
+            --text-dark: #333;
+            --whatsapp: #25D366;
+            --danger: #d9534f;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg-color); color: var(--text-dark); }
+
+        /* --- HERO --- */
+        .hero {
+            background-color: var(--primary);
+            background-image: url('https://images.unsplash.com/photo-1506809613146-2f08a903de10?q=80&w=1920&auto=format&fit=crop'); 
+            background-size: cover;
+            background-position: center;
+            padding: 50px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            color: var(--white);
+        }
+        .hero::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 30, 80, 0.75); }
+        .hero-content { position: relative; z-index: 1; width: 100%; max-width: 800px; }
+        
+        .search-box { display: flex; background: var(--white); padding: 8px; border-radius: 50px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); gap: 5px; margin-top: 20px;}
+        .search-box select, .search-box input { flex: 1; border: none; padding: 15px 20px; outline: none; font-size: 1rem; background: transparent; color: var(--text-dark); }
+        .search-box button { background: var(--accent); color: #111; border: none; padding: 15px 40px; border-radius: 50px; font-weight: bold; cursor: pointer; }
+
+        .fast-links { display: flex; justify-content: center; gap: 10px; margin-top: 20px; flex-wrap: wrap; position: relative; z-index: 2; }
+        .fast-btn { background: rgba(255, 255, 255, 0.2); color: white; padding: 10px 20px; border-radius: 30px; text-decoration: none; font-size: 0.9rem; backdrop-filter: blur(5px); border: 1px solid rgba(255, 255, 255, 0.3); transition: background 0.3s; cursor: pointer; }
+        .fast-btn:hover { background: var(--accent); color: #000; }
+
+        /* --- LAYOUT PRINCIPAL --- */
+        .main-wrapper { display: flex; max-width: 1400px; margin: 20px auto; gap: 20px; padding: 0 15px; align-items: flex-start; }
+        
+        .content-center { flex-grow: 1; display: flex; flex-direction: column; gap: 20px; min-width: 0; }
+
+        /* --- SEÇÕES DE UTILIDADE --- */
+        .info-card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); display: none; }
+        .info-card.active { display: block; animation: fadeIn 0.4s; }
+        .info-card h2 { margin-bottom: 15px; font-size: 1.3rem; color: var(--primary); border-bottom: 2px solid #eee; padding-bottom: 5px; }
+
+        .tel-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .tel-item { background: #f9f9f9; padding: 10px; border-radius: 8px; display: flex; flex-direction: column; }
+        .tel-item span { font-size: 0.75rem; color: #777; }
+        .tel-item a { color: var(--danger); font-weight: bold; text-decoration: none; font-size: 1.1rem; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { text-align: left; padding: 10px; border-bottom: 1px solid #eee; font-size: 0.9rem; }
+        th { background: #f4f7f6; color: var(--primary); }
+
+        /* --- ESCADA ROLANTE VIP (INFINITE SCROLL) --- */
+        .sidebar { 
+            width: 280px; 
+            flex-shrink: 0; 
+            height: 80vh; /* Altura fixa para criar a "janela" da escada rolante */
+            position: sticky; 
+            top: 20px; 
+            overflow: hidden; /* Esconde o que passa dos limites */
+            border-radius: 12px;
+        }
+
+        .scroll-track {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            /* A animação leva 60 segundos para dar uma volta completa, rodando suave */
+            animation: scrollVertical 60s linear infinite; 
+        }
+
+        /* O TOQUE MÁGICO: Pausa a animação quando o mouse (ou dedo) estiver em cima */
+        .scroll-track:hover {
+            animation-play-state: paused;
+        }
+
+        @keyframes scrollVertical {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-50%); } /* Sobe até a metade (onde a cópia começa) */
+        }
+
+        /* --- AD PREMIUM --- */
+        .ad-premium { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-top: 4px solid var(--accent); text-align: center; }
+        .ad-premium img { width: 100%; height: 160px; object-fit: contain; padding: 10px; border-bottom: 1px solid #eee; }
+        .ad-info { padding: 15px; }
+        .ad-info h4 { margin-bottom: 5px; font-size: 1.1rem;}
+        .ad-info p { font-size: 0.85rem; color: #666; margin-bottom: 15px;}
+        .btn-whatsapp { display: block; background: var(--whatsapp); color: white; text-decoration: none; padding: 10px; border-radius: 6px; font-weight: bold; font-size: 0.9rem;}
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- RESPONSIVIDADE CELULAR --- */
+        @media (max-width: 950px) {
+            .main-wrapper { flex-direction: column; }
+            .content-center { order: -1; width: 100%; }
+            
+            /* No celular, a escada rolante vira horizontal! */
+            .sidebar { width: 100%; height: auto; position: relative; top: 0; padding-bottom: 10px;}
+            .scroll-track { flex-direction: row; width: max-content; animation: scrollHorizontal 40s linear infinite; }
+            .ad-premium { width: 260px; } /* Largura fixa no celular para rolar certinho */
+        }
+
+        @keyframes scrollHorizontal {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        @media (max-width: 650px) {
+            .search-box { flex-direction: column; border-radius: 12px; padding: 15px; }
+            .search-box select, .search-box input { border-bottom: 1px solid #ddd; padding: 12px; width: 100%; }
+            .search-box button { width: 100%; border-radius: 8px; padding: 15px; }
+            .tel-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="hero">
+        <div class="hero-content">
+            <h1>Portal Itirapina & Broa</h1>
+            <p>O seu guia completo de serviços locais e turismo.</p>
+            
+            <div class="search-box">
+                <select id="cidadeSelecionada">
+                    <option value="Itirapina">Itirapina</option>
+                    <option value="Broa">Broa (Represa do Broa)</option>
+                </select>
+                <input type="text" id="termoBusca" placeholder="Pesquisar comércio ou serviço..." onkeyup="buscarDados(event)">
+                <button onclick="buscarDados()">Buscar</button>
+            </div>
+
+            <div class="fast-links">
+                <a class="fast-btn" onclick="mostrarInfo('telefones')">=Þ Telefones Úteis</a>
+                <a class="fast-btn" onclick="mostrarInfo('onibus')">=Œ Horários de Ônibus</a>
+                <a class="fast-btn" onclick="buscarDados()"><â Guia Comercial</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-wrapper">
+        <aside class="sidebar">
+            <div class="scroll-track" id="track-esquerda"></div>
+        </aside>
+
+        <main class="content-center">
+            <div id="info-telefones" class="info-card">
+                <h2>=Þ Telefones de Emergência e Úteis</h2>
+                <div class="tel-grid">
+                    <div class="tel-item"><span>SAMU / Ambulância</span><a href="tel:192">192</a></div>
+                    <div class="tel-item"><span>Polícia Militar</span><a href="tel:190">190</a></div>
+                    <div class="tel-item"><span>Corpo de Bombeiros</span><a href="tel:193">193</a></div>
+                    <div class="tel-item"><span>Hospital Municipal</span><a href="tel:1935751000">(19) 3575-1000</a></div>
+                    <div class="tel-item"><span>Prefeitura Itirapina</span><a href="tel:1935751100">(19) 3575-1100</a></div>
+                    <div class="tel-item"><span>Defesa Civil</span><a href="tel:199">199</a></div>
+                </div>
+            </div>
+
+            <div id="info-onibus" class="info-card">
+                <h2>=Œ Horários de Ônibus</h2>
+                <table>
+                    <tr><th>Saída Itirapina</th><th>Saída São Carlos</th><th>Tipo</th></tr>
+                    <tr><td>06:10</td><td>07:30</td><td>Seg a Sáb</td></tr>
+                    <tr><td>09:00</td><td>11:00</td><td>Diário</td></tr>
+                    <tr><td>13:00</td><td>15:30</td><td>Seg a Sex</td></tr>
+                    <tr><td>17:15</td><td>18:45</td><td>Diário</td></tr>
+                </table>
+                <p style="font-size: 0.75rem; margin-top: 10px; color: #999;">* Horários sujeitos a alteração. Consulte a viação para feriados.</p>
+            </div>
+
+            <div id="area-comercial">
+                <h2 style="margin-bottom: 15px; font-size: 1.5rem; border-bottom: 2px solid #eee; padding-bottom: 5px;">Guia de Comércios</h2>
+                <div id="areaResultados" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px;"></div>
+            </div>
+        </main>
+
+        <aside class="sidebar">
+            <div class="scroll-track" id="track-direita"></div>
+        </aside>
+    </div>
+
+<script>
+    // --- 1. CLIENTES VIP ---
+    const clientesPremium = [
+        { nome: "Rotisseria Arte do Sabor", cidade: "Itirapina", servico: "Alimentação & Rotisseria", telefone: "5519999999999", endereco: "Rua Quatro, 123", logo: "logo.jpg" },
+        { nome: "APIB", cidade: "Broa", servico: "Associação do Broa", telefone: "5519999999999", endereco: "Represa do Broa", logo: "logo apib.jpg" },
+        { nome: "Lolana Lavanderia", cidade: "Itirapina", servico: "Lavanderia Especializada", telefone: "5519999999999", endereco: "Rua Principal, 89", logo: "lolana.jpg" },
+        { nome: "Sempre Bella", cidade: "Itirapina", servico: "Perfumaria e Cosméticos", telefone: "5519999999999", endereco: "Centro", logo: "SEMPRE BELA PERFUMARIA .png" },
+        { nome: "Claudio Montador", cidade: "Itirapina", servico: "Montador de Móveis", telefone: "5519999999999", endereco: "Atendimento a Domicílio", logo: "clasudio montador 02.jpeg" },
+        { nome: "FL Conecta", cidade: "Itirapina", servico: "Marketing Digital", telefone: "5519999717781", endereco: "Atendimento Online", logo: "002.jpg" },
+        { nome: "Julia Corretora", cidade: "Itirapina", servico: "Corretora de Imóveis", telefone: "5519999999999", endereco: "Centro", logo: "JULIA.jpg" }
+    ];
+
+    // --- 2. LISTA COMUM ---
+    const comercios = [
+        { nome: "Supermercado Delta", cidade: "Itirapina", servico: "Supermercado", telefone: "551935751215" },
+        { nome: "Pizzaria do Broa", cidade: "Broa", servico: "Alimentação", telefone: "551935750000" },
+        { nome: "Marina Recanto", cidade: "Broa", servico: "Lazer e Náutica", telefone: "551935751111" },
+        { nome: "Padaria Doce Pão", cidade: "Itirapina", servico: "Padaria", telefone: "551933333333" },
+        { nome: "Oficina do Zé", cidade: "Itirapina", servico: "Mecânica", telefone: "5519997001122" },
+        { nome: "Pet Shop Au Au", cidade: "Itirapina", servico: "Pet Shop", telefone: "551935752010" }
+    ];
+
+    function mostrarInfo(tipo) {
+        document.querySelectorAll('.info-card').forEach(card => card.classList.remove('active'));
+        document.getElementById('info-' + tipo).classList.add('active');
+        document.getElementById('area-comercial').style.display = 'none';
+    }
+
+    function buscarDados(event) {
+        if (event && event.key !== 'Enter' && event.type !== 'click') return;
+        
+        document.querySelectorAll('.info-card').forEach(card => card.classList.remove('active'));
+        document.getElementById('area-comercial').style.display = 'block';
+
+        const cidade = document.getElementById("cidadeSelecionada").value;
+        const termoDigitado = document.getElementById("termoBusca").value.toLowerCase().trim();
+        const areaResultados = document.getElementById("areaResultados");
+        areaResultados.innerHTML = "";
+
+        let filtrados = comercios.filter(c => {
+            const cidadeConfere = (c.cidade === cidade);
+            const textoConfere = (termoDigitado === "") || (c.nome.toLowerCase().includes(termoDigitado)) || (c.servico.toLowerCase().includes(termoDigitado));
+            return cidadeConfere && textoConfere;
+        });
+
+        if (filtrados.length === 0) {
+            areaResultados.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #666; padding: 20px;">Nenhum serviço encontrado.</p>`;
+        } else {
+            filtrados.forEach(c => {
+                const linkZap = `https://wa.me/${c.telefone}?text=Olá, vi no Portal Itirapina & Broa.`;
+                areaResultados.innerHTML += `
+                    <div style="border:1px solid #eee; padding:20px; border-radius:8px; background:#fafafa; transition: transform 0.2s;">
+                        <h3 style="color:var(--primary); margin-bottom:5px; font-size:1.1rem;">${c.nome}</h3>
+                        <p style="color:#666; font-size:0.9rem; margin-bottom:15px;">=Í ${c.cidade} <br> =à ${c.servico}</p>
+                        <a href="${linkZap}" target="_blank" style="display:block; text-align:center; border:2px solid var(--primary); color:var(--primary); padding:8px 15px; border-radius:6px; font-weight:bold; text-decoration:none;">Conversar</a>
+                    </div>
+                `;
+            });
+        }
+    }
+
+    // --- LÓGICA DA ESCADA ROLANTE (INFINITE SCROLL) ---
+    function montarEscadaRolante() {
+        const trackEsq = document.getElementById("track-esquerda");
+        const trackDir = document.getElementById("track-direita");
+        trackEsq.innerHTML = ""; trackDir.innerHTML = "";
+
+        function criarAd(cliente) {
+            const linkZap = `https://wa.me/${cliente.telefone}?text=Olá, vi o anúncio em destaque no Portal!`;
+            return `
+                <div class="ad-premium">
+                    <img src="${cliente.logo}" alt="Logo ${cliente.nome}">
+                    <div class="ad-info">
+                        <h4>${cliente.nome}</h4>
+                        <p>${cliente.servico}</p>
+                        <p style="font-size:0.75rem; color:#333; background:#f4f7f6; padding:5px; border-radius:4px; margin-bottom:10px; font-weight:bold;">=Í ${cliente.endereco}</p>
+                        <a href="${linkZap}" target="_blank" class="btn-whatsapp">=ò Chamar Agora</a>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Embaralha duas listas separadas (uma pra esquerda, uma pra direita)
+        let listaEsq = [...clientesPremium].sort(() => 0.5 - Math.random());
+        let listaDir = [...clientesPremium].sort(() => 0.5 - Math.random());
+
+        // Para a escada rolante funcionar sem buracos, precisamos de muitos itens.
+        // Vamos duplicar a lista base algumas vezes para criar volume (ex: 20 anúncios).
+        let htmlEsq = "";
+        let htmlDir = "";
+        
+        // Multiplica a lista para dar volume (3x a lista original)
+        for(let i=0; i < 3; i++) {
+            listaEsq.forEach(cliente => htmlEsq += criarAd(cliente));
+            listaDir.forEach(cliente => htmlDir += criarAd(cliente));
+        }
+
+        // O SEGREDO DO INFINITO: A div interna precisa ter o conteúdo repetido 2 vezes exatas.
+        // Quando a animação chega em 50% (final da primeira cópia), ela pula invisivelmente para o 0%.
+        trackEsq.innerHTML = htmlEsq + htmlEsq;
+        trackDir.innerHTML = htmlDir + htmlDir;
+    }
+
+    window.onload = () => {
+        buscarDados();
+        montarEscadaRolante(); // Inicia a escada rolante assim que o site carrega
+    };
+
+</script>
+</body>
+</html>

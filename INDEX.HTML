@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Teste CEP</title>
+<style>
+body{font-family:Arial;background:#111;color:#fff;text-align:center}
+input{padding:10px;margin:20px}
+.item{background:#222;margin:5px;padding:10px;border-radius:10px}
+</style>
+</head>
+
+<body>
+
+<h2>Teste CEP</h2>
+
+<input id="busca" placeholder="Digite rua ou bairro">
+
+<div id="lista"></div>
+
+<script>
+
+const ceps = [
+{rua:"Rua 1",bairro:"Centro",cep:"13530-031"},
+{rua:"Rua 2",bairro:"Centro",cep:"13530-029"},
+{rua:"Rua 3",bairro:"Centro",cep:"13530-027"},
+{rua:"Rua 4",bairro:"Centro",cep:"13530-025"},
+{rua:"Rua 5",bairro:"Centro",cep:"13530-023"},
+{rua:"Rua 6",bairro:"Centro",cep:"13530-021"},
+{rua:"Rua 7",bairro:"Centro",cep:"13530-017"}
+];
+
+function render(lista){
+const div=document.getElementById("lista");
+div.innerHTML="";
+lista.forEach(c=>{
+div.innerHTML+=`
+<div class="item">
+${c.rua} - ${c.bairro}<br>${c.cep}
+</div>`;
+});
+}
+
+render(ceps);
+
+document.getElementById("busca").addEventListener("input",e=>{
+const termo=e.target.value.toLowerCase();
+render(ceps.filter(c =>
+c.rua.toLowerCase().includes(termo) ||
+c.bairro.toLowerCase().includes(termo)
+));
+});
+
+</script>
+
+</body>
+</html>

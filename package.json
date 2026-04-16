@@ -1,0 +1,33 @@
+{
+  "name": "agenda",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "sync:supabase": "node scripts/sync-supabase.js",
+    "security:supabase": "node scripts/harden-supabase-rls.js",
+    "security:all": "node scripts/security-automation.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fabriciocostacp-svg/portal-agenda-.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/fabriciocostacp-svg/portal-agenda-/issues"
+  },
+  "homepage": "https://github.com/fabriciocostacp-svg/portal-agenda-#readme",
+  "dependencies": {
+    "better-sqlite3": "^12.8.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "express-rate-limit": "^8.3.2",
+    "helmet": "^8.1.0"
+  }
+}

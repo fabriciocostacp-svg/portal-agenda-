@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portal Itirapina & Broa</title>
+
+<style>
+body{
+  margin:0;
+  font-family:Arial;
+  background:linear-gradient(180deg,#052f2f,#021919);
+  color:white;
+  text-align:center;
+}
+
+/* ESCADA REAL FUNCIONANDO */
+.lateral{
+  position:fixed;
+  top:0;
+  width:110px;
+  height:100vh;
+  overflow:hidden;
+  z-index:1;
+}
+.esq{left:0;}
+.dir{right:0;}
+
+.scroll{
+  display:flex;
+  flex-direction:column;
+}
+
+.scroll img{
+  width:80px;
+  margin:10px auto;
+  border-radius:10px;
+}
+
+/* ANIMAÇÃO */
+@keyframes subir{
+  0%{transform:translateY(0);}
+  100%{transform:translateY(-50%);}
+}
+
+.animar{
+  animation:subir 20s linear infinite;
+}
+
+/* TOPO */
+h1{margin-top:20px;}
+
+.menu{
+  display:flex;
+  gap:10px;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+
+.menu button{
+  padding:10px;
+  border:none;
+  border-radius:20px;
+  background:#0aa;
+  color:white;
+  cursor:pointer;
+}
+
+/* TEMPO MELHOR */
+.tempo{
+  background:linear-gradient(90deg,#0c3,#063);
+  padding:15px;
+  margin:20px;
+  border-radius:15px;
+  font-weight:bold;
+}
+
+/* BUSCA */
+input{
+  padding:12px;
+  border-radius:20px;
+  border:none;
+  width:260px;
+  margin:20px 0;
+}
+
+/* CARDS */
+.container{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+  gap:20px;
+  padding:20px 120px;
+}
+
+.card{
+  background:#111;
+  border-radius:15px;
+  padding:15px;
+  transition:.3s;
+}
+
+.card:hover{transform:scale(1.05);}
+
+.card img{
+  width:100px;
+  height:100px;
+  object-fit:contain;
+  background:#000;
+  border-radius:12px;
+  padding:8px;
+}
+
+.btn{
+  display:block;
+  margin-top:8px;
+  padding:10px;
+  border-radius:10px;
+  text-decoration:none;
+  color:white;
+  background:#0aa;
+}
+
+.vip{
+  border:2px solid gold;
+  box-shadow:0 0 15px gold;
+}
+
+/* SEÇÕES */
+.secao{display:none;}
+.ativa{display:block;}
+
+/* TELEFONES BONITO */
+.lista{
+  text-align:left;
+  max-width:500px;
+  margin:auto;
+  background:#111;
+  padding:20px;
+  border-radius:15px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- ESCADA -->
+<div class="lateral esq"><div class="scroll animar" id="escadaEsq"></div></div>
+<div class="lateral dir"><div class="scroll animar" id="escadaDir"></div></div>
+
+<h1>Portal Itirapina & Broa</h1>
+
+<div class="tempo">
+🌤️ 20°C • Predominantemente limpo  
+<br>Qui 29° / 15° • Sex 30° / 18° • Sáb 31° / 20°
+</div>
+
+<div class="menu">
+<button onclick="trocar('empresas')">Empresas</button>
+<button onclick="trocar('cep')">CEP</button>
+<button onclick="trocar('telefones')">Telefones</button>
+<button onclick="trocar('onibus')">Ônibus</button>
+<button onclick="window.open('https://wa.me/5519999717781')">Anuncie</button>
+</div>
+
+<input id="busca" placeholder="Buscar empresa...">
+
+<!-- EMPRESAS -->
+<div id="empresas" class="secao ativa">
+<div class="container" id="lista"></div>
+</div>
+
+<!-- CEP -->
+<div id="cep" class="secao">
+<input id="buscaCep" placeholder="Buscar rua ou bairro">
+<div id="listaCep" class="container"></div>
+</div>
+
+<!-- TELEFONES -->
+<div id="telefones" class="secao">
+<div class="lista">
+ALMOXARIFADO 3575-1526<br><br>
+APAE 3575-1090<br><br>
+ASSOCIAÇÃO COMERCIAL 3575-1443<br><br>
+POLÍCIA 190<br><br>
+HOSPITAL 3575-9200<br><br>
+PREFEITURA 3575-9000
+</div>
+</div>
+
+<!-- ÔNIBUS -->
+<div id="onibus" class="secao">
+<div class="lista">
+<b>Itirapina → São Carlos</b><br>
+05:50 • 08:00 • 12:00 • 17:10<br><br>
+
+<b>São Carlos → Itirapina</b><br>
+07:00 • 11:00 • 16:05 • 18:30
+</div>
+</div>
+
+<script>
+
+/* WHATS */
+function gerarLink(numero){
+  return `https://wa.me/${numero}?text=Olá vi seu anúncio no Portal`;
+}
+
+/* EMPRESAS COMPLETAS */
+const empresas=[
+{nome:"FL Conecta",logo:"assets/conecta.jpeg",tel:"5519999717781",vip:true},
+{nome:"Julia Corretora",logo:"assets/julia.jpeg",tel:"5519999322673",vip:true},
+{nome:"Clinica Bem Viver",logo:"assets/clinica.jpeg",tel:"5519997731179",vip:true},
+{nome:"Rotisseria Arte do Sabor",logo:"assets/rotisseria.jpeg",tel:"5519998507034"},
+{nome:"Gordo Lanches",logo:"assets/gordo.jpeg",tel:"5519997913079"},
+{nome:"Depósito Alves",logo:"assets/deposito.jpeg",tel:"5519996662084"},
+{nome:"Lolana Lavanderia",logo:"assets/lolana.jpeg",tel:"5519997579086"},
+{nome:"Margem Zero Gráfica",logo:"assets/grafica.jpeg",tel:"5519990195526"},
+{nome:"Criando Sonhos",logo:"assets/criando-sonhos.jpeg",tel:"5516992513881"},
+{nome:"APIB",logo:"assets/apib.jpeg",tel:"5519990000000"},
+{nome:"Sempre Bella",logo:"assets/sempre-bela.jpeg",tel:"5519997168481"},
+{nome:"Cheiro de Amor",logo:"assets/cheiro-de-amor.jpeg",tel:"5519996983282"},
+{nome:"Sorvete Americano",logo:"assets/sorvete.jpeg",tel:"5519997216659"},
+{nome:"Limp Gel",logo:"assets/limpgel.jpeg",tel:"5519997216659"},
+{nome:"Impulsiona Veículos",logo:"assets/impulsiona.jpeg",tel:"5519981301140",vip:true},
+{nome:"Valdecir Alves",logo:"assets/valdecir.jpeg",tel:"551999474489"},
+{nome:"EC Escavações",logo:"assets/escavacoes.jpeg",tel:"5519998174773"},
+{nome:"Gu Espetaria",logo:"assets/espetaria.jpeg",tel:"5519996150744"},
+{nome:"Buffet em Casa",logo:"assets/buffet.jpeg",tel:"551997750869"},
+{nome:"Iara Ponfilio",logo:"assets/iara.jpeg",tel:"5519997606453"}
+];
+
+/* RENDER */
+function render(lista){
+  const div=document.getElementById("lista");
+  div.innerHTML="";
+  lista.forEach(e=>{
+    div.innerHTML+=`
+    <div class="card ${e.vip?"vip":""}">
+      <img src="${e.logo}">
+      <h3>${e.nome}</h3>
+      <a class="btn" href="${gerarLink(e.tel)}" target="_blank">WhatsApp</a>
+      <a class="btn" href="tel:${e.tel}">Ligar</a>
+    </div>`;
+  });
+}
+render(empresas);
+
+/* ESCADA */
+function escada(){
+  const esq=document.getElementById("escadaEsq");
+  const dir=document.getElementById("escadaDir");
+
+  empresas.forEach(e=>{
+    esq.innerHTML+=`<img src="${e.logo}">`;
+    dir.innerHTML+=`<img src="${e.logo}">`;
+  });
+}
+escada();
+
+/* BUSCA */
+document.getElementById("busca").addEventListener("input",e=>{
+  const termo=e.target.value.toLowerCase();
+  render(empresas.filter(x=>x.nome.toLowerCase().includes(termo)));
+});
+
+/* MENU */
+function trocar(id){
+  document.querySelectorAll(".secao").forEach(s=>s.classList.remove("ativa"));
+  document.getElementById(id).classList.add("ativa");
+}
+
+/* CEP */
+const ceps=[
+{rua:"Avenida 1",bairro:"Centro",cep:"13530-003"},
+{rua:"Avenida 2",bairro:"Centro",cep:"13530-001"},
+{rua:"Rua 7",bairro:"Centro",cep:"13530-047"}
+];
+
+function renderCep(lista){
+  const div=document.getElementById("listaCep");
+  div.innerHTML="";
+  lista.forEach(c=>{
+    div.innerHTML+=`
+    <div class="card">
+      <h3>${c.rua}</h3>
+      <p>${c.bairro}</p>
+      <p>${c.cep}</p>
+    </div>`;
+  });
+}
+renderCep(ceps);
+
+document.getElementById("buscaCep").addEventListener("input",e=>{
+  const termo=e.target.value.toLowerCase();
+  renderCep(ceps.filter(c=>c.rua.toLowerCase().includes(termo)));
+});
+
+</script>
+
+</body>
+</html>

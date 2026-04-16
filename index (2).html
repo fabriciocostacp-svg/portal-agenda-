@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Itirapina & Broa - Dark Real</title>
+    <style>
+        :root {
+            --primary: #1a73e8;
+            --accent: #ffc107;
+            --bg-dark: #0a0a0a; 
+            --card-bg: #1a1a1a; 
+            --white: #ffffff;
+            --text-gray: #cfcfcf;
+            --whatsapp: #25D366;
+            --cor-vip: #ffc107;
+            --cor-standard: #007bff;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, sans-serif; 
+            background-color: var(--bg-dark); 
+            color: var(--white); 
+            overflow-x: hidden; 
+        }
+
+        .hero { background: #000; padding: 30px 20px; text-align: center; border-bottom: 2px solid var(--primary); }
+        .search-box { max-width: 500px; margin: 15px auto; background: #222; padding: 5px; border-radius: 50px; display: flex; border: 1px solid #444; }
+        .search-box input { flex: 1; border: none; padding: 12px 20px; outline: none; border-radius: 50px; background: transparent; color: white; width: 100%; }
+
+        .main-wrapper { display: flex; max-width: 1400px; margin: 10px auto; gap: 10px; padding: 0 10px; align-items: flex-start; }
+
+        .sidebar { width: 240px; flex-shrink: 0; height: 85vh; position: sticky; top: 10px; overflow: hidden; }
+        .scroll-track { display: flex; flex-direction: column; gap: 8px; animation: scrollVertical 60s linear infinite; }
+
+        .ad-vip-card { 
+            background: var(--card-bg); 
+            border-radius: 10px; 
+            overflow: hidden; 
+            border: 1px solid #333;
+            border-top: 4px solid var(--cor-vip); 
+            text-align: center;
+            width: 100%;
+        }
+        
+        .ad-vip-card img { 
+            width: 100%; 
+            height: 120px; 
+            object-fit: contain; 
+            padding: 10px; 
+            display: block;
+            filter: drop-shadow(0px 0px 2px rgba(255,255,255,0.2));
+        }
+        
+        .ad-vip-info { padding: 10px; background: #222; }
+        .ad-vip-info h4 { font-size: 0.85rem; margin-bottom: 5px; color: var(--white); }
+
+        @keyframes scrollVertical { from { transform: translateY(0); } to { transform: translateY(-50%); } }
+
+        .content-center { flex: 1; min-width: 0; }
+        .card { background: var(--card-bg); border-radius: 12px; padding: 20px; border: 1px solid #333; text-align: center; margin-bottom: 12px; }
+        .card.standard { border: 2px solid var(--cor-standard); }
+        .card.vip { border: 2px solid var(--cor-vip); }
+
+        .img-container-centro {
+            height: 80px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            background: #111; 
+            border-radius: 8px; 
+            margin-bottom: 15px;
+            border: 1px solid #333;
+        }
+
+        .btn-whats { display: block; text-align: center; background: var(--whatsapp); color: white; text-decoration: none; padding: 10px; border-radius: 6px; font-weight: bold; margin-top: 10px; }
+        .btn-site { display: block; text-align: center; background: #444; color: white; text-decoration: none; padding: 8px; border-radius: 6px; font-size: 0.8rem; margin-top: 5px; }
+
+        #painel-admin { 
+            display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: #222; padding: 30px; border-radius: 15px; border: 2px solid var(--primary);
+            box-shadow: 0 0 50px rgba(0,0,0,0.8); z-index: 9999; width: 350px;
+        }
+        #painel-admin h3 { margin-bottom: 15px; color: var(--primary); }
+        #painel-admin input, #painel-admin select { width: 100%; padding: 10px; margin-bottom: 10px; background: #333; border: 1px solid #444; color: white; border-radius: 5px; }
+
+        @media (max-width: 950px) {
+            .main-wrapper { flex-direction: column; }
+            .sidebar { width: 100%; height: auto; position: relative; }
+            .scroll-track { flex-direction: row; width: max-content; animation: scrollHorizontal 40s linear infinite; }
+            .ad-vip-card { width: 220px; }
+        }
+        @keyframes scrollHorizontal { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+        
+        .counter-box { margin-top: 10px; font-size: 0.7rem; color: #555; }
+    </style>
+</head>
+<body>
+
+    <header class="hero">
+        <h1 style="color: var(--accent);">Portal Itirapina & Broa</h1>
+        <div class="search-box">
+            <input type="text" id="termoBusca" placeholder="Pesquisar comércio ou serviço..." oninput="buscar()">
+        </div>
+    </header>
+
+    <div class="main-wrapper">
+        <aside class="sidebar"><div id="lista-vip-esq" class="scroll-track"></div></aside>
+
+        <main class="content-center">
+            <h2 style="margin-bottom: 20px; color: var(--text-gray); font-weight: 300;">Guia Comercial</h2>
+            <div id="areaResultados" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 15px;"></div>
+        </main>
+
+        <aside class="sidebar"><div id="lista-vip-dir" class="scroll-track"></div></aside>
+    </div>
+
+    <div id="painel-admin">
+        <h3>Novo Cadastro</h3>
+        <input type="text" id="adm-nome" placeholder="Nome da Empresa">
+        <input type="text" id="adm-servico" placeholder="Serviço (ex: Pizzaria)">
+        <input type="text" id="adm-logo" placeholder="Arquivo da Logo (ex: logo.jpeg)">
+        <input type="text" id="adm-tel" placeholder="WhatsApp (5519...)">
+        <select id="adm-plano">
+            <option value="VIP">💎 Plano VIP</option>
+            <option value="Standard">★ Plano Standard</option>
+            <option value="Basico">⚪ Plano Básico</option>
+        </select>
+        <button onclick="salvarNovo()" style="width:100%; padding:12px; background:var(--primary); color:white; border:none; border-radius:5px; font-weight:bold; cursor:pointer;">Cadastrar</button>
+        <button onclick="fecharAdmin()" style="width:100%; margin-top:10px; background:transparent; color:red; border:none; cursor:pointer;">Cancelar</button>
+    </div>
+
+    <footer style="text-align:center; padding:40px; color:#555; font-size:0.8rem">
+        <p>© 2026 Portal Itirapina & Broa | <span onclick="abrirAdmin()" style="cursor:pointer; text-decoration: underline;">Administração</span></p>
+        
+        <div class="counter-box">
+            <p>Visitantes:</p>
+            <img src="https://hitwebcounter.com/counter/counter.php?page=itirapinabroa_portal&style=0005&nbdigits=5&type=page&initCount=0" title="Contador de Visitas" Alt="Visitantes"   border="0" style="margin-top:5px; opacity: 0.6;">
+        </div>
+    </footer>
+
+<script>
+    let comercios = [
+        { nome: "FL Conecta", servico: "Marketing Digital", logo: "01.jpeg", telefone: "5519999717781", plano: "VIP" },
+        { nome: "Claudio Montador", servico: "Montador de Móveis", logo: "clasudio montador.jpeg", telefone: "5519996188134", plano: "VIP" },
+        { nome: "Julia Corretora", servico: "Imóveis", logo: "JULIA.jpeg", telefone: "5519999999999", plano: "Standard" },
+        { nome: "Rotisseria Arte do Sabor", servico: "Alimentação", logo: "rotisseria.jpeg", telefone: "5519998507034", plano: "VIP" },
+        { nome: "Lolana Lavanderia", servico: "Lavanderia", logo: "lolana.jpeg", telefone: "5519997579086", plano: "VIP" },
+        { nome: "Sempre Bella Perfumaria", servico: "Perfumaria", logo: "SEMPRE BELA.jpeg", telefone: "5519997168481", plano: "Standard" },
+        { nome: "Impulsiona Veículos", servico: "Veículos", logo: "impulsionaveiculos.jpeg", telefone: "5519981301140", site: "https://impulsionaveiculos.com.br", plano: "VIP" },
+        { nome: "Margem Zero Gráfica", servico: "Gráfica", logo: "grafica.jpeg", telefone: "5519990195526", plano: "VIP" },
+        { nome: "Sorvete Americano", servico: "Sorvetes", logo: "sorvete.jpeg", telefone: "5519997216659", plano: "VIP" },
+        { nome: "Perfumaria Cheia de Amor", servico: "Perfumaria", logo: "cheiadeamor.jpeg", telefone: "5519996983282", plano: "Standard" }
+    ];
+
+    function abrirAdmin() {
+        if(prompt("Digite a Senha:") === "123") {
+            document.getElementById('painel-admin').style.display = 'block';
+        }
+    }
+
+    function fecharAdmin() { document.getElementById('painel-admin').style.display = 'none'; }
+
+    function salvarNovo() {
+        const n = {
+            nome: document.getElementById('adm-nome').value,
+            servico: document.getElementById('adm-servico').value,
+            logo: document.getElementById('adm-logo').value,
+            telefone: document.getElementById('adm-tel').value,
+            plano: document.getElementById('adm-plano').value
+        };
+        if(!n.nome || !n.telefone) return alert("Preencha os campos obrigatórios!");
+        comercios.push(n);
+        fecharAdmin();
+        renderizar();
+    }
+
+    function renderizar() {
+        const vips = comercios.filter(c => c.plano === "VIP");
+        const trackEsq = document.getElementById('lista-vip-esq');
+        const trackDir = document.getElementById('lista-vip-dir');
+
+        const htmlVip = vips.map(c => `
+            <div class="ad-vip-card">
+                <img src="${c.logo}" onerror="this.src='https://via.placeholder.com/150?text=Sem+Foto'">
+                <div class="ad-vip-info">
+                    <h4>${c.nome}</h4>
+                    <a href="https://wa.me/${c.telefone}" target="_blank" class="btn-whats" style="font-size:0.75rem; padding:6px;">WhatsApp</a>
+                </div>
+            </div>
+        `).join('');
+
+        const trilha = htmlVip + htmlVip + htmlVip + htmlVip;
+        trackEsq.innerHTML = trilha;
+        trackDir.innerHTML = trilha;
+        buscar();
+    }
+
+    function buscar() {
+        const termo = document.getElementById("termoBusca").value.toLowerCase();
+        const area = document.getElementById("areaResultados");
+        const filtrados = comercios
+            .filter(c => c.nome.toLowerCase().includes(termo) || c.servico.toLowerCase().includes(termo));
+
+        area.innerHTML = filtrados.map(c => `
+            <div class="card ${c.plano.toLowerCase()}">
+                <div class="img-container-centro">
+                    <img src="${c.logo}" style="max-height:85%; max-width:85%; object-fit:contain;" onerror="this.style.display='none'">
+                </div>
+                <h3 style="font-size:1.1rem;">${c.nome}</h3>
+                <p style="margin: 5px 0;">🛠️ ${c.servico}</p>
+                <a href="https://wa.me/${c.telefone}" target="_blank" class="btn-whats">Chamar no Whats</a>
+                ${c.site ? `<a href="${c.site}" target="_blank" class="btn-site">Ver Site</a>` : ''}
+            </div>
+        `).join('');
+    }
+
+    window.onload = renderizar;
+</script>
+</body>
+</html>
