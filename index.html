@@ -392,7 +392,7 @@
           0 0 24px rgba(47, 152, 255, 0.24);
       }
 
-      /* Só logos “retangulares” diretos no topo; evita estilos de 80×80 no círculo da Samarina */
+      /* Logos no topo do card (mesmo padrão para todos, inclusive Samarina) */
       .card .card-topo > img {
         width: 80px;
         height: 80px;
@@ -413,49 +413,21 @@
         box-shadow: 0 10px 18px rgba(0, 0, 0, 0.18);
       }
 
-      /* Samarina: selo já é circular — contain + moldura suave, sem filtro “estourado” */
-      .card-logo-crop {
-        isolation: isolate;
-        width: 128px;
-        height: 128px;
+      /* Selo no preto + círculo dourado, como a arte de referência */
+      .card .card-topo > img.logo-samarina {
         border-radius: 50%;
-        overflow: hidden;
-        flex-shrink: 0;
-        margin-bottom: 6px;
-        background: radial-gradient(
-          circle at 50% 45%,
-          rgba(90, 24, 28, 0.35) 0%,
-          rgba(18, 10, 12, 0.96) 62%
-        );
-        box-shadow:
-          inset 0 0 0 1px rgba(255, 209, 102, 0.2),
-          0 4px 14px rgba(0, 0, 0, 0.32);
-      }
-
-      .card-logo-crop img {
-        width: 100%;
-        height: 100%;
-        margin: 0;
-        border-radius: 0;
+        background: #000;
         object-fit: contain;
-        object-position: center center;
-        display: block;
-        background: transparent;
-        padding: 6px;
-        box-sizing: border-box;
-        transform: none;
-        filter: brightness(1.05) contrast(1.04) saturate(1.02);
-      }
-
-      .card:hover .card-logo-crop img {
-        transform: scale(1.03);
-        filter: brightness(1.08) contrast(1.05) saturate(1.03);
-      }
-
-      .card:hover .card-logo-crop {
         box-shadow:
-          inset 0 0 0 1px rgba(255, 209, 102, 0.32),
-          0 6px 16px rgba(0, 0, 0, 0.36);
+          inset 0 0 0 2px rgba(255, 209, 102, 0.42),
+          0 4px 14px rgba(0, 0, 0, 0.35);
+      }
+
+      .card:hover .card-topo > img.logo-samarina {
+        background: #050505;
+        box-shadow:
+          inset 0 0 0 2px rgba(255, 209, 102, 0.55),
+          0 10px 20px rgba(0, 0, 0, 0.3);
       }
 
       .card h3 {
@@ -1270,34 +1242,10 @@
         background: rgba(255, 255, 255, 0.06);
       }
 
-      .mini-card-logo-crop {
-        isolation: isolate;
-        width: 64px;
-        height: 64px;
+      .mini-card img.logo-samarina-mini {
         border-radius: 50%;
-        overflow: hidden;
-        flex-shrink: 0;
-        background: radial-gradient(
-          circle at 50% 45%,
-          rgba(90, 24, 28, 0.3) 0%,
-          rgba(18, 10, 12, 0.95) 62%
-        );
-        box-shadow: inset 0 0 0 1px rgba(255, 209, 102, 0.16);
-      }
-
-      .mini-card-logo-crop img {
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
-        object-position: center center;
-        border-radius: 0;
-        margin: 0;
-        display: block;
-        background: transparent;
-        padding: 3px;
-        box-sizing: border-box;
-        transform: none;
-        filter: brightness(1.04) contrast(1.03);
+        background: #000;
+        box-shadow: inset 0 0 0 1px rgba(255, 209, 102, 0.38);
       }
 
       .mini-nome {
@@ -2069,7 +2017,7 @@
           },
           {
             nome: "Samarina Marino",
-            logo: "assets/samarina.jpeg",
+            logo: "assets/samarina.png",
             tel: "5519997399970",
             instagram: "https://www.instagram.com/samarinagomesmarino/",
             categoria: "Beleza",
@@ -4450,8 +4398,8 @@
         apib: "assets/apib.jpeg",
         "vitale croche": "assets/vitale.jpeg",
         "sempre bella": "assets/sempre-bela.jpeg",
-        "samarina marino": "assets/samarina.jpeg",
-        "samarina gomes marino": "assets/samarina.jpeg",
+        "samarina marino": "assets/samarina.png",
+        "samarina gomes marino": "assets/samarina.png",
         "cheiro de amor": "assets/cheiro-de-amor.jpeg",
         "sorvete americano": "assets/sorvete.jpeg",
         "limp gel": "assets/limpgel.jpeg",
@@ -4609,7 +4557,6 @@
         });
 
         ordenada.forEach((e) => {
-          const nomeK = normalizarNomeIgualdade(e.nome);
           const telefone = normalizarTelefone(e.tel);
           const telWa = telefoneInternacionalBr(e.tel);
           const temWhatsApp = telefoneValido(e.tel);
@@ -4633,10 +4580,10 @@
             ? `https://maps.google.com/?q=${encodeURIComponent(e.endereco)}`
             : "#";
 
-          const logoComCropCircular = empresaEhSamarinaMarinoParaCard(e);
-          const blocoLogo = logoComCropCircular
-            ? `<div class="card-logo-crop"><img src="${logoSeguro}" alt="Logo ${nomeSeguro}" loading="lazy"></div>`
-            : `<img src="${logoSeguro}" alt="Logo ${nomeSeguro}" loading="lazy">`;
+          const clsLogo = empresaEhSamarinaMarinoParaCard(e)
+            ? ' class="logo-samarina"'
+            : "";
+          const blocoLogo = `<img${clsLogo} src="${logoSeguro}" alt="Logo ${nomeSeguro}" loading="lazy">`;
 
           grid.innerHTML += `
 <div class="card ${e.patrocinado ? "patrocinado" : ""} ${e.plano === "vip" ? "vip" : ""}">
@@ -5234,13 +5181,12 @@ ${e.endereco ? `<a class="btn site" href="${hrefMapa}" target="_blank" rel="noop
         const vitrine = [...base, ...base];
 
         vitrine.forEach((e) => {
-          const nomeKMini = normalizarNomeIgualdade(e.nome);
           const nomeSeguro = escaparHtml(nomePublicoCard(e));
           const logoSeguro = logoUrlEmpresa(e);
-          const miniCrop = empresaEhSamarinaMarinoParaCard(e);
-          const miniImg = miniCrop
-            ? `<div class="mini-card-logo-crop"><img src="${logoSeguro}" alt="Mini logo ${nomeSeguro}" loading="lazy"></div>`
-            : `<img src="${logoSeguro}" alt="Mini logo ${nomeSeguro}" loading="lazy">`;
+          const clsMini = empresaEhSamarinaMarinoParaCard(e)
+            ? ' class="logo-samarina-mini"'
+            : "";
+          const miniImg = `<img${clsMini} src="${logoSeguro}" alt="Mini logo ${nomeSeguro}" loading="lazy">`;
           let mini = `
 <div class="mini-card">
 ${miniImg}
