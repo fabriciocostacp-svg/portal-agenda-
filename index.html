@@ -336,7 +336,8 @@
         max-width: 1160px;
         margin: 0 auto;
         padding: 8px clamp(16px, 4vw, 48px) 20px;
-        align-items: stretch;
+        /* start: evita altura forçada igual + barra de rolagem dentro do card */
+        align-items: start;
       }
 
       .card {
@@ -349,9 +350,10 @@
         flex-direction: column;
         align-items: center;
         min-height: 440px;
-        height: 100%;
-        align-self: stretch;
-        overflow: visible;
+        height: auto;
+        align-self: start;
+        overflow-x: hidden;
+        overflow-y: visible;
         background: linear-gradient(
           180deg,
           rgba(16, 32, 40, 0.95),
@@ -485,7 +487,7 @@
       }
 
       .card-topo {
-        flex: 1 1 0;
+        flex: 1 1 auto;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -1328,7 +1330,7 @@
           padding: 8px 10px 20px;
           gap: 12px;
           grid-template-columns: repeat(2, minmax(0, 1fr));
-          align-items: stretch;
+          align-items: start;
         }
 
         .card {
@@ -1336,7 +1338,7 @@
           min-width: 0;
           padding: 12px;
           min-height: 420px;
-          height: 100%;
+          height: auto;
         }
 
         .card-descricao {
