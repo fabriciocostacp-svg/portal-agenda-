@@ -14,7 +14,7 @@ update empresas set logotipo = 'assets/julia.jpeg' where nome ilike 'julia corre
 
 update empresas set logotipo = 'assets/clinica.jpeg' where nome ilike 'clinica bem viver';
 
-update empresas set logotipo = 'assets/rotisseria.jpeg' where nome ilike 'rotisseria arte do sabor';
+update empresas set logotipo = 'assets/rotisseria.png' where nome ilike 'rotisseria arte do sabor';
 
 update empresas set logotipo = 'assets/gordo.jpeg' where nome ilike 'gordo lanches';
 
