@@ -518,7 +518,7 @@
         width: 100%;
         box-sizing: border-box;
         text-align: left;
-        white-space: pre-line;
+        white-space: normal;
         overflow: visible;
         overflow-x: hidden;
         scrollbar-width: none;
@@ -1350,7 +1350,6 @@
         .card-descricao {
           font-size: 10.5px;
           padding: 5px 6px;
-          white-space: pre-line;
         }
 
         .estado-vazio {
@@ -2135,7 +2134,7 @@
               "R. Jaguarucu, 669 - Jardim Nova Itirapina, Itirapina - CEP 13530-268",
             categoria: "Variedades / Loja",
             descricao:
-              "Produtos de limpeza\nUtilidades domésticas\nMaterial escolar\nBrinquedos\nEletrônicos",
+              "Produtos de limpeza, utilidades domésticas, material escolar, brinquedos e eletrônicos.",
             palavrasChave: [
               "multilar",
               "variedades",
@@ -3807,6 +3806,120 @@
         return out;
       }
 
+      /** Patrocinadores: completa Instagram, logo e descrição se o banco veio vazio. */
+      const EXTRAS_OBRIGATORIOS_PORTAL = [
+        {
+          nome: "MULTLar VARIEDADES",
+          logo: "assets/multilar-logo.jpeg",
+          tel: "5519971689501",
+          instagram: "https://www.instagram.com/multlar_itirapina/",
+          endereco:
+            "R. Jaguarucu, 669 - Jardim Nova Itirapina, Itirapina - CEP 13530-268",
+          categoria: "Variedades / Loja",
+          descricao:
+            "Produtos de limpeza, utilidades domésticas, material escolar, brinquedos e eletrônicos.",
+          palavrasChave: [
+            "multilar",
+            "variedades",
+            "loja",
+            "itirapina",
+            "jaguarucu",
+            "limpeza",
+            "escolar",
+            "brinquedos",
+            "eletronicos",
+          ],
+          plano: "vip",
+          patrocinado: true,
+        },
+        {
+          nome: "Samarina Marino",
+          logo: "assets/samarina.png",
+          tel: "5519997399970",
+          instagram: "https://www.instagram.com/samarinagomesmarino/",
+          categoria: "Beleza",
+          descricao:
+            "Consultora de Beleza Natura e Avon — atendimento e pedidos com praticidade.",
+          palavrasChave: [
+            "natura",
+            "avon",
+            "beleza",
+            "consultora",
+            "cosmeticos",
+            "perfumaria",
+            "samarina",
+            "marino",
+            "gomes",
+          ],
+          plano: "standard",
+          patrocinado: true,
+        },
+        {
+          nome: "EC Escavações",
+          logo: "assets/escavacoes.jpeg",
+          tel: "5519998174773",
+          categoria: "Construção",
+          plano: "vip",
+          patrocinado: true,
+          palavrasChave: [
+            "escavacoes",
+            "piscinas",
+            "alicerces",
+            "terraplenagem",
+          ],
+        },
+        {
+          nome: "Gu Espetaria e Choperia",
+          logo: "assets/espetaria.jpeg",
+          tel: "5519996150744",
+          categoria: "Alimentação",
+          plano: "basico",
+          palavrasChave: ["espetaria", "choperia", "petiscos", "eventos"],
+        },
+        {
+          nome: "Iara Ponfilio",
+          logo: "assets/iara.jpeg",
+          tel: "5519997606453",
+          categoria: "Uber",
+          plano: "vip",
+          patrocinado: true,
+          palavrasChave: ["uber", "motorista", "conveniencias", "servicos"],
+        },
+        {
+          nome: "Rotisseria Arte do Sabor",
+          site: "https://deliveryapp.neemo.com.br/pedir/14398/PfvWHwxooksbqcqEFH9g",
+        },
+      ];
+
+      function mesclarExtrasObrigatoriosNaLista(base, opcoes) {
+        const permitirInserirNovos = opcoes?.permitirInserirNovos !== false;
+        if (!Array.isArray(base)) return base;
+        EXTRAS_OBRIGATORIOS_PORTAL.forEach((extra) => {
+          const i = base.findIndex(
+            (empresa) =>
+              normalizarTexto(empresa.nome) === normalizarTexto(extra.nome),
+          );
+          const ex = normalizarEmpresa(extra);
+          const descExtra = String(ex.descricao || "").trim();
+          const logoExtra = String(ex.logo || "").trim();
+          const instaExtra = String(ex.instagram || "").trim();
+          const siteExtra = String(ex.site || "").trim();
+          if (i === -1) {
+            if (permitirInserirNovos) base.push(ex);
+          } else {
+            const patch = {};
+            if (descExtra) patch.descricao = descExtra;
+            if (logoExtra) patch.logo = logoExtra;
+            if (instaExtra) patch.instagram = instaExtra;
+            if (siteExtra) patch.site = siteExtra;
+            if (Object.keys(patch).length) {
+              base[i] = normalizarEmpresa({ ...base[i], ...patch });
+            }
+          }
+        });
+        return base;
+      }
+
       function aplicarCatalogoComercialLegado(lista) {
         const nomesForcarVip = new Set([
           "fl conecta",
@@ -3943,105 +4056,7 @@
           );
         }
 
-        const extrasObrigatorios = [
-          {
-            nome: "MULTLar VARIEDADES",
-            logo: "assets/multilar-logo.jpeg",
-            tel: "5519971689501",
-            instagram: "https://www.instagram.com/multlar_itirapina/",
-            endereco:
-              "R. Jaguarucu, 669 - Jardim Nova Itirapina, Itirapina - CEP 13530-268",
-            categoria: "Variedades / Loja",
-            descricao:
-              "Produtos de limpeza\nUtilidades domésticas\nMaterial escolar\nBrinquedos\nEletrônicos",
-            palavrasChave: [
-              "multilar",
-              "variedades",
-              "loja",
-              "itirapina",
-              "jaguarucu",
-              "limpeza",
-              "escolar",
-              "brinquedos",
-              "eletronicos",
-            ],
-            plano: "vip",
-            patrocinado: true,
-          },
-          {
-            nome: "Samarina Marino",
-            logo: "assets/samarina.png",
-            tel: "5519997399970",
-            instagram: "https://www.instagram.com/samarinagomesmarino/",
-            categoria: "Beleza",
-            descricao:
-              "Consultora de Beleza Natura e Avon — atendimento e pedidos com praticidade.",
-            palavrasChave: [
-              "natura",
-              "avon",
-              "beleza",
-              "consultora",
-              "cosmeticos",
-              "perfumaria",
-              "samarina",
-              "marino",
-              "gomes",
-            ],
-            plano: "standard",
-            patrocinado: true,
-          },
-          {
-            nome: "EC Escavações",
-            logo: "assets/escavacoes.jpeg",
-            tel: "5519998174773",
-            categoria: "Construção",
-            plano: "vip",
-            patrocinado: true,
-            palavrasChave: [
-              "escavacoes",
-              "piscinas",
-              "alicerces",
-              "terraplenagem",
-            ],
-          },
-          {
-            nome: "Gu Espetaria e Choperia",
-            logo: "assets/espetaria.jpeg",
-            tel: "5519996150744",
-            categoria: "Alimentação",
-            plano: "basico",
-            palavrasChave: ["espetaria", "choperia", "petiscos", "eventos"],
-          },
-          {
-            nome: "Iara Ponfilio",
-            logo: "assets/iara.jpeg",
-            tel: "5519997606453",
-            categoria: "Uber",
-            plano: "vip",
-            patrocinado: true,
-            palavrasChave: ["uber", "motorista", "conveniencias", "servicos"],
-          },
-        ];
-
-        extrasObrigatorios.forEach((extra) => {
-          const i = base.findIndex(
-            (empresa) =>
-              normalizarTexto(empresa.nome) === normalizarTexto(extra.nome),
-          );
-          const ex = normalizarEmpresa(extra);
-          const descExtra = String(ex.descricao || "").trim();
-          const logoExtra = String(ex.logo || "").trim();
-          if (i === -1) {
-            base.push(ex);
-          } else {
-            const patch = {};
-            if (descExtra) patch.descricao = descExtra;
-            if (logoExtra) patch.logo = logoExtra;
-            if (Object.keys(patch).length) {
-              base[i] = normalizarEmpresa({ ...base[i], ...patch });
-            }
-          }
-        });
+        mesclarExtrasObrigatoriosNaLista(base);
 
         return removerEmpresasDuplicadasPorNome(base);
       }
@@ -4049,7 +4064,11 @@
       function aplicarAjustesEmpresas(lista) {
         const base = (lista || []).map((e) => normalizarEmpresa(e));
         if (!P.applyDefaultCatalog) {
-          return removerEmpresasDuplicadasPorNome(base);
+          const dedup = removerEmpresasDuplicadasPorNome(base);
+          mesclarExtrasObrigatoriosNaLista(dedup, {
+            permitirInserirNovos: false,
+          });
+          return removerEmpresasDuplicadasPorNome(dedup);
         }
         return aplicarCatalogoComercialLegado(base);
       }
@@ -4176,7 +4195,7 @@
           "clinica bem viver":
             "A sua saúde em boas mãos com atendimento humanizado e dedicado.",
           "rotisseria arte do sabor":
-            "Refeições e marmitas com sabor caseiro para facilitar seu dia a dia.",
+            "Rotisseria Arte do Sabor — clique em Ver Site e faça seu pedido no delivery Neemo. 👆😋",
           "gordo lanches":
             "Lanches artesanais para matar a fome com sabor.",
           "deposito de bebida alves":
@@ -4240,15 +4259,16 @@
         return "Atendimento local com qualidade e suporte para o que você precisa.";
       }
 
-      /** Texto do card: sem HTML; preserva quebras de linha; Buffet e Gordo com limite curto. */
+      /** Texto do card: sem HTML; quebras viram espaço (uma linha como os outros cards). */
       function textoDescricaoCardPlano(empresa) {
         let t = String(obterDescricaoServico(empresa) || "")
+          .replace(/\u2028|\u2029/g, "\n")
           .replace(/<br\s*\/?>/gi, "\n")
           .replace(/<[^>]+>/g, " ")
           .split("\n")
           .map((linha) => linha.replace(/\s+/g, " ").trim())
           .filter(Boolean)
-          .join("\n")
+          .join(" ")
           .trim();
         const k = normalizarTexto(empresa.nome);
         const compactoSemScroll =
@@ -4928,7 +4948,7 @@ ${blocoLogo}
 ${categoriaSegura ? `<div class="categoria">${categoriaSegura}</div>` : ""}
 <h3>${nomeSeguro}</h3>
 <div class="card-funcionamento${funcionamentoSeguro ? "" : " is-empty"}">${funcionamentoSeguro || "&#8203;"}</div>
-<div class="card-descricao">${escaparHtml(descricaoServico)}</div>
+<div class="card-descricao">${descricaoServico}</div>
 </div>
 <div class="card-acoes">
 <a class="btn ligar ${temLigacao ? "" : "disabled"}" href="${hrefLigacao}" ${temLigacao ? "" : 'aria-disabled="true"'}>

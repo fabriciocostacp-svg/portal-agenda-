@@ -28,5 +28,7 @@ window.PORTAL_CONFIG = {
   supabaseAnonKey: "",
   supabaseTable: "empresas",
   supabaseLogosPublicBase: "",
+  // true: insere empresas legadas (Valdecir, Gordo…). false: só dados do banco, mas
+  // Instagram/logo/descrição dos patrocinadores em EXTRAS ainda são mesclados no código.
   applyDefaultCatalog: false,
 };
