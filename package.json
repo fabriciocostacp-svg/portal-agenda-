@@ -5,10 +5,8 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "node server.js",
-    "sync:supabase": "node scripts/sync-supabase.js",
-    "security:supabase": "node scripts/harden-supabase-rls.js",
-    "security:all": "node scripts/security-automation.js"
+    "start:3010": "set PORT=3010&& node server.js",
+    "dev": "node server.js"
   },
   "repository": {
     "type": "git",

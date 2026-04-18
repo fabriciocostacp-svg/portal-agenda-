@@ -1,0 +1,198 @@
+[
+  {
+    "nome": "FL Conecta",
+    "logo": "assets/conecta.jpeg",
+    "tel": "5519999717781",
+    "instagram": "https://instagram.com/flconecta",
+    "categoria": "Marketing",
+    "palavrasChave": ["marketing", "midias", "publicidade", "social media"],
+    "plano": "vip",
+    "patrocinado": true
+  },
+  {
+    "nome": "Julia Corretora",
+    "logo": "assets/julia.jpeg",
+    "tel": "5519999322673",
+    "categoria": "Seguros",
+    "patrocinado": true
+  },
+  {
+    "nome": "Clinica Bem Viver",
+    "logo": "assets/clinica.jpeg",
+    "tel": "5519997731179",
+    "endereco": "Avenida 2, nº 29 - Centro, Itirapina - SP",
+    "categoria": "Saúde",
+    "palavrasChave": ["clinica", "medico", "saude", "unimed", "iamspe"],
+    "plano": "vip",
+    "patrocinado": true
+  },
+  {
+    "nome": "Rotisseria Arte do Sabor",
+    "logo": "assets/rotisseria.jpeg",
+    "tel": "5519998507034",
+    "endereco": "Rua 2 nº 409 - Centro, Itirapina - SP",
+    "categoria": "Alimentação",
+    "palavrasChave": ["restaurante", "comida", "marmita", "rotisseria"]
+  },
+  {
+    "nome": "Gordo Lanches",
+    "logo": "assets/gordo.jpeg",
+    "tel": "5519997913079",
+    "endereco": "Av. Perimetral, 721 - Jardim Nova Itirapina, Itirapina",
+    "instagram": "https://instagram.com/gordolanchesitirapina",
+    "categoria": "Alimentação",
+    "funcionamento": "Quarta a domingo, das 18:30 às 22:40",
+    "palavrasChave": ["lanches", "hamburguer", "lanche", "gordo"],
+    "plano": "vip",
+    "patrocinado": true
+  },
+  {
+    "nome": "Depósito de Bebida Alves",
+    "logo": "assets/deposito.jpeg",
+    "tel": "5519996662084",
+    "categoria": "Bebidas",
+    "palavrasChave": ["deposito", "bebidas", "cerveja", "agua", "refrigerante"]
+  },
+  {
+    "nome": "Lolana Lavanderia",
+    "logo": "assets/lolana.jpeg",
+    "tel": "5519997579086",
+    "endereco": "Rua Cinco n°752 Vila Garbi (esquina com Av. 6)",
+    "categoria": "Serviços",
+    "palavrasChave": ["lavanderia", "lavar roupa", "roupas"],
+    "plano": "vip",
+    "patrocinado": true
+  },
+  {
+    "nome": "Margem Zero Gráfica",
+    "logo": "assets/grafica.jpeg",
+    "tel": "5519990195526",
+    "categoria": "Gráfica",
+    "palavrasChave": ["grafica", "impressao", "cartao", "banner"]
+  },
+  {
+    "nome": "Criando Sonhos",
+    "logo": "assets/criando-sonhos.jpeg",
+    "tel": "5516992513881",
+    "categoria": "Eventos"
+  },
+  {
+    "nome": "APIB",
+    "logo": "assets/apib.jpeg",
+    "tel": "5519990000000",
+    "categoria": "Associação"
+  },
+  {
+    "nome": "Vitale Crochê",
+    "logo": "assets/vitale.jpeg",
+    "tel": "5519991457752",
+    "categoria": "Artesanato"
+  },
+  {
+    "nome": "Sempre Bella",
+    "logo": "assets/sempre-bela.jpeg",
+    "tel": "5519997168481",
+    "categoria": "Beleza",
+    "palavrasChave": ["perfumaria", "cosmeticos", "beleza"]
+  },
+  {
+    "nome": "Samarina Gomes Marino",
+    "logo": "assets/samarina.png",
+    "tel": "5519997399970",
+    "instagram": "https://www.instagram.com/samarinagomesmarino/",
+    "site": "https://www.facebook.com/samarinag.gmarino",
+    "categoria": "Beleza",
+    "descricao": "Consultora de Beleza Natura e Avon — atendimento e pedidos com praticidade.",
+    "palavrasChave": [
+      "natura",
+      "avon",
+      "beleza",
+      "consultora",
+      "cosmeticos",
+      "perfumaria",
+      "samarina"
+    ],
+    "plano": "standard",
+    "patrocinado": true
+  },
+  {
+    "nome": "Cheiro de Amor",
+    "logo": "assets/cheiro-de-amor.jpeg",
+    "tel": "5519996983282",
+    "categoria": "Perfumaria",
+    "palavrasChave": ["perfumaria", "perfume", "cosmeticos"]
+  },
+  {
+    "nome": "Sorvete Americano",
+    "logo": "assets/sorvete.jpeg",
+    "tel": "5519993210001",
+    "categoria": "Sobremesas"
+  },
+  {
+    "nome": "Limp Gel",
+    "logo": "assets/limpgel.jpeg",
+    "tel": "5519997216659",
+    "categoria": "Serviços",
+    "plano": "basico",
+    "palavrasChave": ["servicos", "limpeza", "limp gel"]
+  },
+  {
+    "nome": "Impulsiona Veículos",
+    "logo": "assets/impulsiona.jpeg",
+    "tel": "5519981301140",
+    "site": "https://impulsionaveiculos.com.br",
+    "categoria": "Automóveis",
+    "palavrasChave": ["veiculos", "carros", "automoveis"],
+    "patrocinado": true
+  },
+  {
+    "nome": "Valdecir Alves",
+    "logo": "assets/valdecir.jpeg",
+    "tel": "5519999474489",
+    "categoria": "Uber",
+    "plano": "basico",
+    "palavrasChave": ["uber", "motorista", "particular", "corridas"]
+  },
+  {
+    "nome": "EC Escavações",
+    "logo": "assets/escavacoes.jpeg",
+    "tel": "5519998174773",
+    "categoria": "Construção",
+    "palavrasChave": ["escavacoes", "piscinas", "alicerces", "terraplenagem"],
+    "plano": "vip",
+    "patrocinado": true
+  },
+  {
+    "nome": "Gu Espetaria e Choperia",
+    "logo": "assets/espetaria.jpeg",
+    "tel": "5519996150744",
+    "categoria": "Alimentação",
+    "palavrasChave": ["espetaria", "choperia", "petiscos", "eventos"]
+  },
+  {
+    "nome": "Buffet em Casa Gourmet",
+    "logo": "assets/buffet.jpeg",
+    "tel": "5519997750869",
+    "categoria": "Eventos",
+    "instagram": "https://instagram.com/buffetemcasagourmet",
+    "descricao": "Buffet completo onde você estiver: cardápios gourmet, garçons e logística. Casamentos, aniversários e eventos corporativos.",
+    "palavrasChave": [
+      "buffet",
+      "casamentos",
+      "aniversarios",
+      "eventos corporativos",
+      "gourmet",
+      "gastronomia",
+      "@buffetemcasagourmet"
+    ]
+  },
+  {
+    "nome": "Iara Ponfilio",
+    "logo": "assets/iara.jpeg",
+    "tel": "5519997606453",
+    "categoria": "Uber",
+    "palavrasChave": ["uber", "motorista", "conveniencias", "servicos"],
+    "plano": "vip",
+    "patrocinado": true
+  }
+]

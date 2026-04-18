@@ -5,15 +5,15 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Portal Itirapina</title>
+    <title>Portal local</title>
     <meta
       name="description"
-      content="Guia local de Itirapina: encontre empresas, contatos úteis, horários de ônibus e previsão do tempo."
+      content="Guia local com empresas, contatos úteis e utilidades num só portal."
     />
     <meta name="theme-color" content="#0b1518" />
 
     <style>
-      @import url("https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=Space+Grotesk:wght@400;500;700&display=swap");
+      @import url("https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=DM+Serif+Display&family=Outfit:wght@500;600;700&family=Space+Grotesk:wght@400;500;700&display=swap");
 
       :root {
         --bg: #0b1518;
@@ -70,35 +70,52 @@
         margin: 0 auto;
         padding: 28px clamp(16px, 4vw, 48px) 8px;
         animation: slideFade 600ms ease;
-      }
-
-      .hero-kicker {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        padding: 6px 12px;
-        border-radius: 999px;
-        border: 1px solid rgba(255, 255, 255, 0.16);
-        font-size: 12px;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        color: var(--muted);
-        background: rgba(255, 255, 255, 0.05);
-      }
-
-      .hero h1 {
-        margin: 14px 0 6px;
-        font-family: "Archivo", sans-serif;
-        font-weight: 800;
-        letter-spacing: -0.03em;
-        font-size: clamp(1.8rem, 2.2vw, 2.8rem);
         text-align: center;
       }
 
+      .hero-kicker {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        margin: 0 auto;
+        width: fit-content;
+        max-width: 100%;
+        padding: 8px 18px;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        font-family: "Outfit", "Space Grotesk", sans-serif;
+        font-size: clamp(11px, 2.1vw, 13px);
+        font-weight: 600;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: #d4f0ff;
+        background: rgba(6, 40, 48, 0.55);
+        box-shadow: 0 0 0 1px rgba(47, 152, 255, 0.12);
+      }
+
+      .hero h1 {
+        margin: 18px auto 10px;
+        max-width: 22ch;
+        font-family: "DM Serif Display", Georgia, "Times New Roman", serif;
+        font-weight: 400;
+        font-style: normal;
+        letter-spacing: -0.02em;
+        line-height: 1.15;
+        font-size: clamp(1.65rem, 4.2vw, 2.65rem);
+        text-align: center;
+        color: #f6fffd;
+        text-wrap: balance;
+      }
+
       .hero p {
-        margin: 0;
+        margin: 0 auto;
         color: var(--muted);
         max-width: 640px;
+        font-family: "Outfit", "Space Grotesk", sans-serif;
+        font-size: clamp(14px, 1.9vw, 16px);
+        font-weight: 500;
+        line-height: 1.55;
       }
 
       .visitas-pill {
@@ -241,6 +258,11 @@
         box-shadow: 0 10px 18px rgba(0, 0, 0, 0.18);
       }
 
+      .menu a.menu-acao.anuncie.is-disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+      }
+
       .busca {
         text-align: center;
         margin: 0 auto 12px;
@@ -289,12 +311,18 @@
       }
 
       .card {
-        width: auto;
+        width: 100%;
+        max-width: none;
+        margin: 0;
         min-width: 0;
+        box-sizing: border-box;
         display: flex;
         flex-direction: column;
         align-items: center;
+        min-height: 440px;
         height: 100%;
+        align-self: stretch;
+        overflow: visible;
         background: linear-gradient(
           180deg,
           rgba(16, 32, 40, 0.95),
@@ -365,11 +393,11 @@
       }
 
       .card img {
-        width: 84px;
-        height: 84px;
+        width: 80px;
+        height: 80px;
         flex-shrink: 0;
         object-fit: contain;
-        margin-bottom: 10px;
+        margin-bottom: 6px;
         border-radius: 12px;
         background: rgba(255, 255, 255, 0.06);
         transition:
@@ -385,46 +413,97 @@
       }
 
       .card h3 {
-        margin: 6px 0 10px;
+        margin: 2px 0 2px;
+        padding: 0 4px 1px;
         font-family: "Archivo", sans-serif;
-        font-size: 1.03rem;
-        line-height: 1.25;
-        min-height: 2.5em;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        font-size: 0.98rem;
+        line-height: 1.28;
+        min-height: 2.56em;
+        max-height: 2.56em;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
         text-align: center;
+        width: 100%;
+        box-sizing: border-box;
       }
 
       .card-funcionamento {
-        margin: -2px 0 8px;
-        font-size: 12px;
+        margin: 0 0 4px;
+        padding: 0 4px;
+        font-size: 11px;
         color: #c5dfda;
+        line-height: 1.35;
+        min-height: 2.7em;
+        max-height: 2.7em;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        width: 100%;
+        box-sizing: border-box;
+      }
+
+      .card-funcionamento.is-empty {
+        visibility: hidden;
+        user-select: none;
+        pointer-events: none;
+      }
+
+      .card-topo {
+        flex: 1 1 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        min-height: 0;
+        overflow-x: hidden;
+        overflow-y: visible;
       }
 
       .card-descricao {
-        margin: 2px 0 10px;
-        padding: 8px 10px;
+        flex: 0 1 auto;
+        align-self: stretch;
+        min-height: 0;
+        margin: 0;
+        padding: 6px 8px;
         border-radius: 10px;
         border: 1px dashed rgba(255, 255, 255, 0.2);
         background: rgba(255, 209, 102, 0.08);
         color: #f4dca7;
-        font-size: 12px;
-        line-height: 1.4;
-        max-height: 0;
-        opacity: 0;
-        overflow: hidden;
-        transition:
-          max-height 220ms ease,
-          opacity 200ms ease,
-          margin 180ms ease,
-          padding 180ms ease;
+        font-size: 11px;
+        line-height: 1.42;
+        width: 100%;
+        box-sizing: border-box;
+        text-align: left;
+        overflow: visible;
+        overflow-x: hidden;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        word-break: break-word;
+        overflow-wrap: anywhere;
+        hyphens: auto;
       }
 
-      .card:hover .card-descricao,
-      .card:focus-within .card-descricao {
-        max-height: 160px;
-        opacity: 1;
+      .card-descricao::-webkit-scrollbar {
+        width: 0;
+        height: 0;
+        display: none;
+      }
+
+      .card-acoes {
+        flex-shrink: 0;
+        margin-top: auto;
+        width: 100%;
+        padding-top: 4px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .card-acoes .btn {
+        margin-top: 0;
       }
 
       .btn {
@@ -460,8 +539,8 @@
         background: rgba(255, 255, 255, 0.07);
         border: 1px solid rgba(255, 255, 255, 0.13);
         border-radius: 999px;
-        padding: 4px 8px;
-        margin-bottom: 8px;
+        padding: 3px 8px;
+        margin-bottom: 4px;
       }
 
       .btn.disabled {
@@ -621,6 +700,14 @@
         margin: 0 0 12px;
         color: var(--muted);
         font-size: 13px;
+      }
+
+      .acesso-local-card p code {
+        font-size: 12px;
+        padding: 1px 5px;
+        border-radius: 6px;
+        background: rgba(255, 255, 255, 0.06);
+        color: var(--text);
       }
 
       .acesso-local-grid {
@@ -934,6 +1021,106 @@
         font-size: 13px;
       }
 
+      .admin-checkbox-linha {
+        flex-direction: row;
+        align-items: flex-start;
+        gap: 10px;
+        cursor: pointer;
+      }
+
+      .admin-checkbox-linha input {
+        width: auto;
+        margin-top: 2px;
+        flex-shrink: 0;
+      }
+
+      .admin-bloco-pausa {
+        margin-top: 14px;
+        padding-top: 14px;
+        border-top: 1px solid rgba(255, 255, 255, 0.12);
+      }
+
+      .admin-bloco-pausa-titulo {
+        margin: 0 0 6px;
+        font-size: 14px;
+        color: var(--text);
+      }
+
+      .admin-bloco-pausa-texto {
+        margin: 0 0 10px;
+        font-size: 12px;
+        color: var(--muted);
+        line-height: 1.45;
+      }
+
+      .admin-bloco-pausa-texto code {
+        font-size: 11px;
+        padding: 1px 4px;
+        border-radius: 4px;
+        background: rgba(255, 255, 255, 0.06);
+      }
+
+      .admin-bloco-renovacao {
+        margin-top: 14px;
+        padding-top: 14px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .admin-bloco-renovacao h4 {
+        margin: 0 0 8px;
+        font-size: 14px;
+        color: var(--text);
+      }
+
+      .admin-lembretes-lista {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .admin-lembrete-linha {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 10px 12px;
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(8, 19, 24, 0.45);
+        font-size: 13px;
+      }
+
+      .admin-lembrete-info {
+        color: var(--muted);
+        min-width: 0;
+      }
+
+      .admin-lembrete-info strong {
+        color: var(--text);
+      }
+
+      .admin-btn-wa {
+        flex-shrink: 0;
+        padding: 8px 12px;
+        border-radius: 10px;
+        border: none;
+        font-weight: 800;
+        font-family: inherit;
+        cursor: pointer;
+        background: linear-gradient(135deg, #25d366, #1ebe5b);
+        color: #042210;
+        text-decoration: none;
+        font-size: 12px;
+      }
+
+      .admin-btn-wa[disabled],
+      .admin-btn-wa.is-disabled {
+        opacity: 0.45;
+        cursor: not-allowed;
+        pointer-events: none;
+      }
+
       .lista {
         max-width: 900px;
         margin: auto;
@@ -1107,17 +1294,20 @@
           padding: 8px 10px 20px;
           gap: 12px;
           grid-template-columns: repeat(2, minmax(0, 1fr));
+          align-items: stretch;
         }
 
         .card {
-          width: auto;
+          width: 100%;
           min-width: 0;
           padding: 12px;
+          min-height: 420px;
+          height: 100%;
         }
 
         .card-descricao {
-          max-height: 160px;
-          opacity: 1;
+          font-size: 10.5px;
+          padding: 5px 6px;
         }
 
         .estado-vazio {
@@ -1178,10 +1368,20 @@
 
         .grid {
           grid-template-columns: 1fr;
+          align-items: stretch;
+        }
+
+        .card {
+          min-height: 400px;
         }
 
         .hero h1 {
-          font-size: 1.7rem;
+          font-size: clamp(1.45rem, 6vw, 1.85rem);
+        }
+
+        .hero-kicker {
+          padding: 7px 14px;
+          letter-spacing: 0.07em;
         }
       }
     </style>
@@ -1193,9 +1393,9 @@
     <div class="sidebar right"><div class="scroll" id="rightScroll"></div></div>
 
     <header class="hero">
-      <span class="hero-kicker">Guia local de Itirapina</span>
-      <h1>Tudo da cidade em um portal só</h1>
-      <p>
+      <span class="hero-kicker" id="portalRegionKicker">Guia local</span>
+      <h1 id="portalHeroTitle">Tudo da cidade em um portal só</h1>
+      <p id="portalHeroLead">
         Encontre empresas, contatos úteis e horários de ônibus com busca rápida
         e acesso direto.
       </p>
@@ -1205,7 +1405,9 @@
     <section class="clima-wrap">
       <div class="clima" id="climaBox">
         <div class="clima-topo">
-          <div class="clima-cidade">Previsão do tempo em Itirapina</div>
+          <div class="clima-cidade" id="portalClimateTitle">
+            Previsão do tempo
+          </div>
           <div class="clima-atual" id="climaAtual">Carregando...</div>
         </div>
         <div class="clima-atualizado" id="climaAtualizado"></div>
@@ -1237,9 +1439,9 @@
       </button>
       <a
         class="menu-acao anuncie"
-        href="https://wa.me/5519999717781?text=Ol%C3%A1%2C%20quero%20anunciar%20no%20Portal%20Itirapina."
-        target="_blank"
-        rel="noopener noreferrer"
+        id="portalLinkAnuncie"
+        href="#"
+        aria-label="Anunciar no portal"
         >🚀 <span class="menu-label-desktop">Anuncie</span
         ><span class="menu-label-mobile">Anunciar</span></a
       >
@@ -1326,11 +1528,10 @@
 
     <div class="sobre-wrap" id="sobreWrap">
       <div class="sobre-card">
-        <h3>Portal Itirapina</h3>
-        <p>
+        <h3 id="portalSobreTitulo">Portal local</h3>
+        <p id="portalSobreTexto">
           Guia local com empresas, contatos úteis, horários de ônibus e previsão
-          do tempo. Para mais informações, procure o administrador clicando no
-          botão Anuncie.
+          do tempo. Use o botão Anuncie para falar com quem opera o portal.
         </p>
         <div class="sobre-acoes">
           <button class="sobre-btn admin" id="abrirAdminNoSobre">
@@ -1344,19 +1545,19 @@
     <div class="acesso-local-wrap" id="acessoLocalWrap">
       <div class="acesso-local-card">
         <h3>Acesso Local</h3>
-        <p>Informe usuário e senha para abrir a Área Admin.</p>
+        <p>
+          Informe a senha do portal (a mesma de <code>ADMIN_LOCAL_PASS</code> no
+          arquivo <code>.env</code>) para abrir a Área Admin.
+        </p>
         <form id="acessoLocalForm">
           <div class="acesso-local-grid">
             <label>
-              Usuário
-              <input type="text" id="acessoLocalUsuario" autocomplete="off" />
-            </label>
-            <label>
-              Senha
+              Senha do portal
               <input
                 type="password"
                 id="acessoLocalSenha"
-                autocomplete="current-password"
+                name="portal_acesso_local_senha"
+                autocomplete="new-password"
               />
             </label>
           </div>
@@ -1389,6 +1590,15 @@
 
         <div class="admin-login" id="adminLoginBox">
           <h3>Acesso restrito</h3>
+          <p
+            class="admin-bloco-pausa-texto"
+            id="adminLoginAjuda"
+            style="margin: 0 0 12px; font-size: 13px"
+          >
+            Com Supabase: use o e-mail e a senha do usuário criado em Authentication
+            → Users. Sem Supabase: ignore este passo e use o formulário abaixo (dados
+            só neste navegador).
+          </p>
           <div class="admin-login-grid">
             <label>
               E-mail admin
@@ -1505,6 +1715,109 @@
                 placeholder="Ex.: Levamos o buffet completo até você..."
               ></textarea>
             </label>
+
+            <label class="full admin-checkbox-linha" for="adminAtivo">
+              <input type="checkbox" id="adminAtivo" checked />
+              <span
+                >Anúncio ativo no portal (desmarque se o cliente está inadimplente
+                — some do guia, da busca e da faixa de logos).</span
+              >
+            </label>
+
+            <label class="full">
+              Próxima cobrança / renovação (opcional)
+              <input type="date" id="adminProximaCobranca" />
+              <span
+                class="admin-bloco-pausa-texto"
+                style="margin-top: 6px; display: block"
+                >Ex.: pagou 3 meses — coloque a data em que deve cobrar de
+                novo.</span
+              >
+            </label>
+
+            <div class="full admin-bloco-renovacao" id="adminLembretesWrap">
+              <h4>Próximos vencimentos (14 dias)</h4>
+              <div id="adminLembretesLista" class="admin-lembretes-lista"></div>
+              <p
+                class="admin-bloco-pausa-texto"
+                id="adminLembretesVazio"
+                style="margin-top: 4px"
+              >
+                Nenhuma cobrança cadastrada neste período.
+              </p>
+              <p class="admin-bloco-pausa-texto" style="margin-top: 8px">
+                No Supabase, rode uma vez
+                <code>supabase-adicionar-proxima-cobranca.sql</code> (coluna
+                <code>proxima_cobranca</code>).
+              </p>
+            </div>
+
+            <div class="full admin-bloco-renovacao">
+              <h4>Alterar data (cliente já cadastrado)</h4>
+              <p class="admin-bloco-pausa-texto">
+                Nome igual ao do card e nova data de cobrança.
+              </p>
+              <label>
+                Nome do cliente
+                <input
+                  type="text"
+                  id="adminNomeCobranca"
+                  list="adminListaEmpresas"
+                  autocomplete="off"
+                  placeholder="Ex.: Buffet em Casa"
+                />
+              </label>
+              <label style="margin-top: 8px">
+                Nova data
+                <input type="date" id="adminDataCobrancaExistente" />
+              </label>
+              <div class="admin-actions" style="margin-top: 10px">
+                <button
+                  type="button"
+                  class="admin-salvar-secundario"
+                  id="adminSalvarCobrancaExistente"
+                >
+                  Salvar próxima cobrança
+                </button>
+              </div>
+            </div>
+
+            <div class="full admin-bloco-pausa">
+              <h4 class="admin-bloco-pausa-titulo">Pausar / reativar cliente já cadastrado</h4>
+              <p class="admin-bloco-pausa-texto">
+                Use o nome <strong>exatamente</strong> como no card. No Supabase,
+                rode uma vez o SQL do arquivo
+                <code>supabase-adicionar-ativo.sql</code> (coluna
+                <code>ativo</code>).
+              </p>
+              <label>
+                Nome do cliente
+                <input
+                  type="text"
+                  id="adminNomeExistente"
+                  list="adminListaEmpresas"
+                  autocomplete="off"
+                  placeholder="Ex.: Vitale Crochê"
+                />
+              </label>
+              <datalist id="adminListaEmpresas"></datalist>
+              <div class="admin-actions" style="margin-top: 10px">
+                <button
+                  type="button"
+                  class="admin-salvar-secundario"
+                  id="adminPausarExistente"
+                >
+                  Pausar anúncio
+                </button>
+                <button
+                  type="button"
+                  class="admin-salvar-secundario"
+                  id="adminReativarExistente"
+                >
+                  Reativar anúncio
+                </button>
+              </div>
+            </div>
           </div>
 
           <div class="admin-actions">
@@ -1523,27 +1836,118 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="/portal-config.js"></script>
     <script>
+      (function mergePortalConfig() {
+        const incoming =
+          window.PORTAL_CONFIG && typeof window.PORTAL_CONFIG === "object"
+            ? window.PORTAL_CONFIG
+            : {};
+        const def = {
+          siteName: "Portal local",
+          siteDescription:
+            "Guia local com empresas, contatos úteis e utilidades num só portal.",
+          regionKicker: "Guia local",
+          heroTitle: "Tudo da cidade em um portal só",
+          heroLead:
+            "Encontre empresas, contatos úteis e horários de ônibus com busca rápida e acesso direto.",
+          climateTitle: "Previsão do tempo",
+          climateLatitude: -22.2528,
+          climateLongitude: -47.8169,
+          sobreTitulo: "Portal local",
+          sobreTexto:
+            "Guia local com empresas, contatos úteis, horários de ônibus e previsão do tempo. Use o botão Anuncie para falar com quem opera o portal.",
+          whatsappE164: "",
+          whatsappAnuncieMessage: "Olá, quero anunciar no portal.",
+          whatsappClienteTemplate:
+            "Olá {nome}, vi seu anúncio no {portal} e gostaria de mais informações.",
+          whatsappRenewalTemplate:
+            "Olá {nome}! A assinatura do anúncio no {portal} está próxima do vencimento ({data}). Podemos renovar?",
+          storagePrefix: "portal_local",
+          supabaseUrl: "",
+          supabaseAnonKey: "",
+          supabaseTable: "empresas",
+          supabaseLogosPublicBase: "",
+          applyDefaultCatalog: true,
+        };
+        window.PORTAL_CONFIG = { ...def, ...incoming };
+      })();
+
+      const P = window.PORTAL_CONFIG;
+
+      function aplicarTextosPublicosDoPortal() {
+        document.title = P.siteName;
+        const md = document.querySelector('meta[name="description"]');
+        if (md) md.setAttribute("content", P.siteDescription);
+        const rk = document.getElementById("portalRegionKicker");
+        if (rk) rk.textContent = P.regionKicker || "Guia local";
+        const ht = document.getElementById("portalHeroTitle");
+        if (ht) ht.textContent = P.heroTitle || "";
+        const hl = document.getElementById("portalHeroLead");
+        if (hl) hl.textContent = P.heroLead || "";
+        const ct = document.getElementById("portalClimateTitle");
+        if (ct) ct.textContent = P.climateTitle || "Previsão do tempo";
+        const st = document.getElementById("portalSobreTitulo");
+        if (st) st.textContent = P.sobreTitulo || P.siteName || "";
+        const sp = document.getElementById("portalSobreTexto");
+        if (sp) sp.textContent = P.sobreTexto || "";
+        const wa = document.getElementById("portalLinkAnuncie");
+        if (wa) {
+          const tel = String(P.whatsappE164 || "").replace(/\D/g, "");
+          if (tel.length >= 12) {
+            const msg = encodeURIComponent(P.whatsappAnuncieMessage || "");
+            wa.setAttribute(
+              "href",
+              `https://wa.me/${tel}?text=${msg}`,
+            );
+            wa.setAttribute("target", "_blank");
+            wa.setAttribute("rel", "noopener noreferrer");
+            wa.classList.remove("is-disabled");
+          } else {
+            wa.setAttribute("href", "#");
+            wa.removeAttribute("target");
+            wa.removeAttribute("rel");
+            wa.classList.add("is-disabled");
+            wa.setAttribute(
+              "title",
+              "Configure PORTAL_WHATSAPP_E164 no .env para ativar o WhatsApp comercial.",
+            );
+          }
+        }
+      }
+
+      function mensagemWhatsAppCliente(nomeEmpresa) {
+        const tpl =
+          P.whatsappClienteTemplate ||
+          "Olá {nome}, vi seu anúncio no {portal} e gostaria de mais informações.";
+        return tpl
+          .replaceAll("{nome}", String(nomeEmpresa || "").trim())
+          .replaceAll("{portal}", P.siteName || "portal");
+      }
+
+      function mensagemWhatsAppRenovacao(nomeEmpresa, dataFmt) {
+        const tpl =
+          P.whatsappRenewalTemplate ||
+          "Olá {nome}! A assinatura do anúncio no {portal} está próxima do vencimento ({data}). Podemos renovar?";
+        return tpl
+          .replaceAll("{nome}", String(nomeEmpresa || "").trim())
+          .replaceAll("{data}", String(dataFmt || "").trim())
+          .replaceAll("{portal}", P.siteName || "portal");
+      }
+
       /* EMPRESAS */
-      const STORAGE_EMPRESAS = "portal_itirapina_empresas";
-      const STORAGE_VISITAS = "portal_itirapina_visitas";
-      const STORAGE_DESCRICOES = "portal_itirapina_descricoes";
-      const SUPABASE_URL = "https://upvppojjkuwtbndjyugl.supabase.co";
-      const SUPABASE_ANON_KEY =
-        "sb_publishable_hO4aymyOY4NunXbbDCPubw_Oz3U6ES-";
-      const SUPABASE_TABLE = "empresas";
+      const STORAGE_EMPRESAS = `${P.storagePrefix}_empresas`;
+      const STORAGE_VISITAS = `${P.storagePrefix}_visitas`;
+      const STORAGE_DESCRICOES = `${P.storagePrefix}_descricoes`;
+      const SUPABASE_URL = (P.supabaseUrl || "").trim();
+      const SUPABASE_ANON_KEY = (P.supabaseAnonKey || "").trim();
+      const SUPABASE_TABLE = (P.supabaseTable || "empresas").trim() || "empresas";
 
       /**
-       * Blindagem: se preencher com a URL pública do bucket (sem barra no final),
-       * todo caminho "assets/nome.jpeg" vira link estável no Supabase Storage.
-       * Crie um bucket público (ex.: portal-logos), envie os arquivos com os
-       * mesmos nomes da pasta assets/ e cole a URL base aqui.
-       * Ex.: https://upvppojjkuwtbndjyugl.supabase.co/storage/v1/object/public/portal-logos
-       * Deixe "" para usar só arquivos locais na pasta assets/.
-       * Só preencha a URL do Storage depois de enviar TODOS os arquivos ao bucket
-       * com os mesmos nomes; senão as imagens somem (404 no Storage).
+       * Blindagem: URL pública do bucket (sem barra no final); veja SUPABASE_LOGOS_PUBLIC_BASE no .env.
+       * Deixe vazio para usar só arquivos locais em assets/.
        */
-      const SUPABASE_LOGOS_PUBLIC_BASE = "";
+      const SUPABASE_LOGOS_PUBLIC_BASE = (P.supabaseLogosPublicBase || "").trim();
 
       const supabaseClient =
         SUPABASE_URL && SUPABASE_ANON_KEY && window.supabase
@@ -1552,187 +1956,35 @@
 
       let descricoesCustomizadas = carregarDescricoesStorage();
 
-      const empresasPadrao = [
-        {
-          nome: "FL Conecta",
-          logo: "assets/conecta.jpeg",
-          tel: "5519999717781",
-          instagram: "https://instagram.com/flconecta",
-          categoria: "Marketing",
-          palavrasChave: ["marketing", "midias", "publicidade", "social media"],
-          patrocinado: true,
-        },
-        {
-          nome: "Julia Corretora",
-          logo: "assets/julia.jpeg",
-          tel: "5519999322673",
-          categoria: "Seguros",
-          patrocinado: true,
-        },
-        {
-          nome: "Clinica Bem Viver",
-          logo: "assets/clinica.jpeg",
-          tel: "5519997731179",
-          endereco: "Avenida 2, nº 29 - Centro, Itirapina - SP",
-          categoria: "Saúde",
-          palavrasChave: ["clinica", "medico", "saude", "unimed", "iamspe"],
-          plano: "vip",
-          patrocinado: true,
-        },
-        {
-          nome: "Rotisseria Arte do Sabor",
-          logo: "assets/rotisseria.jpeg",
-          tel: "5519998507034",
-          endereco: "Rua 2 nº 409 - Centro, Itirapina - SP",
-          categoria: "Alimentação",
-          palavrasChave: ["restaurante", "comida", "marmita", "rotisseria"],
-        },
-        {
-          nome: "Gordo Lanches",
-          logo: "assets/gordo.jpeg",
-          tel: "5519997913079",
-          endereco: "Av. Perimetral, 721 - Jardim Nova Itirapina, Itirapina",
-          instagram: "https://instagram.com/gordolanchesitirapina",
-          categoria: "Alimentação",
-          funcionamento: "Quarta a domingo, das 18:30 às 22:40",
-          palavrasChave: ["lanches", "hamburguer", "lanche", "gordo"],
-        },
-        {
-          nome: "Depósito de Bebida Alves",
-          logo: "assets/deposito.jpeg",
-          tel: "5519996662084",
-          categoria: "Bebidas",
-          palavrasChave: [
-            "deposito",
-            "bebidas",
-            "cerveja",
-            "agua",
-            "refrigerante",
-          ],
-        },
-        {
-          nome: "Lolana Lavanderia",
-          logo: "assets/lolana.jpeg",
-          tel: "5519997579086",
-          endereco: "Rua Cinco n°752 Vila Garbi (esquina com Av. 6)",
-          categoria: "Serviços",
-          palavrasChave: ["lavanderia", "lavar roupa", "roupas"],
-        },
-        {
-          nome: "Margem Zero Gráfica",
-          logo: "assets/grafica.jpeg",
-          tel: "5519990195526",
-          categoria: "Gráfica",
-          palavrasChave: ["grafica", "impressao", "cartao", "banner"],
-        },
-        {
-          nome: "Criando Sonhos",
-          logo: "assets/criando-sonhos.jpeg",
-          tel: "5516992513881",
-          categoria: "Eventos",
-        },
-        {
-          nome: "APIB",
-          logo: "assets/apib.jpeg",
-          tel: "5519990000000",
-          categoria: "Associação",
-        },
-        {
-          nome: "Vitale Crochê",
-          logo: "assets/vitale.jpeg",
-          tel: "5519991457752",
-          categoria: "Artesanato",
-        },
-        {
-          nome: "Sempre Bella",
-          logo: "assets/sempre-bela.jpeg",
-          tel: "5519997168481",
-          categoria: "Beleza",
-          palavrasChave: ["perfumaria", "cosmeticos", "beleza"],
-        },
-        {
-          nome: "Cheiro de Amor",
-          logo: "assets/cheiro-de-amor.jpeg",
-          tel: "5519996983282",
-          categoria: "Perfumaria",
-          palavrasChave: ["perfumaria", "perfume", "cosmeticos"],
-        },
-        {
-          nome: "Sorvete Americano",
-          logo: "assets/sorvete.jpeg",
-          tel: "5519997216659",
-          categoria: "Sobremesas",
-        },
-        {
-          nome: "Limp Gel",
-          logo: "assets/limpgel.jpeg",
-          tel: "5519997216659",
-          categoria: "Serviços",
-          plano: "basico",
-          palavrasChave: ["servicos", "limpeza", "limp gel"],
-        },
-        {
-          nome: "Impulsiona Veículos",
-          logo: "assets/impulsiona.jpeg",
-          tel: "5519981301140",
-          site: "https://impulsionaveiculos.com.br",
-          categoria: "Automóveis",
-          palavrasChave: ["veiculos", "carros", "automoveis"],
-          patrocinado: true,
-        },
-        {
-          nome: "Valdecir Alves",
-          logo: "assets/valdecir.jpeg",
-          tel: "5519999474489",
-          categoria: "Uber",
-          plano: "basico",
-          palavrasChave: ["uber", "motorista", "particular", "corridas"],
-        },
-        {
-          nome: "EC Escavações",
-          logo: "assets/escavacoes.jpeg",
-          tel: "5519998174773",
-          categoria: "Construção",
-          palavrasChave: [
-            "escavacoes",
-            "piscinas",
-            "alicerces",
-            "terraplenagem",
-          ],
-        },
-        {
-          nome: "Gu Espetaria e Choperia",
-          logo: "assets/espetaria.jpeg",
-          tel: "5519996150744",
-          categoria: "Alimentação",
-          palavrasChave: ["espetaria", "choperia", "petiscos", "eventos"],
-        },
-        {
-          nome: "Buffet em Casa Gourmet",
-          logo: "assets/buffet.jpeg",
-          tel: "5519997750869",
-          categoria: "Eventos",
-          instagram: "https://instagram.com/buffetemcasagourmet",
-          descricao:
-            "Levamos o buffet completo até você! 🏠<br>🍱 Cardápios Gourmet | Garçons | Logística Completa<br>🎉 Casamentos, Aniversários e Eventos Corporativos",
-          palavrasChave: [
-            "buffet",
-            "casamentos",
-            "aniversarios",
-            "eventos corporativos",
-            "gourmet",
-            "gastronomia",
-            "@buffetemcasagourmet",
-          ],
-        },
-        {
-          nome: "Iara Ponfilio",
-          logo: "assets/iara.jpeg",
-          tel: "5519997606453",
-          categoria: "Uber",
-          palavrasChave: ["uber", "motorista", "conveniencias", "servicos"],
-        },
-      ];
+      /** Catálogo demo: arquivo `data/empresas-demo.json` (fácil de trocar por cidade/cliente). */
+      let empresasPadrao = [];
+
+      async function carregarEmpresasPadraoJson() {
+        try {
+          const resposta = await fetch("/data/empresas-demo.json", {
+            cache: "no-store",
+          });
+          if (!resposta.ok) throw new Error(String(resposta.status));
+          const dados = await resposta.json();
+          if (!Array.isArray(dados)) throw new Error("Lista inválida");
+          empresasPadrao = dados;
+        } catch (erro) {
+          // eslint-disable-next-line no-console
+          console.warn(
+            "[portal] data/empresas-demo.json ausente ou inválido; usando exemplo mínimo.",
+            erro,
+          );
+          empresasPadrao = [
+            {
+              nome: "Exemplo Local",
+              logo: "assets/conecta.jpeg",
+              tel: "5511999999999",
+              categoria: "Serviços",
+              plano: "basico",
+            },
+          ];
+        }
+      }
 
       const cepNovoDados = [
         {
@@ -3148,15 +3400,39 @@
         return plano === "standard" || plano === "vip";
       }
 
+      function empresaAtivaNoPortal(empresa) {
+        const a = empresa && empresa.ativo;
+        if (a === false || a === 0 || a === "0") return false;
+        if (String(a).toLowerCase() === "false") return false;
+        return true;
+      }
+
+      function empresasAtivasNoPortal(lista) {
+        return (lista || []).filter(empresaAtivaNoPortal);
+      }
+
+      function normalizarDataIsoCobranca(val) {
+        if (val == null || val === "") return undefined;
+        const s = String(val).trim().slice(0, 10);
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(s)) return undefined;
+        return s;
+      }
+
       function normalizarEmpresa(empresa) {
         const plano =
           empresa.plano || (empresa.patrocinado ? "standard" : "basico");
         const descricao = String(empresa.descricao || "").trim();
+        const ativo = empresaAtivaNoPortal(empresa);
+        const proximaCobranca = normalizarDataIsoCobranca(
+          empresa.proximaCobranca ?? empresa.proxima_cobranca,
+        );
         return {
           ...empresa,
           descricao: descricao || undefined,
           plano,
           patrocinado: planoParaPatrocinio(plano),
+          ativo,
+          ...(proximaCobranca ? { proximaCobranca } : {}),
         };
       }
 
@@ -3245,6 +3521,7 @@
           tiposerv,
           palavras_chave,
           palavrasChave,
+          proxima_cobranca,
           ...rest
         } = registro;
         return normalizarEmpresa({
@@ -3254,10 +3531,12 @@
           palavrasChave: normalizarPalavrasChave(
             palavras_chave ?? palavrasChave,
           ),
+          proximaCobranca: proxima_cobranca ?? undefined,
         });
       }
 
       function mapearEmpresaParaBanco(empresa) {
+        const desc = String(empresa.descricao || "").trim();
         return {
           nome: empresa.nome,
           logotipo: empresa.logo,
@@ -3269,10 +3548,21 @@
           plano: empresa.plano,
           patrocinado: Boolean(empresa.patrocinado),
           palavras_chave: normalizarPalavrasChave(empresa.palavrasChave),
+          ativo: empresaAtivaNoPortal(empresa),
+          proxima_cobranca:
+            normalizarDataIsoCobranca(empresa.proximaCobranca) || null,
+          ...(desc ? { descricao: desc } : {}),
         };
       }
 
-      function aplicarAjustesEmpresas(lista) {
+      function aplicarCatalogoComercialLegado(lista) {
+        const nomesForcarVip = new Set([
+          "fl conecta",
+          "gordo lanches",
+          "lolana lavanderia",
+          "ec escavacoes",
+          "iara ponfilio",
+        ]);
         const base = (lista || [])
           .filter(
             (empresa) => normalizarTexto(empresa.nome) !== "claudio montador",
@@ -3313,7 +3603,16 @@
               };
             }
             return empresa;
-          });
+          })
+          .map((empresa) =>
+            nomesForcarVip.has(normalizarTexto(empresa.nome))
+              ? normalizarEmpresa({
+                  ...empresa,
+                  plano: "vip",
+                  patrocinado: true,
+                })
+              : empresa,
+          );
 
         const existeValdecir = base.some(
           (empresa) => normalizarTexto(empresa.nome) === "valdecir alves",
@@ -3386,6 +3685,8 @@
               categoria: "Alimentação",
               funcionamento: "Quarta a domingo, das 18:30 às 22:40",
               palavrasChave: ["lanches", "hamburguer", "lanche", "gordo"],
+              plano: "vip",
+              patrocinado: true,
             }),
           );
         }
@@ -3396,7 +3697,8 @@
             logo: "assets/escavacoes.jpeg",
             tel: "5519998174773",
             categoria: "Construção",
-            plano: "basico",
+            plano: "vip",
+            patrocinado: true,
             palavrasChave: [
               "escavacoes",
               "piscinas",
@@ -3417,7 +3719,8 @@
             logo: "assets/iara.jpeg",
             tel: "5519997606453",
             categoria: "Uber",
-            plano: "basico",
+            plano: "vip",
+            patrocinado: true,
             palavrasChave: ["uber", "motorista", "conveniencias", "servicos"],
           },
         ];
@@ -3435,20 +3738,88 @@
         return removerEmpresasDuplicadasPorNome(base);
       }
 
+      function aplicarAjustesEmpresas(lista) {
+        if (!P.applyDefaultCatalog) {
+          return removerEmpresasDuplicadasPorNome(lista || []);
+        }
+        return aplicarCatalogoComercialLegado(lista);
+      }
+
+      /** Variações de nome do mesmo negócio (ex.: banco + demo com nomes diferentes). */
+      const GRUPOS_NOMES_IGUAIS_EMPRESA = [
+        [
+          "Gu Espetaria e Choperia",
+          "Gu Espetaria & Choperia",
+          "Espetaria do Gu",
+          "Espetaria & Choperia do Gu",
+          "Espetaria e Choperia do Gu",
+        ],
+      ];
+
+      function chaveFusaoNomeEmpresa(nome) {
+        const n = normalizarTexto(nome);
+        for (const grupo of GRUPOS_NOMES_IGUAIS_EMPRESA) {
+          for (let i = 0; i < grupo.length; i += 1) {
+            if (normalizarTexto(grupo[i]) === n) {
+              return normalizarTexto(grupo[0]);
+            }
+          }
+        }
+        return n;
+      }
+
+      function rankPlano(plano) {
+        if (plano === "vip") return 3;
+        if (plano === "standard") return 2;
+        if (plano === "basico") return 1;
+        return 0;
+      }
+
+      function fusionarDuasEmpresas(a, b) {
+        const prim = rankPlano(a.plano) >= rankPlano(b.plano) ? a : b;
+        const sec = prim === a ? b : a;
+        const nome =
+          String(prim.nome || "").length >= String(sec.nome || "").length
+            ? prim.nome
+            : sec.nome;
+        const chaves = new Set([
+          ...normalizarPalavrasChave(prim.palavrasChave),
+          ...normalizarPalavrasChave(sec.palavrasChave),
+        ]);
+        return normalizarEmpresa({
+          ...sec,
+          ...prim,
+          nome,
+          plano:
+            rankPlano(prim.plano) >= rankPlano(sec.plano)
+              ? prim.plano
+              : sec.plano,
+          patrocinado: Boolean(prim.patrocinado || sec.patrocinado),
+          endereco: prim.endereco || sec.endereco,
+          instagram: prim.instagram || sec.instagram,
+          site: prim.site || sec.site,
+          funcionamento: prim.funcionamento || sec.funcionamento,
+          logo: prim.logo || sec.logo,
+          tel: prim.tel || sec.tel,
+          palavrasChave: [...chaves],
+        });
+      }
+
       function removerEmpresasDuplicadasPorNome(lista) {
-        const visto = new Set();
-        const saida = [];
+        const mapa = new Map();
+        const semNome = [];
         for (const empresa of lista || []) {
           const k = normalizarTexto(empresa.nome);
           if (!k) {
-            saida.push(empresa);
+            semNome.push(empresa);
             continue;
           }
-          if (visto.has(k)) continue;
-          visto.add(k);
-          saida.push(empresa);
+          const fusao = chaveFusaoNomeEmpresa(empresa.nome);
+          const prev = mapa.get(fusao);
+          if (!prev) mapa.set(fusao, empresa);
+          else mapa.set(fusao, fusionarDuasEmpresas(prev, empresa));
         }
-        return saida;
+        return [...semNome, ...mapa.values()];
       }
 
       function obterDescricaoServico(empresa) {
@@ -3470,7 +3841,7 @@
           "rotisseria arte do sabor":
             "Refeições e marmitas com sabor caseiro para facilitar seu dia a dia.",
           "gordo lanches":
-            "Lanches artesanais caprichados para matar a fome com muito sabor.",
+            "Lanches artesanais para matar a fome com sabor.",
           "deposito de bebida alves":
             "Bebidas geladas para seu dia a dia, churrasco e confraternizações.",
           "lolana lavanderia":
@@ -3484,6 +3855,8 @@
             "Peças em crochê feitas à mão com carinho, estilo e exclusividade.",
           "sempre bella":
             "Perfumaria e cosméticos para realçar sua beleza todos os dias.",
+          "samarina gomes marino":
+            "Consultora de Beleza Natura e Avon — atendimento e pedidos com praticidade.",
           "cheiro de amor":
             "Fragrâncias e cosméticos para presentear e se cuidar com charme.",
           "sorvete americano":
@@ -3498,6 +3871,10 @@
             "Serviços de escavações, abertura de piscinas e execução de alicerces.",
           "gu espetaria e choperia":
             "Espetaria e choperia para encontros, festas e eventos em geral.",
+          "buffet em casa gourmet":
+            "Buffet completo onde você estiver: casamentos, aniversários e corporativos.",
+          "buffet em casa":
+            "Buffet completo onde você estiver: casamentos, aniversários e corporativos.",
           "iara ponfilio":
             "Serviço de Baby Uber, corridas urbanas e conveniências com atendimento dedicado.",
         };
@@ -3522,6 +3899,22 @@
         }
 
         return "Atendimento local com qualidade e suporte para o que você precisa.";
+      }
+
+      /** Texto do card: sem HTML; Buffet e Gordo com limite curto para não gerar rolagem. */
+      function textoDescricaoCardPlano(empresa) {
+        let t = String(obterDescricaoServico(empresa) || "")
+          .replace(/<br\s*\/?>/gi, " ")
+          .replace(/<[^>]+>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim();
+        const k = normalizarTexto(empresa.nome);
+        const compactoSemScroll =
+          k.includes("buffet") || k === "gordo lanches";
+        if (compactoSemScroll && t.length > 190) {
+          t = `${t.slice(0, 187)}…`;
+        }
+        return escaparHtml(t);
       }
 
       function iniciarContadorVisitas() {
@@ -3592,11 +3985,142 @@
         if (error) throw error;
       }
 
+      async function definirAtivoClienteNoBanco(nome, ativo) {
+        const nomeTrim = String(nome || "").trim();
+        if (!nomeTrim) {
+          throw new Error("Informe o nome do cliente.");
+        }
+        if (supabaseConfigurado()) {
+          const { data, error } = await supabaseClient
+            .from(SUPABASE_TABLE)
+            .update({ ativo })
+            .eq("nome", nomeTrim)
+            .select("nome");
+          if (error) throw error;
+          if (!data || !data.length) {
+            throw new Error(
+              "Nenhum registro com esse nome exato. Confira maiúsculas, acentos e espaços.",
+            );
+          }
+          return;
+        }
+        const chave = normalizarTexto(nomeTrim);
+        const idx = empresas.findIndex(
+          (e) => normalizarTexto(e.nome) === chave,
+        );
+        if (idx < 0) {
+          throw new Error("Cliente não encontrado no armazenamento local.");
+        }
+        empresas[idx] = normalizarEmpresa({ ...empresas[idx], ativo });
+        salvarEmpresasStorage(empresas);
+      }
+
+      function atualizarDatalistNomesAdmin() {
+        const dl = document.getElementById("adminListaEmpresas");
+        if (!dl) return;
+        dl.innerHTML = "";
+        for (const e of empresas || []) {
+          const op = document.createElement("option");
+          op.value = e.nome;
+          dl.appendChild(op);
+        }
+        renderizarLembretesRenovacao();
+      }
+
+      function empresasComRenovacaoProxima(dias) {
+        const janela = Number(dias) > 0 ? Number(dias) : 14;
+        const hoje = new Date();
+        hoje.setHours(0, 0, 0, 0);
+        const limite = new Date(hoje);
+        limite.setDate(limite.getDate() + janela);
+        return (empresas || [])
+          .filter((e) => {
+            const d = normalizarDataIsoCobranca(e.proximaCobranca);
+            if (!d) return false;
+            const dt = new Date(`${d}T12:00:00`);
+            return dt >= hoje && dt <= limite;
+          })
+          .sort((a, b) =>
+            String(a.proximaCobranca).localeCompare(String(b.proximaCobranca)),
+          );
+      }
+
+      function textoRenovacaoWhatsApp(nome, dataFmt) {
+        return mensagemWhatsAppRenovacao(nome, dataFmt);
+      }
+
+      function renderizarLembretesRenovacao() {
+        const box = document.getElementById("adminLembretesLista");
+        const vazio = document.getElementById("adminLembretesVazio");
+        if (!box) return;
+        const lista = empresasComRenovacaoProxima(14);
+        box.innerHTML = "";
+        if (vazio) {
+          vazio.style.display = lista.length ? "none" : "block";
+        }
+        for (const e of lista) {
+          const dIso = normalizarDataIsoCobranca(e.proximaCobranca);
+          const dt = new Date(`${dIso}T12:00:00`);
+          const dataFmt = dt.toLocaleDateString("pt-BR");
+          const telWa = telefoneInternacionalBr(e.tel);
+          const ok = telefoneValido(e.tel);
+          const msg = textoRenovacaoWhatsApp(e.nome, dataFmt);
+          const href = ok
+            ? `https://wa.me/${telWa}?text=${encodeURIComponent(msg)}`
+            : "#";
+          const linha = document.createElement("div");
+          linha.className = "admin-lembrete-linha";
+          const nomeS = escaparHtml(e.nome);
+          linha.innerHTML = `
+<span class="admin-lembrete-info"><strong>${nomeS}</strong> — vence em <strong>${dataFmt}</strong></span>
+<a class="admin-btn-wa ${ok ? "" : "is-disabled"}" href="${href}" ${ok ? 'target="_blank" rel="noopener noreferrer"' : ""}>WhatsApp renovação</a>`;
+          box.appendChild(linha);
+        }
+      }
+
+      async function definirProximaCobrancaNoBanco(nome, dataIso) {
+        const nomeTrim = String(nome || "").trim();
+        const data = normalizarDataIsoCobranca(dataIso);
+        if (!nomeTrim) {
+          throw new Error("Informe o nome do cliente.");
+        }
+        if (!data) {
+          throw new Error("Informe uma data válida.");
+        }
+        if (supabaseConfigurado()) {
+          const { data: rows, error } = await supabaseClient
+            .from(SUPABASE_TABLE)
+            .update({ proxima_cobranca: data })
+            .eq("nome", nomeTrim)
+            .select("nome");
+          if (error) throw error;
+          if (!rows || !rows.length) {
+            throw new Error(
+              "Nenhum registro com esse nome exato. Confira maiúsculas e acentos.",
+            );
+          }
+          return;
+        }
+        const chave = normalizarTexto(nomeTrim);
+        const idx = empresas.findIndex(
+          (item) => normalizarTexto(item.nome) === chave,
+        );
+        if (idx < 0) {
+          throw new Error("Cliente não encontrado no armazenamento local.");
+        }
+        empresas[idx] = normalizarEmpresa({
+          ...empresas[idx],
+          proximaCobranca: data,
+        });
+        salvarEmpresasStorage(empresas);
+      }
+
       function mensagemErroSupabase(erro) {
         if (!erro) return "Falha de conexão com o banco.";
         if (typeof erro === "string") return erro;
-        if (erro.message) return erro.message;
-        return "Falha de conexão com o banco.";
+        const base = erro.message || "Falha de conexão com o banco.";
+        const det = erro.details || erro.hint;
+        return det ? `${base} (${det})` : base;
       }
 
       function exibirErroConexaoBanco(erro) {
@@ -3609,17 +4133,20 @@
       }
 
       async function inicializarEmpresas() {
+        await carregarEmpresasPadraoJson();
         if (supabaseConfigurado()) {
           try {
             empresas = aplicarAjustesEmpresas(await carregarEmpresasBanco());
-            carregar(empresas);
+            carregar(empresasAtivasNoPortal(empresas));
             criarEscada();
+            atualizarDatalistNomesAdmin();
             return;
           } catch (erro) {
             console.error("Falha ao carregar empresas do Supabase:", erro);
             empresas = [];
-            carregar(empresas);
+            carregar(empresasAtivasNoPortal(empresas));
             criarEscada();
+            atualizarDatalistNomesAdmin();
             exibirErroConexaoBanco(erro);
             return;
           }
@@ -3627,8 +4154,9 @@
 
         empresas = aplicarAjustesEmpresas(carregarEmpresasStorage());
         salvarEmpresasStorage(empresas);
-        carregar(empresas);
+        carregar(empresasAtivasNoPortal(empresas));
         criarEscada();
+        atualizarDatalistNomesAdmin();
       }
 
       function normalizarTelefone(tel) {
@@ -3758,6 +4286,7 @@
         apib: "assets/apib.jpeg",
         "vitale croche": "assets/vitale.jpeg",
         "sempre bella": "assets/sempre-bela.jpeg",
+        "samarina gomes marino": "assets/samarina.png",
         "cheiro de amor": "assets/cheiro-de-amor.jpeg",
         "sorvete americano": "assets/sorvete.jpeg",
         "limp gel": "assets/limpgel.jpeg",
@@ -3834,8 +4363,15 @@
         const climaLista = document.getElementById("climaLista");
 
         try {
-          const url =
-            "https://api.open-meteo.com/v1/forecast?latitude=-22.2528&longitude=-47.8169&current=temperature_2m,weather_code,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=America%2FSao_Paulo&forecast_days=4";
+          const lat = Number(P.climateLatitude);
+          const lon = Number(P.climateLongitude);
+          const latitude = Number.isFinite(lat) ? lat : -22.2528;
+          const longitude = Number.isFinite(lon) ? lon : -47.8169;
+          const url = `https://api.open-meteo.com/v1/forecast?latitude=${encodeURIComponent(
+            String(latitude),
+          )}&longitude=${encodeURIComponent(
+            String(longitude),
+          )}&current=temperature_2m,weather_code,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=America%2FSao_Paulo&forecast_days=4`;
           const resposta = await fetch(url);
           if (!resposta.ok) throw new Error("Falha ao carregar clima");
           const dados = await resposta.json();
@@ -3893,16 +4429,18 @@
         const ordenada = [...lista].sort((a, b) => {
           const nomeA = normalizarTexto(a.nome);
           const nomeB = normalizarTexto(b.nome);
-          const ordemA =
-            prioridade[nomeA] !== undefined ? prioridade[nomeA] : 999;
-          const ordemB =
-            prioridade[nomeB] !== undefined ? prioridade[nomeB] : 999;
+          if (P.applyDefaultCatalog) {
+            const ordemA =
+              prioridade[nomeA] !== undefined ? prioridade[nomeA] : 999;
+            const ordemB =
+              prioridade[nomeB] !== undefined ? prioridade[nomeB] : 999;
+            if (ordemA !== ordemB) return ordemA - ordemB;
+          }
 
-          if (ordemA !== ordemB) return ordemA - ordemB;
-
-          return (
-            Number(Boolean(b.patrocinado)) - Number(Boolean(a.patrocinado))
-          );
+          const patDiff =
+            Number(Boolean(b.patrocinado)) - Number(Boolean(a.patrocinado));
+          if (patDiff !== 0) return patDiff;
+          return nomeA.localeCompare(nomeB, "pt-BR");
         });
 
         ordenada.forEach((e) => {
@@ -3913,13 +4451,13 @@
           const nomeSeguro = escaparHtml(e.nome);
           const categoriaSegura = escaparHtml(e.categoria || "");
           const funcionamentoSeguro = escaparHtml(e.funcionamento || "");
-          const descricaoServico = escaparHtml(obterDescricaoServico(e));
+          const descricaoServico = textoDescricaoCardPlano(e);
           const logoSeguro = logoUrlEmpresa(e);
           const siteSeguro = urlHttpSegura(e.site);
           const instagramSeguro = urlHttpSegura(e.instagram);
           const hrefWhatsApp = temWhatsApp
             ? `https://wa.me/${telWa}?text=${encodeURIComponent(
-                `Olá ${e.nome}, vi seu anúncio no Portal Itirapina e gostaria de mais informações.`,
+                mensagemWhatsAppCliente(e.nome),
               )}`
             : "#";
           const hrefLigacao = temLigacao ? `tel:+${telefone}` : "#";
@@ -3929,12 +4467,14 @@
 
           grid.innerHTML += `
 <div class="card ${e.patrocinado ? "patrocinado" : ""} ${e.plano === "vip" ? "vip" : ""}">
+<div class="card-topo">
 <img src="${logoSeguro}" alt="Logo ${nomeSeguro}" loading="lazy">
 ${categoriaSegura ? `<div class="categoria">${categoriaSegura}</div>` : ""}
 <h3>${nomeSeguro}</h3>
-${funcionamentoSeguro ? `<div class="card-funcionamento">${funcionamentoSeguro}</div>` : ""}
+<div class="card-funcionamento${funcionamentoSeguro ? "" : " is-empty"}">${funcionamentoSeguro || "&#8203;"}</div>
 <div class="card-descricao">${descricaoServico}</div>
-
+</div>
+<div class="card-acoes">
 <a class="btn ligar ${temLigacao ? "" : "disabled"}" href="${hrefLigacao}" ${temLigacao ? "" : 'aria-disabled="true"'}>
 ${temLigacao ? "Ligar" : "Ligação indisponível"}
 </a>
@@ -3946,7 +4486,7 @@ ${temWhatsApp ? "WhatsApp" : "WhatsApp indisponível"}
 ${siteSeguro ? `<a class="btn site" href="${siteSeguro}" target="_blank" rel="noopener noreferrer">Ver Site</a>` : ""}
 ${instagramSeguro ? `<a class="btn instagram" href="${instagramSeguro}" target="_blank" rel="noopener noreferrer">Instagram</a>` : ""}
 ${e.endereco ? `<a class="btn site" href="${hrefMapa}" target="_blank" rel="noopener noreferrer">📍 Localização</a>` : ""}
-
+</div>
 </div>`;
         });
       }
@@ -3972,10 +4512,18 @@ ${e.endereco ? `<a class="btn site" href="${hrefMapa}" target="_blank" rel="noop
         const adminSalvarDescricao = document.getElementById(
           "adminSalvarDescricao",
         );
+        const adminAtivo = document.getElementById("adminAtivo");
+        const adminNomeExistente = document.getElementById(
+          "adminNomeExistente",
+        );
+        const adminPausarExistente = document.getElementById(
+          "adminPausarExistente",
+        );
+        const adminReativarExistente = document.getElementById(
+          "adminReativarExistente",
+        );
         const acessoLocalWrap = document.getElementById("acessoLocalWrap");
         const acessoLocalForm = document.getElementById("acessoLocalForm");
-        const acessoLocalUsuario =
-          document.getElementById("acessoLocalUsuario");
         const acessoLocalSenha = document.getElementById("acessoLocalSenha");
         const acessoLocalMsg = document.getElementById("acessoLocalMsg");
         const acessoLocalCancelar = document.getElementById(
@@ -3983,7 +4531,7 @@ ${e.endereco ? `<a class="btn site" href="${hrefMapa}" target="_blank" rel="noop
         );
         let tentativasFalhasLogin = 0;
         let bloqueioLoginAte = 0;
-        const CHAVE_ACESSO_LOCAL = "portal_itirapina_acesso_local_ok_ate";
+        const CHAVE_ACESSO_LOCAL = `${P.storagePrefix}_acesso_local_ok_ate`;
         const ACESSO_LOCAL_TTL_MS = 30 * 60 * 1000;
 
         function acessoLocalValido() {
@@ -4006,7 +4554,6 @@ ${e.endereco ? `<a class="btn site" href="${hrefMapa}" target="_blank" rel="noop
             return;
           }
           acessoLocalMsg.textContent = "";
-          acessoLocalUsuario.value = "";
           acessoLocalSenha.value = "";
           acessoLocalWrap.classList.add("active");
         }
@@ -4030,7 +4577,12 @@ ${e.endereco ? `<a class="btn site" href="${hrefMapa}" target="_blank" rel="noop
         aplicarCorPlanoSelecionado();
 
         async function adminLogado() {
-          if (!supabaseConfigurado()) return false;
+          if (!supabaseConfigurado()) {
+            return acessoLocalValido();
+          }
+          if (!acessoLocalValido()) {
+            return false;
+          }
           const {
             data: { session },
           } = await supabaseClient.auth.getSession();
@@ -4042,6 +4594,7 @@ ${e.endereco ? `<a class="btn site" href="${hrefMapa}" target="_blank" rel="noop
             adminLoginBox.classList.add("admin-hidden");
             adminForm.classList.remove("admin-hidden");
             adminSair.style.display = "inline-block";
+            atualizarDatalistNomesAdmin();
           } else {
             adminLoginBox.classList.remove("admin-hidden");
             adminForm.classList.add("admin-hidden");
@@ -4088,27 +4641,38 @@ ${e.endereco ? `<a class="btn site" href="${hrefMapa}" target="_blank" rel="noop
 
         acessoLocalForm.addEventListener("submit", async (event) => {
           event.preventDefault();
-          const usuario = acessoLocalUsuario.value.trim();
-          const senha = acessoLocalSenha.value;
+          const senha = acessoLocalSenha.value.trim();
 
-          if (!usuario || !senha) {
-            acessoLocalMsg.textContent = "Preencha usuário e senha.";
+          if (!senha) {
+            acessoLocalMsg.textContent = "Preencha a senha.";
             return;
           }
 
           acessoLocalMsg.textContent = "Validando...";
 
           try {
-            const resposta = await fetch("/api/admin/local-login", {
+            const base =
+              window.location.protocol === "file:"
+                ? "http://localhost:3000"
+                : window.location.origin;
+            const loginUrl = new URL("/api/admin/local-login", base).href;
+            const resposta = await fetch(loginUrl, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ usuario, senha }),
+              body: JSON.stringify({ senha }),
             });
 
             if (!resposta.ok) {
               const payload = await resposta.json().catch(() => ({}));
+              const texto =
+                payload.error ||
+                payload.message ||
+                (typeof payload === "string" ? payload : "");
               acessoLocalMsg.textContent =
-                payload.error || "Usuário ou senha inválidos.";
+                texto.trim() ||
+                (resposta.status === 429
+                  ? "Muitas tentativas. Aguarde ~10 min ou pare e rode npm start de novo."
+                  : "Senha inválida.");
               return;
             }
 
@@ -4149,7 +4713,8 @@ ${e.endereco ? `<a class="btn site" href="${hrefMapa}" target="_blank" rel="noop
           }
 
           if (!supabaseConfigurado()) {
-            adminLoginMsg.textContent = "Supabase não configurado.";
+            adminLoginMsg.textContent =
+              "Sem Supabase no .env: o cadastro já está liberado neste aparelho (dados locais). Configure SUPABASE_URL e SUPABASE_ANON_KEY para salvar na nuvem.";
             return;
           }
 
@@ -4180,10 +4745,96 @@ ${e.endereco ? `<a class="btn site" href="${hrefMapa}" target="_blank" rel="noop
           aplicarEstadoAdmin();
         });
 
+        adminPausarExistente.addEventListener("click", async () => {
+          if (!(await adminLogado())) {
+            adminMsg.textContent = "Faça login para pausar.";
+            return;
+          }
+          const nome = adminNomeExistente
+            ? adminNomeExistente.value.trim()
+            : "";
+          if (!nome) {
+            adminMsg.textContent =
+              "Informe o nome do cliente (igual ao do card).";
+            return;
+          }
+          adminMsg.textContent = "Pausando...";
+          try {
+            await definirAtivoClienteNoBanco(nome, false);
+            if (supabaseConfigurado()) {
+              empresas = aplicarAjustesEmpresas(await carregarEmpresasBanco());
+            }
+            carregar(empresasAtivasNoPortal(empresas));
+            criarEscada();
+            atualizarDatalistNomesAdmin();
+            adminMsg.textContent =
+              "Anúncio pausado — não aparece mais no guia nem na busca.";
+            if (adminNomeExistente) adminNomeExistente.value = "";
+          } catch (erro) {
+            adminMsg.textContent = mensagemErroSupabase(erro);
+          }
+        });
+
+        adminReativarExistente.addEventListener("click", async () => {
+          if (!(await adminLogado())) {
+            adminMsg.textContent = "Faça login para reativar.";
+            return;
+          }
+          const nome = adminNomeExistente
+            ? adminNomeExistente.value.trim()
+            : "";
+          if (!nome) {
+            adminMsg.textContent =
+              "Informe o nome do cliente (igual ao do card).";
+            return;
+          }
+          adminMsg.textContent = "Reativando...";
+          try {
+            await definirAtivoClienteNoBanco(nome, true);
+            if (supabaseConfigurado()) {
+              empresas = aplicarAjustesEmpresas(await carregarEmpresasBanco());
+            }
+            carregar(empresasAtivasNoPortal(empresas));
+            criarEscada();
+            atualizarDatalistNomesAdmin();
+            adminMsg.textContent = "Anúncio reativado no portal.";
+            if (adminNomeExistente) adminNomeExistente.value = "";
+          } catch (erro) {
+            adminMsg.textContent = mensagemErroSupabase(erro);
+          }
+        });
+
+        document
+          .getElementById("adminSalvarCobrancaExistente")
+          .addEventListener("click", async () => {
+            if (!(await adminLogado())) {
+              adminMsg.textContent = "Faça login para salvar a data.";
+              return;
+            }
+            const nomeEl = document.getElementById("adminNomeCobranca");
+            const dataEl = document.getElementById("adminDataCobrancaExistente");
+            const nome = nomeEl ? nomeEl.value.trim() : "";
+            const dataIso = dataEl ? dataEl.value : "";
+            adminMsg.textContent = "Salvando data...";
+            try {
+              await definirProximaCobrancaNoBanco(nome, dataIso);
+              if (supabaseConfigurado()) {
+                empresas = aplicarAjustesEmpresas(await carregarEmpresasBanco());
+              }
+              atualizarDatalistNomesAdmin();
+              adminMsg.textContent = "Data da próxima cobrança salva.";
+              if (nomeEl) nomeEl.value = "";
+              if (dataEl) dataEl.value = "";
+            } catch (erro) {
+              adminMsg.textContent = mensagemErroSupabase(erro);
+            }
+          });
+
         adminSair.addEventListener("click", async () => {
           if (supabaseConfigurado()) {
             await supabaseClient.auth.signOut();
           }
+          sessionStorage.removeItem(CHAVE_ACESSO_LOCAL);
           adminMsg.textContent = "";
           adminLoginMsg.textContent = "Sessão encerrada.";
           aplicarEstadoAdmin();
@@ -4205,7 +4856,7 @@ ${e.endereco ? `<a class="btn site" href="${hrefMapa}" target="_blank" rel="noop
           }
 
           salvarDescricaoCustomizada(nome, descricao);
-          carregar(empresas);
+          carregar(empresasAtivasNoPortal(empresas));
           criarEscada();
           adminMsg.textContent = descricao
             ? "Descrição salva com sucesso."
@@ -4273,12 +4924,20 @@ ${e.endereco ? `<a class="btn site" href="${hrefMapa}" target="_blank" rel="noop
             }
           }
 
+          const dataCobrancaCadastro = normalizarDataIsoCobranca(
+            document.getElementById("adminProximaCobranca")?.value,
+          );
+
           const novo = normalizarEmpresa({
             nome,
             logo,
             tel,
             categoria,
             plano,
+            ativo: adminAtivo ? adminAtivo.checked : true,
+            ...(dataCobrancaCadastro
+              ? { proximaCobranca: dataCobrancaCadastro }
+              : {}),
             descricao: descricao || undefined,
             endereco: endereco || undefined,
             instagram: instagramSeguro || undefined,
@@ -4291,20 +4950,22 @@ ${e.endereco ? `<a class="btn site" href="${hrefMapa}" target="_blank" rel="noop
           try {
             if (supabaseConfigurado()) {
               await inserirEmpresaBanco(novo);
-              empresas = await carregarEmpresasBanco();
+              empresas = aplicarAjustesEmpresas(await carregarEmpresasBanco());
             } else {
               empresas.push(novo);
               salvarEmpresasStorage(empresas);
             }
 
-            carregar(empresas);
+            carregar(empresasAtivasNoPortal(empresas));
             criarEscada();
+            atualizarDatalistNomesAdmin();
           } catch (erro) {
-            adminMsg.textContent = "Erro ao salvar no banco de dados.";
+            adminMsg.textContent = mensagemErroSupabase(erro);
             return;
           }
 
           adminForm.reset();
+          if (adminAtivo) adminAtivo.checked = true;
           aplicarCorPlanoSelecionado();
           adminMsg.textContent = supabaseConfigurado()
             ? "Cliente cadastrado no banco com sucesso."
@@ -4335,6 +4996,7 @@ ${e.endereco ? `<a class="btn site" href="${hrefMapa}" target="_blank" rel="noop
         });
       }
 
+      aplicarTextosPublicosDoPortal();
       iniciarContadorVisitas();
       carregarClima();
       iniciarCepNovo();
@@ -4346,7 +5008,7 @@ ${e.endereco ? `<a class="btn site" href="${hrefMapa}" target="_blank" rel="noop
       document.getElementById("busca").addEventListener("input", function () {
         const valor = normalizarTexto(this.value);
         const valorNumero = normalizarTelefone(this.value);
-        let filtrado = empresas.filter(
+        let filtrado = empresasAtivasNoPortal(empresas).filter(
           (e) =>
             normalizarTexto(e.nome).includes(valor) ||
             normalizarTexto(e.categoria).includes(valor) ||
@@ -4394,7 +5056,8 @@ ${e.endereco ? `<a class="btn site" href="${hrefMapa}" target="_blank" rel="noop
         left.innerHTML = "";
         right.innerHTML = "";
 
-        const vitrine = [...empresas, ...empresas];
+        const base = empresasAtivasNoPortal(empresas);
+        const vitrine = [...base, ...base];
 
         vitrine.forEach((e) => {
           const nomeSeguro = escaparHtml(e.nome);

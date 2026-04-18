@@ -39,6 +39,8 @@ update empresas set logotipo = 'assets/vitale.jpeg' where nome ilike 'vitale cro
 
 update empresas set logotipo = 'assets/sempre-bela.jpeg' where nome ilike 'sempre bella';
 
+update empresas set logotipo = 'assets/samarina.png' where nome ilike 'samarina gomes marino';
+
 update empresas set logotipo = 'assets/cheiro-de-amor.jpeg' where nome ilike 'cheiro de amor';
 
 update empresas set logotipo = 'assets/sorvete.jpeg' where nome ilike 'sorvete americano';
