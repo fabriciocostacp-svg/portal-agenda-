@@ -21,7 +21,6 @@
   },
   "homepage": "https://github.com/fabriciocostacp-svg/portal-agenda-#readme",
   "dependencies": {
-    "better-sqlite3": "^12.8.0",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
