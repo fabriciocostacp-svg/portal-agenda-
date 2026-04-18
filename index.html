@@ -518,6 +518,7 @@
         width: 100%;
         box-sizing: border-box;
         text-align: left;
+        white-space: pre-line;
         overflow: visible;
         overflow-x: hidden;
         scrollbar-width: none;
@@ -1349,6 +1350,7 @@
         .card-descricao {
           font-size: 10.5px;
           padding: 5px 6px;
+          white-space: pre-line;
         }
 
         .estado-vazio {
@@ -2093,7 +2095,7 @@
       let empresasPadrao = [];
 
       async function carregarEmpresasPadraoJson() {
-        const bust = "10";
+        const bust = "11";
         const candidatos = [
           new URL(`data/empresas-demo.json?v=${bust}`, window.location.href)
             .href,
@@ -2128,17 +2130,22 @@
             nome: "MULTLar VARIEDADES",
             logo: "assets/multilar-logo.jpeg",
             tel: "5519971689501",
+            instagram: "https://www.instagram.com/multilar.variedades/",
             endereco:
               "R. Jaguarucu, 669 - Jardim Nova Itirapina, Itirapina - CEP 13530-268",
             categoria: "Variedades / Loja",
             descricao:
-              "Loja de produtos de limpeza e produtos para o lar.",
+              "Produtos de limpeza\nUtilidades domésticas\nMaterial escolar\nBrinquedos\nEletrônicos",
             palavrasChave: [
               "multilar",
               "variedades",
               "loja",
               "itirapina",
               "jaguarucu",
+              "limpeza",
+              "escolar",
+              "brinquedos",
+              "eletronicos",
             ],
             plano: "vip",
             patrocinado: true,
@@ -3941,17 +3948,22 @@
             nome: "MULTLar VARIEDADES",
             logo: "assets/multilar-logo.jpeg",
             tel: "5519971689501",
+            instagram: "https://www.instagram.com/multilar.variedades/",
             endereco:
               "R. Jaguarucu, 669 - Jardim Nova Itirapina, Itirapina - CEP 13530-268",
             categoria: "Variedades / Loja",
             descricao:
-              "Loja de produtos de limpeza e produtos para o lar.",
+              "Produtos de limpeza\nUtilidades domésticas\nMaterial escolar\nBrinquedos\nEletrônicos",
             palavrasChave: [
               "multilar",
               "variedades",
               "loja",
               "itirapina",
               "jaguarucu",
+              "limpeza",
+              "escolar",
+              "brinquedos",
+              "eletronicos",
             ],
             plano: "vip",
             patrocinado: true,
@@ -4228,12 +4240,15 @@
         return "Atendimento local com qualidade e suporte para o que você precisa.";
       }
 
-      /** Texto do card: sem HTML; Buffet e Gordo com limite curto para não gerar rolagem. */
+      /** Texto do card: sem HTML; preserva quebras de linha; Buffet e Gordo com limite curto. */
       function textoDescricaoCardPlano(empresa) {
         let t = String(obterDescricaoServico(empresa) || "")
-          .replace(/<br\s*\/?>/gi, " ")
+          .replace(/<br\s*\/?>/gi, "\n")
           .replace(/<[^>]+>/g, " ")
-          .replace(/\s+/g, " ")
+          .split("\n")
+          .map((linha) => linha.replace(/\s+/g, " ").trim())
+          .filter(Boolean)
+          .join("\n")
           .trim();
         const k = normalizarTexto(empresa.nome);
         const compactoSemScroll =
@@ -4913,7 +4928,7 @@ ${blocoLogo}
 ${categoriaSegura ? `<div class="categoria">${categoriaSegura}</div>` : ""}
 <h3>${nomeSeguro}</h3>
 <div class="card-funcionamento${funcionamentoSeguro ? "" : " is-empty"}">${funcionamentoSeguro || "&#8203;"}</div>
-<div class="card-descricao">${descricaoServico}</div>
+<div class="card-descricao">${escaparHtml(descricaoServico)}</div>
 </div>
 <div class="card-acoes">
 <a class="btn ligar ${temLigacao ? "" : "disabled"}" href="${hrefLigacao}" ${temLigacao ? "" : 'aria-disabled="true"'}>
