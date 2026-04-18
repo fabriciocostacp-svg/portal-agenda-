@@ -1650,9 +1650,8 @@
             id="adminLoginAjuda"
             style="margin: 0 0 12px; font-size: 13px"
           >
-            Com Supabase: use o e-mail e a senha do usuário criado em Authentication
-            → Users. Sem Supabase: ignore este passo e use o formulário abaixo (dados
-            só neste navegador).
+            Entre com o e-mail e a senha do utilizador em Supabase (Authentication
+            → Users). Sem Supabase, os dados ficam só neste navegador.
           </p>
           <div class="admin-login-grid">
             <label>
@@ -1680,31 +1679,56 @@
           <div class="admin-grid">
             <div class="full admin-bloco-pausa" style="margin-bottom: 2px">
               <p class="admin-bloco-pausa-texto" style="margin: 0 0 8px">
-                <strong>Salvar cliente</strong> adiciona ao guia. Se já existir
-                <strong>o mesmo nome</strong>, os dados são
-                <strong>atualizados</strong> (Supabase ou neste navegador). Use
-                <strong>Limpar</strong> entre um cadastro e outro.
+                <strong>Salvar</strong> cria ou atualiza pelo <strong>nome</strong>.
+                Use <strong>Limpar</strong> antes de outro cadastro.
               </p>
               <button type="button" class="admin-salvar-secundario" id="adminLimparForm">
                 Limpar formulário
               </button>
             </div>
 
-            <label>
-              Nome do cliente
+            <label class="full">
+              Nome da empresa
               <input type="text" id="adminNome" required />
             </label>
 
-            <label>
+            <label class="full">
+              Logo (imagem)
+              <input type="file" id="adminLogoArquivo" accept="image/*" />
+            </label>
+
+            <label class="full">
+              Instagram (URL)
+              <input
+                type="text"
+                id="adminInstagram"
+                placeholder="https://instagram.com/..."
+              />
+            </label>
+
+            <label class="full">
+              WhatsApp (DDD + número)
+              <div class="admin-telefone-wrap">
+                <span class="admin-telefone-prefixo">+55</span>
+                <input
+                  type="text"
+                  id="adminTelefone"
+                  required
+                  placeholder="19999999999"
+                />
+              </div>
+            </label>
+
+            <label class="full">
               Plano
               <select id="adminPlano" required>
-                <option value="basico">Básico - R$ 19,90</option>
-                <option value="standard">Standart - R$ 27,90</option>
-                <option value="vip">VIP - R$ 39,90</option>
+                <option value="basico">Básico — R$ 19,90</option>
+                <option value="standard">Standard — R$ 27,90</option>
+                <option value="vip">VIP — R$ 30,00</option>
               </select>
             </label>
 
-            <label>
+            <label class="full">
               Categoria
               <select id="adminCategoria" required>
                 <option value="Alimentação">Alimentação</option>
@@ -1729,63 +1753,13 @@
               </select>
             </label>
 
-            <label>
-              Telefone (DDD + número)
-              <div class="admin-telefone-wrap">
-                <span class="admin-telefone-prefixo">+55</span>
-                <input
-                  type="text"
-                  id="adminTelefone"
-                  required
-                  placeholder="19999999999"
-                />
-              </div>
-            </label>
-
             <label class="full">
-              Endereço
+              Endereço (botão Localização no card)
               <input type="text" id="adminEndereco" />
             </label>
 
-            <label>
-              Instagram (URL)
-              <input
-                type="text"
-                id="adminInstagram"
-                placeholder="https://instagram.com/..."
-              />
-            </label>
-
-            <label>
-              Site (URL)
-              <input type="text" id="adminSite" placeholder="https://..." />
-            </label>
-
             <label class="full">
-              Logo por URL
-              <input
-                type="text"
-                id="adminLogoUrl"
-                placeholder="https://.../logo.jpg"
-              />
-            </label>
-
-            <label class="full">
-              Ou enviar imagem do logo
-              <input type="file" id="adminLogoArquivo" accept="image/*" />
-            </label>
-
-            <label class="full">
-              Palavras-chave na busca (opcional, separadas por vírgula)
-              <input
-                type="text"
-                id="adminPalavrasChave"
-                placeholder="Ex.: marmita, almoço, delivery"
-              />
-            </label>
-
-            <label class="full">
-              Descrição do serviço (mostrada no card)
+              Descrição no card
               <textarea
                 id="adminDescricao"
                 placeholder="Ex.: Levamos o buffet completo até você..."
@@ -1794,106 +1768,149 @@
 
             <label class="full admin-checkbox-linha" for="adminAtivo">
               <input type="checkbox" id="adminAtivo" checked />
-              <span
-                >Anúncio ativo no portal (desmarque se o cliente está inadimplente
-                — some do guia, da busca e da faixa de logos).</span
-              >
+              <span>Anúncio ativo no portal</span>
             </label>
 
             <label class="full">
-              Próxima cobrança / renovação (opcional)
-              <input type="date" id="adminProximaCobranca" />
+              Visível no portal por (opcional)
+              <select id="adminValidadeDias">
+                <option value="">Manter prazo atual (se já existir)</option>
+                <option value="limpar">Remover data de fim</option>
+                <option value="7">7 dias (a partir de hoje ao salvar)</option>
+                <option value="15">15 dias</option>
+                <option value="30">30 dias</option>
+                <option value="60">60 dias</option>
+              </select>
               <span
                 class="admin-bloco-pausa-texto"
                 style="margin-top: 6px; display: block"
-                >Ex.: pagou 3 meses — coloque a data em que deve cobrar de
-                novo.</span
+                >Após essa data o anúncio some do guia. Requer coluna
+                <code>ativo_ate</code> no Supabase (<code>supabase-adicionar-ativo-ate.sql</code>).</span
               >
             </label>
 
-            <div class="full admin-bloco-renovacao" id="adminLembretesWrap">
-              <h4>Próximos vencimentos (14 dias)</h4>
-              <div id="adminLembretesLista" class="admin-lembretes-lista"></div>
-              <p
+            <datalist id="adminListaEmpresas"></datalist>
+
+            <div class="full admin-bloco-renovacao" id="adminGestaoRapida">
+              <h4>Cliente já cadastrado — ativo e prazo</h4>
+              <p class="admin-bloco-pausa-texto">
+                Escolha o cliente, o estado e (se quiser) por quantos dias fica
+                visível a partir de hoje.
+              </p>
+              <label class="full">
+                Empresa
+                <select id="adminSelectClienteExistente">
+                  <option value="">— Selecione —</option>
+                </select>
+              </label>
+              <label class="full" style="margin-top: 8px">
+                Estado no portal
+                <select id="adminGestaoAtivo">
+                  <option value="1">Ativo</option>
+                  <option value="0">Inativo (oculto)</option>
+                </select>
+              </label>
+              <label class="full" style="margin-top: 8px">
+                Visível por (a partir de hoje)
+                <select id="adminGestaoDias">
+                  <option value="">Não alterar prazo / só estado</option>
+                  <option value="limpar">Remover data de fim</option>
+                  <option value="7">7 dias</option>
+                  <option value="15">15 dias</option>
+                  <option value="30">30 dias</option>
+                  <option value="60">60 dias</option>
+                </select>
+              </label>
+              <div class="admin-actions" style="margin-top: 10px">
+                <button
+                  type="button"
+                  class="admin-salvar-secundario"
+                  id="adminAplicarGestaoRapida"
+                >
+                  Aplicar ao cliente
+                </button>
+              </div>
+            </div>
+
+            <details class="full" style="margin-top: 10px">
+              <summary
                 class="admin-bloco-pausa-texto"
-                id="adminLembretesVazio"
-                style="margin-top: 4px"
+                style="cursor: pointer; user-select: none"
               >
-                Nenhuma cobrança cadastrada neste período.
-              </p>
-              <p class="admin-bloco-pausa-texto" style="margin-top: 8px">
-                No Supabase, rode uma vez
-                <code>supabase-adicionar-proxima-cobranca.sql</code> (coluna
-                <code>proxima_cobranca</code>).
-              </p>
-            </div>
-
-            <div class="full admin-bloco-renovacao">
-              <h4>Alterar data (cliente já cadastrado)</h4>
-              <p class="admin-bloco-pausa-texto">
-                Nome igual ao do card e nova data de cobrança.
-              </p>
-              <label>
-                Nome do cliente
-                <input
-                  type="text"
-                  id="adminNomeCobranca"
-                  list="adminListaEmpresas"
-                  autocomplete="off"
-                  placeholder="Ex.: Buffet em Casa"
-                />
-              </label>
-              <label style="margin-top: 8px">
-                Nova data
-                <input type="date" id="adminDataCobrancaExistente" />
-              </label>
-              <div class="admin-actions" style="margin-top: 10px">
-                <button
-                  type="button"
-                  class="admin-salvar-secundario"
-                  id="adminSalvarCobrancaExistente"
-                >
-                  Salvar próxima cobrança
-                </button>
+                Mais opções — site, logo por URL, palavras-chave, cobrança
+              </summary>
+              <div style="margin-top: 12px" class="admin-grid">
+                <label class="full">
+                  Site (URL)
+                  <input type="text" id="adminSite" placeholder="https://..." />
+                </label>
+                <label class="full">
+                  Logo por URL
+                  <input
+                    type="text"
+                    id="adminLogoUrl"
+                    placeholder="https://.../logo.jpg"
+                  />
+                </label>
+                <label class="full">
+                  Palavras-chave (opcional, vírgula)
+                  <input
+                    type="text"
+                    id="adminPalavrasChave"
+                    placeholder="Ex.: marmita, almoço, delivery"
+                  />
+                </label>
+                <label class="full">
+                  Próxima cobrança / renovação (opcional)
+                  <input type="date" id="adminProximaCobranca" />
+                  <span
+                    class="admin-bloco-pausa-texto"
+                    style="margin-top: 6px; display: block"
+                    >Lembrete comercial (coluna <code>proxima_cobranca</code>).</span
+                  >
+                </label>
               </div>
-            </div>
 
-            <div class="full admin-bloco-pausa">
-              <h4 class="admin-bloco-pausa-titulo">Pausar / reativar cliente já cadastrado</h4>
-              <p class="admin-bloco-pausa-texto">
-                Use o nome <strong>exatamente</strong> como no card. No Supabase,
-                rode uma vez o SQL do arquivo
-                <code>supabase-adicionar-ativo.sql</code> (coluna
-                <code>ativo</code>).
-              </p>
-              <label>
-                Nome do cliente
-                <input
-                  type="text"
-                  id="adminNomeExistente"
-                  list="adminListaEmpresas"
-                  autocomplete="off"
-                  placeholder="Ex.: Vitale Crochê"
-                />
-              </label>
-              <datalist id="adminListaEmpresas"></datalist>
-              <div class="admin-actions" style="margin-top: 10px">
-                <button
-                  type="button"
-                  class="admin-salvar-secundario"
-                  id="adminPausarExistente"
+              <div class="full admin-bloco-renovacao" style="margin-top: 14px">
+                <h4>Próximos vencimentos (14 dias)</h4>
+                <div id="adminLembretesLista" class="admin-lembretes-lista"></div>
+                <p
+                  class="admin-bloco-pausa-texto"
+                  id="adminLembretesVazio"
+                  style="margin-top: 4px"
                 >
-                  Pausar anúncio
-                </button>
-                <button
-                  type="button"
-                  class="admin-salvar-secundario"
-                  id="adminReativarExistente"
-                >
-                  Reativar anúncio
-                </button>
+                  Nenhuma cobrança cadastrada neste período.
+                </p>
               </div>
-            </div>
+
+              <div class="full admin-bloco-renovacao" style="margin-top: 12px">
+                <h4>Alterar data de cobrança (cliente já cadastrado)</h4>
+                <p class="admin-bloco-pausa-texto">Nome no card e nova data.</p>
+                <label class="full">
+                  Nome do cliente
+                  <input
+                    type="text"
+                    id="adminNomeCobranca"
+                    list="adminListaEmpresas"
+                    autocomplete="off"
+                    placeholder="Ex.: Buffet em Casa"
+                  />
+                </label>
+                <label class="full" style="margin-top: 8px">
+                  Nova data
+                  <input type="date" id="adminDataCobrancaExistente" />
+                </label>
+                <div class="admin-actions" style="margin-top: 10px">
+                  <button
+                    type="button"
+                    class="admin-salvar-secundario"
+                    id="adminSalvarCobrancaExistente"
+                  >
+                    Salvar próxima cobrança
+                  </button>
+                </div>
+              </div>
+            </details>
           </div>
 
           <div class="admin-actions">
@@ -3559,7 +3576,24 @@
         const a = empresa && empresa.ativo;
         if (a === false || a === 0 || a === "0") return false;
         if (String(a).toLowerCase() === "false") return false;
+        const ate = normalizarDataIsoCobranca(
+          empresa.ativoAte ?? empresa.ativo_ate,
+        );
+        if (ate) {
+          const hoje = new Date().toISOString().slice(0, 10);
+          if (ate < hoje) return false;
+        }
         return true;
+      }
+
+      /** ISO yyyy-mm-dd, N dias a partir de hoje (calendário local). */
+      function somarDiasIsoDesdeHoje(dias) {
+        const n = Number(dias);
+        if (!Number.isFinite(n) || n <= 0) return undefined;
+        const d = new Date();
+        d.setHours(12, 0, 0, 0);
+        d.setDate(d.getDate() + n);
+        return d.toISOString().slice(0, 10);
       }
 
       function empresasAtivasNoPortal(lista) {
@@ -3585,11 +3619,22 @@
         const plano =
           empresa.plano || (empresa.patrocinado ? "standard" : "basico");
         const descricao = String(empresa.descricao || "").trim();
-        const ativo = empresaAtivaNoPortal(empresa);
+        const rawAte = empresa.ativoAte ?? empresa.ativo_ate;
+        const ativoAteNorm = normalizarDataIsoCobranca(rawAte);
+        const ativo = empresaAtivaNoPortal(
+          rawAte === null
+            ? { ...empresa, ativoAte: undefined, ativo_ate: undefined }
+            : {
+                ...empresa,
+                ...(ativoAteNorm
+                  ? { ativoAte: ativoAteNorm, ativo_ate: ativoAteNorm }
+                  : {}),
+              },
+        );
         const proximaCobranca = normalizarDataIsoCobranca(
           empresa.proximaCobranca ?? empresa.proxima_cobranca,
         );
-        return {
+        const base = {
           ...empresa,
           descricao: descricao || undefined,
           plano,
@@ -3597,6 +3642,15 @@
           ativo,
           ...(proximaCobranca ? { proximaCobranca } : {}),
         };
+        if (ativoAteNorm) {
+          base.ativoAte = ativoAteNorm;
+        } else if (rawAte === null) {
+          base.ativoAte = null;
+        } else {
+          delete base.ativoAte;
+          delete base.ativo_ate;
+        }
+        return base;
       }
 
       function carregarDescricoesStorage() {
@@ -3701,6 +3755,7 @@
           palavras_chave,
           palavrasChave,
           proxima_cobranca,
+          ativo_ate,
           ...rest
         } = registro;
         return normalizarEmpresa({
@@ -3711,12 +3766,16 @@
             palavras_chave ?? palavrasChave,
           ),
           proximaCobranca: proxima_cobranca ?? undefined,
+          ativoAte: ativo_ate ?? undefined,
         });
       }
 
       function mapearEmpresaParaBanco(empresa) {
         const desc = String(empresa.descricao || "").trim();
-        return {
+        const ativoAteIso = normalizarDataIsoCobranca(
+          empresa.ativoAte ?? empresa.ativo_ate,
+        );
+        const out = {
           nome: empresa.nome,
           logotipo: empresa.logo,
           tel: empresa.tel,
@@ -3732,6 +3791,13 @@
             normalizarDataIsoCobranca(empresa.proximaCobranca) || null,
           ...(desc ? { descricao: desc } : {}),
         };
+        if (
+          Object.prototype.hasOwnProperty.call(empresa, "ativoAte") ||
+          Object.prototype.hasOwnProperty.call(empresa, "ativo_ate")
+        ) {
+          out.ativo_ate = ativoAteIso || null;
+        }
+        return out;
       }
 
       function aplicarCatalogoComercialLegado(lista) {
@@ -4049,6 +4115,18 @@
           tel: prim.tel || sec.tel,
           palavrasChave: [...chaves],
           ativo: [prim, sec].some((x) => empresaAtivaNoPortal(x)),
+          ...(() => {
+            const pa = normalizarDataIsoCobranca(
+              prim.ativoAte ?? prim.ativo_ate,
+            );
+            const sa = normalizarDataIsoCobranca(
+              sec.ativoAte ?? sec.ativo_ate,
+            );
+            if (!pa && !sa) return {};
+            if (!pa) return { ativoAte: sa };
+            if (!sa) return { ativoAte: pa };
+            return { ativoAte: pa >= sa ? pa : sa };
+          })(),
         });
       }
 
@@ -4257,15 +4335,22 @@
         return false;
       }
 
-      async function definirAtivoClienteNoBanco(nome, ativo) {
+      async function definirAtivoClienteNoBanco(nome, ativo, ativoAteIso) {
         const nomeTrim = String(nome || "").trim();
         if (!nomeTrim) {
           throw new Error("Informe o nome do cliente.");
         }
+        const ativoAteNorm = normalizarDataIsoCobranca(ativoAteIso);
+        const patch = { ativo };
+        if (ativoAteIso !== undefined) {
+          patch.ativo_ate = ativoAteNorm || null;
+        } else if (!ativo) {
+          patch.ativo_ate = null;
+        }
         if (supabaseConfigurado()) {
           const { data, error } = await supabaseClient
             .from(SUPABASE_TABLE)
-            .update({ ativo })
+            .update(patch)
             .eq("nome", nomeTrim)
             .select("nome");
           if (error) throw error;
@@ -4283,18 +4368,46 @@
         if (idx < 0) {
           throw new Error("Cliente não encontrado no armazenamento local.");
         }
-        empresas[idx] = normalizarEmpresa({ ...empresas[idx], ativo });
+        const mesclado = { ...empresas[idx], ativo };
+        if (ativoAteIso !== undefined) {
+          if (ativoAteNorm) {
+            mesclado.ativoAte = ativoAteNorm;
+          } else {
+            delete mesclado.ativoAte;
+            delete mesclado.ativo_ate;
+          }
+        } else if (!ativo) {
+          delete mesclado.ativoAte;
+          delete mesclado.ativo_ate;
+        }
+        empresas[idx] = normalizarEmpresa(mesclado);
         salvarEmpresasStorage(empresas);
       }
 
       function atualizarDatalistNomesAdmin() {
         const dl = document.getElementById("adminListaEmpresas");
-        if (!dl) return;
-        dl.innerHTML = "";
-        for (const e of empresas || []) {
-          const op = document.createElement("option");
-          op.value = e.nome;
-          dl.appendChild(op);
+        if (dl) {
+          dl.innerHTML = "";
+          for (const e of empresas || []) {
+            const op = document.createElement("option");
+            op.value = e.nome;
+            dl.appendChild(op);
+          }
+        }
+        const sel = document.getElementById("adminSelectClienteExistente");
+        if (sel) {
+          const cur = sel.value;
+          sel.innerHTML = '<option value="">— Selecione —</option>';
+          for (const e of empresas || []) {
+            const op = document.createElement("option");
+            op.value = e.nome;
+            const vis = empresaAtivaNoPortal(e) ? "visível" : "oculto";
+            op.textContent = `${e.nome} (${vis})`;
+            sel.appendChild(op);
+          }
+          if (cur && [...sel.options].some((o) => o.value === cur)) {
+            sel.value = cur;
+          }
         }
         renderizarLembretesRenovacao();
       }
@@ -4841,15 +4954,6 @@ ${e.endereco ? `<a class="btn site" href="${hrefMapa}" target="_blank" rel="noop
           "adminSalvarDescricao",
         );
         const adminAtivo = document.getElementById("adminAtivo");
-        const adminNomeExistente = document.getElementById(
-          "adminNomeExistente",
-        );
-        const adminPausarExistente = document.getElementById(
-          "adminPausarExistente",
-        );
-        const adminReativarExistente = document.getElementById(
-          "adminReativarExistente",
-        );
         const acessoLocalWrap = document.getElementById("acessoLocalWrap");
         const acessoLocalForm = document.getElementById("acessoLocalForm");
         const acessoLocalSenha = document.getElementById("acessoLocalSenha");
@@ -5192,64 +5296,52 @@ ${e.endereco ? `<a class="btn site" href="${hrefMapa}" target="_blank" rel="noop
           aplicarEstadoAdmin();
         });
 
-        adminPausarExistente.addEventListener("click", async () => {
-          if (!(await adminLogado())) {
-            adminMsg.textContent = "Faça login para pausar.";
-            return;
-          }
-          const nome = adminNomeExistente
-            ? adminNomeExistente.value.trim()
-            : "";
-          if (!nome) {
-            adminMsg.textContent =
-              "Informe o nome do cliente (igual ao do card).";
-            return;
-          }
-          adminMsg.textContent = "Pausando...";
-          try {
-            await definirAtivoClienteNoBanco(nome, false);
-            if (supabaseConfigurado()) {
-              empresas = aplicarAjustesEmpresas(await carregarEmpresasBanco());
+        const adminAplicarGestaoRapida = document.getElementById(
+          "adminAplicarGestaoRapida",
+        );
+        if (adminAplicarGestaoRapida) {
+          adminAplicarGestaoRapida.addEventListener("click", async () => {
+            if (!(await adminLogado())) {
+              adminMsg.textContent = "Faça login para alterar clientes.";
+              return;
             }
-            carregar(empresasAtivasNoPortal(empresas));
-            criarEscada();
-            atualizarDatalistNomesAdmin();
-            adminMsg.textContent =
-              "Anúncio pausado — não aparece mais no guia nem na busca.";
-            if (adminNomeExistente) adminNomeExistente.value = "";
-          } catch (erro) {
-            adminMsg.textContent = mensagemErroSupabase(erro);
-          }
-        });
-
-        adminReativarExistente.addEventListener("click", async () => {
-          if (!(await adminLogado())) {
-            adminMsg.textContent = "Faça login para reativar.";
-            return;
-          }
-          const nome = adminNomeExistente
-            ? adminNomeExistente.value.trim()
-            : "";
-          if (!nome) {
-            adminMsg.textContent =
-              "Informe o nome do cliente (igual ao do card).";
-            return;
-          }
-          adminMsg.textContent = "Reativando...";
-          try {
-            await definirAtivoClienteNoBanco(nome, true);
-            if (supabaseConfigurado()) {
-              empresas = aplicarAjustesEmpresas(await carregarEmpresasBanco());
+            const sel = document.getElementById("adminSelectClienteExistente");
+            const nome = sel ? String(sel.value || "").trim() : "";
+            if (!nome) {
+              adminMsg.textContent = "Selecione um cliente na lista.";
+              return;
             }
-            carregar(empresasAtivasNoPortal(empresas));
-            criarEscada();
-            atualizarDatalistNomesAdmin();
-            adminMsg.textContent = "Anúncio reativado no portal.";
-            if (adminNomeExistente) adminNomeExistente.value = "";
-          } catch (erro) {
-            adminMsg.textContent = mensagemErroSupabase(erro);
-          }
-        });
+            const ativoEl = document.getElementById("adminGestaoAtivo");
+            const diasEl = document.getElementById("adminGestaoDias");
+            const ativo = ativoEl ? ativoEl.value === "1" : true;
+            const diasRaw = diasEl ? String(diasEl.value || "").trim() : "";
+            adminMsg.textContent = "Aplicando...";
+            try {
+              if (!ativo) {
+                await definirAtivoClienteNoBanco(nome, false);
+              } else {
+                let ativoAteArg;
+                if (diasRaw === "limpar") {
+                  ativoAteArg = null;
+                } else if (/^\d+$/.test(diasRaw)) {
+                  ativoAteArg = somarDiasIsoDesdeHoje(Number(diasRaw));
+                } else {
+                  ativoAteArg = undefined;
+                }
+                await definirAtivoClienteNoBanco(nome, true, ativoAteArg);
+              }
+              if (supabaseConfigurado()) {
+                empresas = aplicarAjustesEmpresas(await carregarEmpresasBanco());
+              }
+              carregar(empresasAtivasNoPortal(empresas));
+              criarEscada();
+              atualizarDatalistNomesAdmin();
+              adminMsg.textContent = "Estado do cliente atualizado.";
+            } catch (erro) {
+              adminMsg.textContent = mensagemErroSupabase(erro);
+            }
+          });
+        }
 
         document
           .getElementById("adminSalvarCobrancaExistente")
@@ -5349,7 +5441,7 @@ ${e.endereco ? `<a class="btn site" href="${hrefMapa}" target="_blank" rel="noop
             document.getElementById("adminLogoArquivo").files[0];
 
           if (!nome || !tel) {
-            adminMsg.textContent = "Preencha nome e telefone.";
+            adminMsg.textContent = "Preencha nome e WhatsApp.";
             return;
           }
 
@@ -5382,6 +5474,24 @@ ${e.endereco ? `<a class="btn site" href="${hrefMapa}" target="_blank" rel="noop
             document.getElementById("adminProximaCobranca")?.value,
           );
 
+          const ve = document.getElementById("adminValidadeDias");
+          const diasVal = ve ? String(ve.value || "").trim() : "";
+          const chaveN = normalizarNomeIgualdade(nome);
+          const existente = (empresas || []).find(
+            (e) => normalizarNomeIgualdade(e.nome) === chaveN,
+          );
+          let ativoAteForm;
+          if (diasVal === "limpar") {
+            ativoAteForm = null;
+          } else if (diasVal && /^\d+$/.test(diasVal)) {
+            ativoAteForm = somarDiasIsoDesdeHoje(Number(diasVal));
+          } else {
+            const prev = normalizarDataIsoCobranca(
+              existente?.ativoAte ?? existente?.ativo_ate,
+            );
+            ativoAteForm = prev || undefined;
+          }
+
           const chavesBase = normalizarPalavrasChave([categoria, nome]);
           const chavesExtras = normalizarPalavrasChave(palavrasChaveExtra);
           const palavrasChaveUnicas = [
@@ -5395,6 +5505,7 @@ ${e.endereco ? `<a class="btn site" href="${hrefMapa}" target="_blank" rel="noop
             categoria,
             plano,
             ativo: adminAtivo ? adminAtivo.checked : true,
+            ...(ativoAteForm !== undefined ? { ativoAte: ativoAteForm } : {}),
             ...(dataCobrancaCadastro
               ? { proximaCobranca: dataCobrancaCadastro }
               : {}),
@@ -5436,6 +5547,8 @@ ${e.endereco ? `<a class="btn site" href="${hrefMapa}" target="_blank" rel="noop
 
           adminForm.reset();
           if (adminAtivo) adminAtivo.checked = true;
+          const vd = document.getElementById("adminValidadeDias");
+          if (vd) vd.value = "";
           aplicarCorPlanoSelecionado();
           adminMsg.textContent = atualizado
             ? supabaseConfigurado()
@@ -5451,6 +5564,8 @@ ${e.endereco ? `<a class="btn site" href="${hrefMapa}" target="_blank" rel="noop
           adminLimparForm.addEventListener("click", () => {
             adminForm.reset();
             if (adminAtivo) adminAtivo.checked = true;
+            const vd = document.getElementById("adminValidadeDias");
+            if (vd) vd.value = "";
             aplicarCorPlanoSelecionado();
             adminMsg.textContent = "Formulário limpo. Pronto para outro cadastro.";
           });
