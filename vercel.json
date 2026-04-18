@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/portal-config.js",
+      "destination": "/api/portal-config"
+    }
+  ]
+}

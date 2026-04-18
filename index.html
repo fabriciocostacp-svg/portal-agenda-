@@ -1612,7 +1612,11 @@
             </label>
           </div>
           <div class="acesso-local-acoes">
-            <button type="submit" class="acesso-local-btn entrar">
+            <button
+              type="submit"
+              class="acesso-local-btn entrar"
+              id="acessoLocalEntrar"
+            >
               Entrar
             </button>
             <button
@@ -4756,6 +4760,13 @@ ${e.endereco ? `<a class="btn site" href="${hrefMapa}" target="_blank" rel="noop
         const acessoLocalCancelar = document.getElementById(
           "acessoLocalCancelar",
         );
+        const acessoLocalEntrar = document.getElementById("acessoLocalEntrar");
+
+        function setAcessoLocalFormInterativo(on) {
+          if (acessoLocalSenha) acessoLocalSenha.disabled = !on;
+          if (acessoLocalEntrar) acessoLocalEntrar.disabled = !on;
+        }
+
         let tentativasFalhasLogin = 0;
         let bloqueioLoginAte = 0;
         const CHAVE_ACESSO_LOCAL = `${P.storagePrefix}_acesso_local_ok_ate`;
@@ -4814,6 +4825,7 @@ ${e.endereco ? `<a class="btn site" href="${hrefMapa}" target="_blank" rel="noop
         }
 
         async function abrirAdminComProtecaoLocal() {
+          setAcessoLocalFormInterativo(true);
           if (acessoLocalValido()) {
             adminLoginMsg.textContent = "";
             adminWrap.classList.add("active");
@@ -4834,8 +4846,9 @@ ${e.endereco ? `<a class="btn site" href="${hrefMapa}" target="_blank" rel="noop
             return;
           }
           acessoLocalMsg.textContent =
-            "Neste endereço não há API Node nem Supabase configurado. Para cadastrar: rode npm start e use localhost, ou defina SUPABASE_URL e SUPABASE_ANON_KEY no deploy (ex.: variáveis que alimentam /portal-config.js).";
+            "Neste endereço não há API Node nem Supabase no /portal-config.js. No Vercel: Settings → Environment Variables → defina SUPABASE_URL e SUPABASE_ANON_KEY (veja env.example), guarde e faça Redeploy. Em localhost: rode npm start e use o .env.";
           acessoLocalSenha.value = "";
+          setAcessoLocalFormInterativo(false);
           acessoLocalWrap.classList.add("active");
         }
 
@@ -4911,17 +4924,31 @@ ${e.endereco ? `<a class="btn site" href="${hrefMapa}" target="_blank" rel="noop
         acessoLocalCancelar.addEventListener("click", () => {
           acessoLocalWrap.classList.remove("active");
           acessoLocalMsg.textContent = "";
+          setAcessoLocalFormInterativo(true);
         });
 
         acessoLocalWrap.addEventListener("click", (event) => {
           if (event.target === acessoLocalWrap) {
             acessoLocalWrap.classList.remove("active");
             acessoLocalMsg.textContent = "";
+            setAcessoLocalFormInterativo(true);
           }
         });
 
         acessoLocalForm.addEventListener("submit", async (event) => {
           event.preventDefault();
+          const apiLive = await apiAdminNodeDisponivel();
+          if (!apiLive && !supabaseConfigurado()) {
+            acessoLocalMsg.textContent =
+              "Não há API aqui nem Supabase carregado. No Vercel adicione SUPABASE_URL e SUPABASE_ANON_KEY às variáveis de ambiente e redeploy (o ficheiro vercel.json gera /portal-config.js). Em desenvolvimento use npm start.";
+            return;
+          }
+          if (!apiLive && supabaseConfigurado()) {
+            acessoLocalMsg.textContent =
+              "Neste site o admin é só por e-mail/senha do Supabase. Cancele e abra de novo «Área Admin».";
+            return;
+          }
+
           const senha = acessoLocalSenha.value.trim();
 
           if (!senha) {
