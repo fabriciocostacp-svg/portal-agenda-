@@ -3,20 +3,20 @@
  * Com npm start, o servidor gera /portal-config.js a partir do .env (tem prioridade).
  */
 window.PORTAL_CONFIG = {
-  siteName: "Meu portal local",
+  siteName: "MULTLar VARIEDADES",
   siteDescription:
-    "Guia local com empresas, contatos úteis e utilidades num só lugar.",
-  regionKicker: "Guia local da sua cidade",
-  heroTitle: "Tudo da cidade em um portal só",
+    "Guia local com variedades, empresas e utilidades em Itirapina e região.",
+  regionKicker: "Itirapina e região",
+  heroTitle: "Tudo que você procura em um só lugar",
   heroLead:
-    "Encontre empresas, contatos úteis e horários de ônibus com busca rápida e acesso direto.",
+    "Empresas, contatos úteis, ônibus, CEP novo e mais — com busca rápida.",
   climateTitle: "Previsão do tempo",
   climateLatitude: -22.2528,
   climateLongitude: -47.8169,
-  sobreTitulo: "Meu portal local",
+  sobreTitulo: "MULTLar VARIEDADES",
   sobreTexto:
-    "Guia local com empresas, contatos úteis e horários de ônibus. Use Anuncie para falar com quem opera o portal.",
-  whatsappE164: "5519999717781",
+    "Guia local com empresas, contatos úteis e horários de ônibus. Use Anuncie para falar com a MULTLar VARIEDADES.",
+  whatsappE164: "5519971689501",
   whatsappAnuncieMessage:
     "Olá! Vim pelo portal {portal} e tenho interesse em anunciar. Poderia me enviar opções e valores?",
   whatsappClienteTemplate:

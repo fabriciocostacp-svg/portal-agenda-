@@ -5,20 +5,20 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Portal local</title>
+    <title>MULTLar VARIEDADES</title>
     <meta
       name="description"
-      content="Guia local com empresas, contatos úteis e utilidades num só portal."
+      content="MULTLar VARIEDADES — guia local em Itirapina: empresas, contatos e utilidades."
     />
     <meta name="theme-color" content="#0b1518" />
 
     <!-- Open Graph / WhatsApp / Facebook (imagem ≥ 300px; ideal 1200×630). URL base trocada pelo server.js se configurar APP_ORIGIN / PORTAL_PUBLIC_ORIGIN. -->
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="Portal local" />
-    <meta property="og:title" content="Portal local" />
+    <meta property="og:site_name" content="MULTLar VARIEDADES" />
+    <meta property="og:title" content="MULTLar VARIEDADES — Guia local" />
     <meta
       property="og:description"
-      content="Guia local com empresas, contatos úteis e utilidades num só portal."
+      content="MULTLar VARIEDADES — guia local em Itirapina: empresas, contatos e utilidades."
     />
     <meta
       property="og:url"
@@ -31,10 +31,10 @@
     <meta property="og:image:type" content="image/png" />
     <meta property="og:locale" content="pt_BR" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Portal local" />
+    <meta name="twitter:title" content="MULTLar VARIEDADES — Guia local" />
     <meta
       name="twitter:description"
-      content="Guia local com empresas, contatos úteis e utilidades num só portal."
+      content="MULTLar VARIEDADES — guia local em Itirapina: empresas, contatos e utilidades."
     />
     <meta
       name="twitter:image"
@@ -1424,6 +1424,7 @@
           padding: 7px 14px;
           letter-spacing: 0.07em;
         }
+
       }
     </style>
   </head>
@@ -1919,20 +1920,20 @@
             ? window.PORTAL_CONFIG
             : {};
         const def = {
-          siteName: "Portal local",
+          siteName: "MULTLar VARIEDADES",
           siteDescription:
-            "Guia local com empresas, contatos úteis e utilidades num só portal.",
-          regionKicker: "Guia local",
-          heroTitle: "Tudo da cidade em um portal só",
+            "Guia local com variedades, empresas e utilidades em Itirapina e região.",
+          regionKicker: "Itirapina e região",
+          heroTitle: "Tudo que você procura em um só lugar",
           heroLead:
-            "Encontre empresas, contatos úteis e horários de ônibus com busca rápida e acesso direto.",
+            "Empresas, contatos úteis, ônibus, CEP novo e mais — com busca rápida.",
           climateTitle: "Previsão do tempo",
           climateLatitude: -22.2528,
           climateLongitude: -47.8169,
-          sobreTitulo: "Portal local",
+          sobreTitulo: "MULTLar VARIEDADES",
           sobreTexto:
-            "Guia local com empresas, contatos úteis, horários de ônibus e previsão do tempo. Use o botão Anuncie para falar com quem opera o portal.",
-          whatsappE164: "5519999717781",
+            "Guia local com empresas, contatos úteis, horários de ônibus e previsão do tempo. Use o botão Anuncie para falar com a MULTLar VARIEDADES.",
+          whatsappE164: "5519971689501",
           whatsappAnuncieMessage:
             "Olá! Vim pelo portal {portal} e tenho interesse em anunciar. Poderia me enviar opções e valores?",
           whatsappClienteTemplate:
@@ -2015,7 +2016,7 @@
             wa.classList.add("is-disabled");
             wa.setAttribute(
               "title",
-              "Defina PORTAL_WHATSAPP_E164 no .env (DDI+DDD+número, ex.: 5519999717781).",
+              "Defina PORTAL_WHATSAPP_E164 no .env (DDI+DDD+número, ex.: 5519971689501).",
             );
           }
         }
@@ -2075,7 +2076,7 @@
       let empresasPadrao = [];
 
       async function carregarEmpresasPadraoJson() {
-        const bust = "4";
+        const bust = "5";
         const candidatos = [
           new URL(`data/empresas-demo.json?v=${bust}`, window.location.href)
             .href,
@@ -2105,6 +2106,25 @@
             tel: "5511999999999",
             categoria: "Serviços",
             plano: "basico",
+          },
+          {
+            nome: "MULTLar VARIEDADES",
+            logo: "assets/multilar-logo.png",
+            tel: "5519971689501",
+            endereco:
+              "R. Jaguarucu, 669 - Jardim Nova Itirapina, Itirapina - CEP 13530-268",
+            categoria: "Variedades / Loja",
+            descricao:
+              "Loja de variedades em Itirapina. Atendimento pelo WhatsApp (19) 97168-9501.",
+            palavrasChave: [
+              "multilar",
+              "variedades",
+              "loja",
+              "itirapina",
+              "jaguarucu",
+            ],
+            plano: "vip",
+            patrocinado: true,
           },
           {
             nome: "Samarina Marino",
@@ -3637,6 +3657,15 @@
           }
           const lista = JSON.parse(bruto);
           if (!Array.isArray(lista)) throw new Error("Formato inválido");
+          if (
+            lista.length === 0 &&
+            Array.isArray(empresasPadrao) &&
+            empresasPadrao.length > 0
+          ) {
+            const iniciais = empresasPadrao.map(normalizarEmpresa);
+            localStorage.setItem(STORAGE_EMPRESAS, JSON.stringify(iniciais));
+            return iniciais;
+          }
           return lista.map(normalizarEmpresa);
         } catch (erro) {
           return empresasPadrao.map(normalizarEmpresa);
@@ -3842,6 +3871,25 @@
         }
 
         const extrasObrigatorios = [
+          {
+            nome: "MULTLar VARIEDADES",
+            logo: "assets/multilar-logo.png",
+            tel: "5519971689501",
+            endereco:
+              "R. Jaguarucu, 669 - Jardim Nova Itirapina, Itirapina - CEP 13530-268",
+            categoria: "Variedades / Loja",
+            descricao:
+              "Loja de variedades em Itirapina. Atendimento pelo WhatsApp (19) 97168-9501.",
+            palavrasChave: [
+              "multilar",
+              "variedades",
+              "loja",
+              "itirapina",
+              "jaguarucu",
+            ],
+            plano: "vip",
+            patrocinado: true,
+          },
           {
             nome: "EC Escavações",
             logo: "assets/escavacoes.jpeg",
@@ -4325,20 +4373,36 @@
 
       async function inicializarEmpresas() {
         await carregarEmpresasPadraoJson();
+        const previewLocal =
+          !window.location.hostname ||
+          window.location.hostname === "localhost" ||
+          window.location.hostname === "127.0.0.1" ||
+          window.location.hostname === "[::1]";
         if (supabaseConfigurado()) {
           try {
             empresas = aplicarAjustesEmpresas(await carregarEmpresasBanco());
+            if (!empresas.length && previewLocal) {
+              empresas = aplicarAjustesEmpresas(carregarEmpresasStorage());
+              salvarEmpresasStorage(empresas);
+            }
             carregar(empresasAtivasNoPortal(empresas));
             criarEscada();
             atualizarDatalistNomesAdmin();
             return;
           } catch (erro) {
             console.error("Falha ao carregar empresas do Supabase:", erro);
-            empresas = [];
+            if (previewLocal) {
+              empresas = aplicarAjustesEmpresas(carregarEmpresasStorage());
+              salvarEmpresasStorage(empresas);
+            } else {
+              empresas = [];
+            }
             carregar(empresasAtivasNoPortal(empresas));
             criarEscada();
             atualizarDatalistNomesAdmin();
-            exibirErroConexaoBanco(erro);
+            if (!empresas.length) {
+              exibirErroConexaoBanco(erro);
+            }
             return;
           }
         }
@@ -5400,7 +5464,7 @@ ${e.endereco ? `<a class="btn site" href="${hrefMapa}" target="_blank" rel="noop
           event.preventDefault();
           const C = window.PORTAL_CONFIG || {};
           let tel = String(C.whatsappE164 || "").replace(/\D/g, "");
-          if (tel.length < 12) tel = "5519999717781";
+          if (tel.length < 12) tel = "5519971689501";
           const texto = preencherPlaceholdersWhatsApp(
             C.whatsappAnuncieMessage ||
               "Olá! Vim pelo portal {portal} e tenho interesse em anunciar.",
