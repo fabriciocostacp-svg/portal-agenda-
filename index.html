@@ -62,6 +62,9 @@
 
       html {
         scroll-behavior: smooth;
+        /* Mesma largura útil com/sem barra de rolagem (Chrome vs Firefox). */
+        overflow-y: auto;
+        scrollbar-gutter: stable;
       }
 
       * {
@@ -454,6 +457,7 @@
         max-height: 2.56em;
         display: -webkit-box;
         -webkit-line-clamp: 2;
+        line-clamp: 2;
         -webkit-box-orient: vertical;
         overflow: hidden;
         text-align: center;
@@ -471,6 +475,7 @@
         max-height: 2.7em;
         display: -webkit-box;
         -webkit-line-clamp: 2;
+        line-clamp: 2;
         -webkit-box-orient: vertical;
         overflow: hidden;
         width: 100%;
@@ -1583,7 +1588,11 @@
         <h3>Acesso Local</h3>
         <p>
           Informe a senha do portal (a mesma de <code>ADMIN_LOCAL_PASS</code> no
-          arquivo <code>.env</code>) para abrir a Área Admin.
+          arquivo <code>.env</code> na pasta do projeto, junto ao
+          <code>server.js</code>). Rode <code>npm start</code> e abra o site pela
+          <strong>mesma porta</strong> (ex.: <code>http://localhost:3000/</code>).
+          Senha com <code>@</code>: no <code>.env</code> use aspas, ex.:
+          <code>ADMIN_LOCAL_PASS="AGENDA@2026"</code>.
         </p>
         <form id="acessoLocalForm">
           <div class="acesso-local-grid">
@@ -1914,8 +1923,9 @@
           sobreTitulo: "Portal local",
           sobreTexto:
             "Guia local com empresas, contatos úteis, horários de ônibus e previsão do tempo. Use o botão Anuncie para falar com quem opera o portal.",
-          whatsappE164: "",
-          whatsappAnuncieMessage: "Olá, quero anunciar no portal.",
+          whatsappE164: "5519999717781",
+          whatsappAnuncieMessage:
+            "Olá! Vim pelo portal {portal} e tenho interesse em anunciar. Poderia me enviar opções e valores?",
           whatsappClienteTemplate:
             "Olá {nome}, vi seu anúncio no {portal} e gostaria de mais informações.",
           whatsappRenewalTemplate:
@@ -1927,10 +1937,34 @@
           supabaseLogosPublicBase: "",
           applyDefaultCatalog: true,
         };
-        window.PORTAL_CONFIG = { ...def, ...incoming };
+        const merged = { ...def, ...incoming };
+        const waIn = String(merged.whatsappE164 || "").replace(/\D/g, "");
+        const waDef = String(def.whatsappE164 || "").replace(/\D/g, "");
+        merged.whatsappE164 =
+          waIn.length >= 12 ? waIn : waDef.length >= 12 ? waDef : "";
+        const msgIn = String(merged.whatsappAnuncieMessage || "").trim();
+        merged.whatsappAnuncieMessage = msgIn || def.whatsappAnuncieMessage;
+        if (String(merged.whatsappE164 || "").replace(/\D/g, "").length < 12) {
+          merged.whatsappE164 = def.whatsappE164;
+        }
+        window.PORTAL_CONFIG = merged;
       })();
 
       const P = window.PORTAL_CONFIG;
+
+      /** Placeholders WhatsApp sem replaceAll (compatível com browsers mais antigos). */
+      function preencherPlaceholdersWhatsApp(
+        tpl,
+        { nome = "", data = "", portal = "" } = {},
+      ) {
+        return String(tpl ?? "")
+          .split("{nome}")
+          .join(String(nome))
+          .split("{data}")
+          .join(String(data))
+          .split("{portal}")
+          .join(String(portal));
+      }
 
       function aplicarTextosPublicosDoPortal() {
         document.title = P.siteName;
@@ -1952,22 +1986,27 @@
         if (wa) {
           const tel = String(P.whatsappE164 || "").replace(/\D/g, "");
           if (tel.length >= 12) {
-            const msg = encodeURIComponent(P.whatsappAnuncieMessage || "");
-            wa.setAttribute(
-              "href",
-              `https://wa.me/${tel}?text=${msg}`,
-            );
+            const textoAnuncie = preencherPlaceholdersWhatsApp(
+              P.whatsappAnuncieMessage,
+              { portal: P.siteName || "portal local" },
+            ).trim();
+            const msg = encodeURIComponent(textoAnuncie);
+            const waUrl = `https://wa.me/${tel}?text=${msg}`;
+            wa.setAttribute("href", waUrl);
+            wa.setAttribute("data-wa-href", waUrl);
             wa.setAttribute("target", "_blank");
             wa.setAttribute("rel", "noopener noreferrer");
             wa.classList.remove("is-disabled");
+            wa.removeAttribute("title");
           } else {
             wa.setAttribute("href", "#");
+            wa.removeAttribute("data-wa-href");
             wa.removeAttribute("target");
             wa.removeAttribute("rel");
             wa.classList.add("is-disabled");
             wa.setAttribute(
               "title",
-              "Configure PORTAL_WHATSAPP_E164 no .env para ativar o WhatsApp comercial.",
+              "Defina PORTAL_WHATSAPP_E164 no .env (DDI+DDD+número, ex.: 5519999717781).",
             );
           }
         }
@@ -1977,19 +2016,21 @@
         const tpl =
           P.whatsappClienteTemplate ||
           "Olá {nome}, vi seu anúncio no {portal} e gostaria de mais informações.";
-        return tpl
-          .replaceAll("{nome}", String(nomeEmpresa || "").trim())
-          .replaceAll("{portal}", P.siteName || "portal");
+        return preencherPlaceholdersWhatsApp(tpl, {
+          nome: String(nomeEmpresa || "").trim(),
+          portal: P.siteName || "portal",
+        });
       }
 
       function mensagemWhatsAppRenovacao(nomeEmpresa, dataFmt) {
         const tpl =
           P.whatsappRenewalTemplate ||
           "Olá {nome}! A assinatura do anúncio no {portal} está próxima do vencimento ({data}). Podemos renovar?";
-        return tpl
-          .replaceAll("{nome}", String(nomeEmpresa || "").trim())
-          .replaceAll("{data}", String(dataFmt || "").trim())
-          .replaceAll("{portal}", P.siteName || "portal");
+        return preencherPlaceholdersWhatsApp(tpl, {
+          nome: String(nomeEmpresa || "").trim(),
+          data: String(dataFmt || "").trim(),
+          portal: P.siteName || "portal",
+        });
       }
 
       /* EMPRESAS */
@@ -2008,7 +2049,15 @@
 
       const supabaseClient =
         SUPABASE_URL && SUPABASE_ANON_KEY && window.supabase
-          ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+          ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+              auth: {
+                persistSession: true,
+                autoRefreshToken: true,
+                detectSessionInUrl: true,
+                storage: window.localStorage,
+                storageKey: `${P.storagePrefix}_supabase_auth`,
+              },
+            })
           : null;
 
       let descricoesCustomizadas = carregarDescricoesStorage();
@@ -4708,12 +4757,12 @@ ${e.endereco ? `<a class="btn site" href="${hrefMapa}" target="_blank" rel="noop
         const ACESSO_LOCAL_TTL_MS = 30 * 60 * 1000;
 
         function acessoLocalValido() {
-          const ate = Number(sessionStorage.getItem(CHAVE_ACESSO_LOCAL) || 0);
+          const ate = Number(localStorage.getItem(CHAVE_ACESSO_LOCAL) || 0);
           return Number.isFinite(ate) && Date.now() < ate;
         }
 
         function marcarAcessoLocal() {
-          sessionStorage.setItem(
+          localStorage.setItem(
             CHAVE_ACESSO_LOCAL,
             String(Date.now() + ACESSO_LOCAL_TTL_MS),
           );
@@ -4824,28 +4873,70 @@ ${e.endereco ? `<a class="btn site" href="${hrefMapa}" target="_blank" rel="noop
           acessoLocalMsg.textContent = "Validando...";
 
           try {
-            const base =
-              window.location.protocol === "file:"
-                ? "http://localhost:3000"
-                : window.location.origin;
+            const base = (() => {
+              if (window.location.protocol !== "file:") {
+                return window.location.origin;
+              }
+              try {
+                const api = new URL(window.location.href).searchParams.get(
+                  "api",
+                );
+                if (api && /^https?:\/\//i.test(api)) {
+                  return api.replace(/\/$/, "");
+                }
+              } catch (_) {
+                /* ignore */
+              }
+              return "http://localhost:3000";
+            })();
             const loginUrl = new URL("/api/admin/local-login", base).href;
             const resposta = await fetch(loginUrl, {
               method: "POST",
+              mode: "cors",
+              credentials: "same-origin",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ senha }),
             });
 
             if (!resposta.ok) {
-              const payload = await resposta.json().catch(() => ({}));
-              const texto =
-                payload.error ||
-                payload.message ||
-                (typeof payload === "string" ? payload : "");
+              const muralHdr =
+                resposta.headers.get("X-Mural-Portal") ||
+                resposta.headers.get("x-mural-portal");
+              /** Lê o corpo sempre como texto e tenta JSON (Chrome/proxy às vezes omitem Content-Type). */
+              let texto = "";
+              try {
+                const raw = await resposta.text();
+                if (raw) {
+                  try {
+                    const j = JSON.parse(raw);
+                    if (j && typeof j === "object") {
+                      texto = String(j.error || j.message || "").trim();
+                    }
+                  } catch {
+                    texto = raw.trim().slice(0, 280);
+                  }
+                }
+              } catch {
+                texto = "";
+              }
+
+              if (resposta.status === 404) {
+                acessoLocalMsg.textContent =
+                  "Este endereço não tem a API do portal (404). O login local só funciona com o servidor Node: na pasta do projeto rode npm start e abra http://localhost:3000/ (ou a porta que o terminal mostrar). Sites só estáticos (ex. sem server.js) não validam esta senha.";
+                return;
+              }
+
+              if (!texto && !muralHdr) {
+                acessoLocalMsg.textContent =
+                  "Resposta inesperada: não parece ser o server.js deste projeto (falta o cabeçalho do portal). Confirme npm start na pasta certa e a mesma URL/porta.";
+                return;
+              }
+
               acessoLocalMsg.textContent =
-                texto.trim() ||
+                texto ||
                 (resposta.status === 429
                   ? "Muitas tentativas. Aguarde ~10 min ou pare e rode npm start de novo."
-                  : "Senha inválida.");
+                  : "Senha inválida. Faça Ctrl+F5 para recarregar sem cache e use a mesma URL em que corre npm start (ex.: http://localhost:3000/).");
               return;
             }
 
@@ -4856,7 +4947,7 @@ ${e.endereco ? `<a class="btn site" href="${hrefMapa}" target="_blank" rel="noop
             aplicarEstadoAdmin();
           } catch (erro) {
             acessoLocalMsg.textContent =
-              "Falha ao validar acesso local. Tente novamente.";
+              "Não foi possível contactar o servidor. Rode npm start na pasta do projeto e abra o site pelo mesmo endereço (ex.: http://localhost:3000/).";
           }
         });
 
@@ -5207,6 +5298,33 @@ ${e.endereco ? `<a class="btn site" href="${hrefMapa}" target="_blank" rel="noop
       }
 
       aplicarTextosPublicosDoPortal();
+
+      (function vincularFallbackWhatsAppAnuncie() {
+        const el = document.getElementById("portalLinkAnuncie");
+        if (!el) return;
+        el.addEventListener("click", (event) => {
+          const href = (el.getAttribute("href") || "").trim();
+          const data = (el.getAttribute("data-wa-href") || "").trim();
+          if (/^https:\/\/wa\.me\//i.test(href)) return;
+          if (/^https:\/\/wa\.me\//i.test(data)) {
+            event.preventDefault();
+            window.open(data, "_blank", "noopener,noreferrer");
+            return;
+          }
+          event.preventDefault();
+          const C = window.PORTAL_CONFIG || {};
+          let tel = String(C.whatsappE164 || "").replace(/\D/g, "");
+          if (tel.length < 12) tel = "5519999717781";
+          const texto = preencherPlaceholdersWhatsApp(
+            C.whatsappAnuncieMessage ||
+              "Olá! Vim pelo portal {portal} e tenho interesse em anunciar.",
+            { portal: C.siteName || "portal local" },
+          ).trim();
+          const url = `https://wa.me/${tel}?text=${encodeURIComponent(texto)}`;
+          window.open(url, "_blank", "noopener,noreferrer");
+        });
+      })();
+
       iniciarContadorVisitas();
       carregarClima();
       iniciarCepNovo();

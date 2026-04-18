@@ -65,6 +65,7 @@ app.use(
   cors({
     origin: originAlvo || true,
     credentials: true,
+    exposedHeaders: ["X-Mural-Portal"],
   }),
 );
 
@@ -82,10 +83,18 @@ app.use(express.json({ limit: "32kb" }));
  * Lê ADMIN_LOCAL_* direto do arquivo .env (mesma pasta do server.js).
  * O Cursor às vezes injeta process.env vazio com o mesmo nome e quebra o login.
  */
+function sanitizarTextoCredencial(s) {
+  return String(s ?? "")
+    .replace(/[\u200B-\u200D\uFEFF]/g, "")
+    .normalize("NFC")
+    .trim();
+}
+
 function lerAdminLocalDoArquivo() {
   const envPath = path.join(__dirname, ".env");
   let user = "";
-  let pass = "";
+  /** Todas as ocorrências de ADMIN_LOCAL_PASS (a última vazia não deve apagar a anterior). */
+  const passLinhas = [];
   try {
     let raw = fs.readFileSync(envPath, "utf8");
     if (raw.charCodeAt(0) === 0xfeff) {
@@ -112,25 +121,29 @@ function lerAdminLocalDoArquivo() {
         }
       }
       if (chave === "ADMIN_LOCAL_USER") user = valor;
-      if (chave === "ADMIN_LOCAL_PASS") pass = valor;
+      if (chave === "ADMIN_LOCAL_PASS") passLinhas.push(valor);
     }
   } catch {
     /* .env ausente */
   }
-  const norm = (s) => String(s ?? "").normalize("NFC").trim();
-  return { user: norm(user), pass: norm(pass) };
+  const passBruto =
+    [...passLinhas].reverse().find((v) => String(v).trim() !== "") ?? "";
+  return {
+    user: sanitizarTextoCredencial(user),
+    pass: sanitizarTextoCredencial(passBruto),
+  };
 }
 
 function credenciaisAdminLocal() {
   const arq = lerAdminLocalDoArquivo();
   /** Preferir sempre o arquivo; process.env só se a linha não existir no .env */
-  const u = arq.user !== "" ? arq.user : normEnv(process.env.ADMIN_LOCAL_USER);
-  const p = arq.pass !== "" ? arq.pass : normEnv(process.env.ADMIN_LOCAL_PASS);
+  const u =
+    arq.user !== "" ? arq.user : sanitizarTextoCredencial(process.env.ADMIN_LOCAL_USER);
+  const p =
+    arq.pass !== ""
+      ? arq.pass
+      : sanitizarTextoCredencial(process.env.ADMIN_LOCAL_PASS);
   return { user: u, pass: p };
-}
-
-function normEnv(v) {
-  return String(v ?? "").normalize("NFC").trim();
 }
 
 const windowMs = Number(process.env.ADMIN_LOCAL_WINDOW_MS) || 15 * 60 * 1000;
@@ -164,9 +177,8 @@ app.post("/api/admin/local-login", loginLimiter, (req, res) => {
     });
   }
 
-  const norm = (s) => String(s ?? "").normalize("NFC").trim();
-  const senha = norm(req.body?.senha);
-  const passEsp = norm(esperadoPass);
+  const senha = sanitizarTextoCredencial(req.body?.senha);
+  const passEsp = sanitizarTextoCredencial(esperadoPass);
 
   if (!senha) {
     return res.status(401).json({ error: "Preencha a senha." });
@@ -183,7 +195,13 @@ app.post("/api/admin/local-login", loginLimiter, (req, res) => {
     lenPassEnv: passEsp.length,
   });
 
-  return res.status(401).json({ error: "Senha inválida." });
+  const dicaComprimento =
+    passEsp.length > 0 && senha.length !== passEsp.length
+      ? ` (a senha configurada tem ${passEsp.length} caracteres)`
+      : "";
+  return res.status(401).json({
+    error: `Senha inválida.${dicaComprimento} Confira o .env na pasta do projeto (junto ao server.js), reinicie o servidor após alterar e use a mesma URL (ex.: http://localhost:${PORT}/).`,
+  });
 });
 
 function envBool(nome, padrao) {
@@ -232,10 +250,13 @@ function montarPayloadPortalConfig() {
       "PORTAL_SOBRE_TEXTO",
       "Guia local com empresas, contatos úteis, horários de ônibus e previsão do tempo. Use o botão Anuncie para falar com quem opera o portal.",
     ),
-    whatsappE164: strEnv("PORTAL_WHATSAPP_E164").replace(/\D/g, ""),
+    whatsappE164: (() => {
+      const d = strEnv("PORTAL_WHATSAPP_E164").replace(/\D/g, "");
+      return d.length >= 12 ? d : "5519999717781";
+    })(),
     whatsappAnuncieMessage: strEnv(
       "PORTAL_WHATSAPP_ANUNCIE_MESSAGE",
-      "Olá, quero anunciar no portal.",
+      "Olá! Vim pelo portal {portal} e tenho interesse em anunciar. Poderia me enviar opções e valores?",
     ),
     whatsappClienteTemplate: strEnv(
       "PORTAL_WHATSAPP_CLIENT_TEMPLATE",
