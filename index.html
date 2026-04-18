@@ -1587,12 +1587,17 @@
       <div class="acesso-local-card">
         <h3>Acesso Local</h3>
         <p>
-          Informe a senha do portal (a mesma de <code>ADMIN_LOCAL_PASS</code> no
-          arquivo <code>.env</code> na pasta do projeto, junto ao
-          <code>server.js</code>). Rode <code>npm start</code> e abra o site pela
-          <strong>mesma porta</strong> (ex.: <code>http://localhost:3000/</code>).
-          Senha com <code>@</code>: no <code>.env</code> use aspas, ex.:
-          <code>ADMIN_LOCAL_PASS="AGENDA@2026"</code>.
+          Com o <strong>servidor Node</strong> (<code>npm start</code>): informe a
+          senha igual a <code>ADMIN_LOCAL_PASS</code> no <code>.env</code> (pasta
+          do projeto, junto ao <code>server.js</code>), na mesma URL/porta (ex.:
+          <code>http://localhost:3000/</code>). Senha com <code>@</code>: use
+          aspas no <code>.env</code>, ex. <code>ADMIN_LOCAL_PASS="AGENDA@2026"</code>.
+        </p>
+        <p>
+          Em <strong>só estático + Supabase</strong> (ex.: Vercel com
+          <code>SUPABASE_*</code> no <code>portal-config.js</code>): este passo é
+          <strong>ignorado</strong> — o login é só por <strong>e-mail e senha</strong>
+          do utilizador criado no Supabase Auth.
         </p>
         <form id="acessoLocalForm">
           <div class="acesso-local-grid">
@@ -4756,6 +4761,46 @@ ${e.endereco ? `<a class="btn site" href="${hrefMapa}" target="_blank" rel="noop
         const CHAVE_ACESSO_LOCAL = `${P.storagePrefix}_acesso_local_ok_ate`;
         const ACESSO_LOCAL_TTL_MS = 30 * 60 * 1000;
 
+        function origemBaseApiAdmin() {
+          if (window.location.protocol !== "file:") {
+            return window.location.origin;
+          }
+          try {
+            const api = new URL(window.location.href).searchParams.get("api");
+            if (api && /^https?:\/\//i.test(api)) {
+              return api.replace(/\/$/, "");
+            }
+          } catch (_) {
+            /* ignore */
+          }
+          return "http://localhost:3000";
+        }
+
+        let apiAdminNodeDisponivelCache = null;
+        async function apiAdminNodeDisponivel() {
+          if (apiAdminNodeDisponivelCache !== null) {
+            return apiAdminNodeDisponivelCache;
+          }
+          try {
+            const res = await fetch(
+              new URL("/api/admin/self-check", origemBaseApiAdmin()).href,
+              { method: "GET", credentials: "same-origin", cache: "no-store" },
+            );
+            if (!res.ok) {
+              apiAdminNodeDisponivelCache = false;
+              return false;
+            }
+            const j = await res.json().catch(() => ({}));
+            apiAdminNodeDisponivelCache = Boolean(
+              j && j.versao === "admin-local-pass-1",
+            );
+            return apiAdminNodeDisponivelCache;
+          } catch {
+            apiAdminNodeDisponivelCache = false;
+            return false;
+          }
+        }
+
         function acessoLocalValido() {
           const ate = Number(localStorage.getItem(CHAVE_ACESSO_LOCAL) || 0);
           return Number.isFinite(ate) && Date.now() < ate;
@@ -4768,14 +4813,28 @@ ${e.endereco ? `<a class="btn site" href="${hrefMapa}" target="_blank" rel="noop
           );
         }
 
-        function abrirAdminComProtecaoLocal() {
+        async function abrirAdminComProtecaoLocal() {
           if (acessoLocalValido()) {
             adminLoginMsg.textContent = "";
             adminWrap.classList.add("active");
-            aplicarEstadoAdmin();
+            await aplicarEstadoAdmin();
             return;
           }
-          acessoLocalMsg.textContent = "";
+          const apiNode = await apiAdminNodeDisponivel();
+          if (apiNode) {
+            acessoLocalMsg.textContent = "";
+            acessoLocalSenha.value = "";
+            acessoLocalWrap.classList.add("active");
+            return;
+          }
+          if (supabaseConfigurado()) {
+            adminLoginMsg.textContent = "";
+            adminWrap.classList.add("active");
+            await aplicarEstadoAdmin();
+            return;
+          }
+          acessoLocalMsg.textContent =
+            "Neste endereço não há API Node nem Supabase configurado. Para cadastrar: rode npm start e use localhost, ou defina SUPABASE_URL e SUPABASE_ANON_KEY no deploy (ex.: variáveis que alimentam /portal-config.js).";
           acessoLocalSenha.value = "";
           acessoLocalWrap.classList.add("active");
         }
@@ -4802,7 +4861,7 @@ ${e.endereco ? `<a class="btn site" href="${hrefMapa}" target="_blank" rel="noop
           if (!supabaseConfigurado()) {
             return acessoLocalValido();
           }
-          if (!acessoLocalValido()) {
+          if (await apiAdminNodeDisponivel() && !acessoLocalValido()) {
             return false;
           }
           const {
@@ -4846,7 +4905,7 @@ ${e.endereco ? `<a class="btn site" href="${hrefMapa}" target="_blank" rel="noop
 
         abrirAdminNoSobre.addEventListener("click", () => {
           sobreWrap.classList.remove("active");
-          abrirAdminComProtecaoLocal();
+          void abrirAdminComProtecaoLocal();
         });
 
         acessoLocalCancelar.addEventListener("click", () => {
