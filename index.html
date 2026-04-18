@@ -2070,8 +2070,8 @@
       const SUPABASE_TABLE = (P.supabaseTable || "empresas").trim() || "empresas";
 
       /**
-       * Blindagem: URL pública do bucket (sem barra no final); veja SUPABASE_LOGOS_PUBLIC_BASE no .env.
-       * Deixe vazio para usar só arquivos locais em assets/.
+       * URL pública do bucket (sem barra no final) para logos fora de assets/ (ex.: uploads).
+       * Caminhos `assets/...` ignoram isto e vêm sempre do deploy (Git).
        */
       const SUPABASE_LOGOS_PUBLIC_BASE = (P.supabaseLogosPublicBase || "").trim();
 
@@ -4711,13 +4711,14 @@
         if (!s) return s;
         if (s.startsWith("data:")) return s;
         if (/^https?:\/\//i.test(s)) return s;
+        const rel = s.replace(/^\.\//, "").replace(/^\/+/, "");
+        /* Logos em assets/ vêm do próprio deploy (Git); não redirecionar para o bucket. */
+        if (rel.startsWith("assets/")) return rel;
         const base = String(SUPABASE_LOGOS_PUBLIC_BASE || "")
           .trim()
           .replace(/\/+$/, "");
-        if (!base) return s;
-        let rel = s.replace(/^\.\//, "").replace(/^\/+/, "");
-        if (rel.startsWith("assets/")) rel = rel.slice("assets/".length);
-        return `${base}/${rel}`;
+        if (!base) return rel;
+        return `${base}/${rel.replace(/^\/+/, "")}`;
       }
 
       function resolverCaminhoLogoLegado(valor) {
