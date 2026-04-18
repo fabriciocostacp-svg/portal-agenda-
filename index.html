@@ -2076,7 +2076,7 @@
       let empresasPadrao = [];
 
       async function carregarEmpresasPadraoJson() {
-        const bust = "5";
+        const bust = "8";
         const candidatos = [
           new URL(`data/empresas-demo.json?v=${bust}`, window.location.href)
             .href,
@@ -2109,13 +2109,13 @@
           },
           {
             nome: "MULTLar VARIEDADES",
-            logo: "assets/multilar-logo.png",
+            logo: "assets/multilar-logo.jpeg",
             tel: "5519971689501",
             endereco:
               "R. Jaguarucu, 669 - Jardim Nova Itirapina, Itirapina - CEP 13530-268",
             categoria: "Variedades / Loja",
             descricao:
-              "Loja de variedades em Itirapina. Atendimento pelo WhatsApp (19) 97168-9501.",
+              "Loja de produtos de limpeza e produtos para o lar.",
             palavrasChave: [
               "multilar",
               "variedades",
@@ -3873,13 +3873,13 @@
         const extrasObrigatorios = [
           {
             nome: "MULTLar VARIEDADES",
-            logo: "assets/multilar-logo.png",
+            logo: "assets/multilar-logo.jpeg",
             tel: "5519971689501",
             endereco:
               "R. Jaguarucu, 669 - Jardim Nova Itirapina, Itirapina - CEP 13530-268",
             categoria: "Variedades / Loja",
             descricao:
-              "Loja de variedades em Itirapina. Atendimento pelo WhatsApp (19) 97168-9501.",
+              "Loja de produtos de limpeza e produtos para o lar.",
             palavrasChave: [
               "multilar",
               "variedades",
@@ -3888,6 +3888,28 @@
               "jaguarucu",
             ],
             plano: "vip",
+            patrocinado: true,
+          },
+          {
+            nome: "Samarina Marino",
+            logo: "assets/samarina.png",
+            tel: "5519997399970",
+            instagram: "https://www.instagram.com/samarinagomesmarino/",
+            categoria: "Beleza",
+            descricao:
+              "Consultora de Beleza Natura e Avon — atendimento e pedidos com praticidade.",
+            palavrasChave: [
+              "natura",
+              "avon",
+              "beleza",
+              "consultora",
+              "cosmeticos",
+              "perfumaria",
+              "samarina",
+              "marino",
+              "gomes",
+            ],
+            plano: "standard",
             patrocinado: true,
           },
           {
@@ -3924,12 +3946,22 @@
         ];
 
         extrasObrigatorios.forEach((extra) => {
-          const existe = base.some(
+          const i = base.findIndex(
             (empresa) =>
               normalizarTexto(empresa.nome) === normalizarTexto(extra.nome),
           );
-          if (!existe) {
-            base.push(normalizarEmpresa(extra));
+          const ex = normalizarEmpresa(extra);
+          const descExtra = String(ex.descricao || "").trim();
+          const logoExtra = String(ex.logo || "").trim();
+          if (i === -1) {
+            base.push(ex);
+          } else {
+            const patch = {};
+            if (descExtra) patch.descricao = descExtra;
+            if (logoExtra) patch.logo = logoExtra;
+            if (Object.keys(patch).length) {
+              base[i] = normalizarEmpresa({ ...base[i], ...patch });
+            }
           }
         });
 
@@ -4016,6 +4048,7 @@
           logo: prim.logo || sec.logo,
           tel: prim.tel || sec.tel,
           palavrasChave: [...chaves],
+          ativo: [prim, sec].some((x) => empresaAtivaNoPortal(x)),
         });
       }
 
@@ -4910,9 +4943,9 @@ ${e.endereco ? `<a class="btn site" href="${hrefMapa}" target="_blank" rel="noop
             return;
           }
           acessoLocalMsg.textContent =
-            "Neste endereço não há API Node nem Supabase no /portal-config.js. No Vercel: Settings → Environment Variables → defina SUPABASE_URL e SUPABASE_ANON_KEY (veja env.example), guarde e faça Redeploy. Em localhost: rode npm start e use o .env.";
+            "Não foi detetado Supabase nem a API Node neste URL — a senha do .env só é validada com npm start no mesmo endereço (ex.: http://localhost:3000/). No site na Vercel: Settings → Environment Variables → SUPABASE_URL e SUPABASE_ANON_KEY (veja env.example) → Guardar → Redeploy; depois abra de novo «Área Admin» e use e-mail/senha do Supabase Auth (este passo de senha do portal fica de lado).";
           acessoLocalSenha.value = "";
-          setAcessoLocalFormInterativo(false);
+          setAcessoLocalFormInterativo(true);
           acessoLocalWrap.classList.add("active");
         }
 
