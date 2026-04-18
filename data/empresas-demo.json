@@ -96,8 +96,8 @@
     "palavrasChave": ["perfumaria", "cosmeticos", "beleza"]
   },
   {
-    "nome": "Samarina Gomes Marino",
-    "logo": "assets/samarina.png",
+    "nome": "Samarina Marino",
+    "logo": "assets/samarina.jpeg",
     "tel": "5519997399970",
     "instagram": "https://www.instagram.com/samarinagomesmarino/",
     "categoria": "Beleza",
@@ -109,7 +109,9 @@
       "consultora",
       "cosmeticos",
       "perfumaria",
-      "samarina"
+      "samarina",
+      "marino",
+      "gomes"
     ],
     "plano": "standard",
     "patrocinado": true

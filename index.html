@@ -392,7 +392,8 @@
           0 0 24px rgba(47, 152, 255, 0.24);
       }
 
-      .card img {
+      /* Só logos “retangulares” diretos no topo; evita estilos de 80×80 no círculo da Samarina */
+      .card .card-topo > img {
         width: 80px;
         height: 80px;
         flex-shrink: 0;
@@ -406,7 +407,7 @@
           box-shadow 180ms ease;
       }
 
-      .card:hover img {
+      .card:hover .card-topo > img {
         transform: translateY(-2px) scale(1.04);
         background: rgba(255, 209, 102, 0.14);
         box-shadow: 0 10px 18px rgba(0, 0, 0, 0.18);
@@ -423,12 +424,12 @@
         margin-bottom: 6px;
         background: linear-gradient(
           165deg,
-          rgba(18, 36, 44, 0.98),
-          rgba(8, 16, 20, 0.99)
+          rgba(72, 82, 88, 0.55),
+          rgba(52, 60, 66, 0.65)
         );
         box-shadow:
-          inset 0 0 0 1px rgba(255, 255, 255, 0.1),
-          0 4px 14px rgba(0, 0, 0, 0.35);
+          inset 0 0 0 1px rgba(255, 255, 255, 0.22),
+          0 4px 14px rgba(0, 0, 0, 0.28);
       }
 
       .card-logo-crop img {
@@ -439,14 +440,14 @@
         object-fit: cover;
         object-position: center center;
         display: block;
-        background: transparent;
-        mix-blend-mode: multiply;
-        transform: scale(1.22);
+        background: #f2f6f8;
+        transform: scale(1.18);
+        filter: brightness(1.88) saturate(1.14) contrast(1.22);
       }
 
       .card:hover .card-logo-crop img {
-        transform: scale(1.28) translateY(-1px);
-        mix-blend-mode: multiply;
+        transform: scale(1.24) translateY(-1px);
+        filter: brightness(1.98) saturate(1.16) contrast(1.24);
       }
 
       .card:hover .card-logo-crop {
@@ -1276,10 +1277,10 @@
         flex-shrink: 0;
         background: linear-gradient(
           165deg,
-          rgba(18, 36, 44, 0.98),
-          rgba(8, 16, 20, 0.99)
+          rgba(72, 82, 88, 0.5),
+          rgba(52, 60, 66, 0.62)
         );
-        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18);
       }
 
       .mini-card-logo-crop img {
@@ -1290,9 +1291,9 @@
         border-radius: 0;
         margin: 0;
         display: block;
-        background: transparent;
-        mix-blend-mode: multiply;
-        transform: scale(1.18);
+        background: #f2f6f8;
+        transform: scale(1.14);
+        filter: brightness(1.72) saturate(1.12) contrast(1.18);
       }
 
       .mini-nome {
@@ -2031,7 +2032,7 @@
       let empresasPadrao = [];
 
       async function carregarEmpresasPadraoJson() {
-        const bust = "3";
+        const bust = "4";
         const candidatos = [
           new URL(`data/empresas-demo.json?v=${bust}`, window.location.href)
             .href,
@@ -2063,8 +2064,8 @@
             plano: "basico",
           },
           {
-            nome: "Samarina Gomes Marino",
-            logo: "assets/samarina.png",
+            nome: "Samarina Marino",
+            logo: "assets/samarina.jpeg",
             tel: "5519997399970",
             instagram: "https://www.instagram.com/samarinagomesmarino/",
             categoria: "Beleza",
@@ -3509,7 +3510,15 @@
         return s;
       }
 
+      function renomearLegadoSamarinaMarino(empresa) {
+        if (!empresa || empresa.nome == null) return empresa;
+        const t = tituloCorrigidoSamarinaMarino(empresa.nome);
+        if (t) return { ...empresa, nome: t };
+        return empresa;
+      }
+
       function normalizarEmpresa(empresa) {
+        empresa = renomearLegadoSamarinaMarino(empresa);
         const plano =
           empresa.plano || (empresa.patrocinado ? "standard" : "basico");
         const descricao = String(empresa.descricao || "").trim();
@@ -3546,12 +3555,19 @@
       }
 
       function chaveDescricaoEmpresa(nome) {
-        return normalizarTexto(nome);
+        return normalizarNomeIgualdade(nome);
       }
 
       function obterDescricaoCustomizada(nome) {
         const chave = chaveDescricaoEmpresa(nome);
-        return String(descricoesCustomizadas[chave] || "").trim();
+        let t = String(descricoesCustomizadas[chave] || "").trim();
+        if (!t && chave === "samarina marino") {
+          t = String(descricoesCustomizadas["samarina gomes marino"] || "").trim();
+        }
+        if (!t && tituloCorrigidoSamarinaMarino(nome)) {
+          t = String(descricoesCustomizadas["samarina gomes marino"] || "").trim();
+        }
+        return t;
       }
 
       function salvarDescricaoCustomizada(nome, descricao) {
@@ -3830,14 +3846,16 @@
       }
 
       function aplicarAjustesEmpresas(lista) {
+        const base = (lista || []).map((e) => normalizarEmpresa(e));
         if (!P.applyDefaultCatalog) {
-          return removerEmpresasDuplicadasPorNome(lista || []);
+          return removerEmpresasDuplicadasPorNome(base);
         }
-        return aplicarCatalogoComercialLegado(lista);
+        return aplicarCatalogoComercialLegado(base);
       }
 
       /** Variações de nome do mesmo negócio (ex.: banco + demo com nomes diferentes). */
       const GRUPOS_NOMES_IGUAIS_EMPRESA = [
+        ["Samarina Marino", "Samarina Gomes Marino"],
         [
           "Gu Espetaria e Choperia",
           "Gu Espetaria & Choperia",
@@ -3848,11 +3866,11 @@
       ];
 
       function chaveFusaoNomeEmpresa(nome) {
-        const n = normalizarTexto(nome);
+        const n = normalizarNomeIgualdade(nome);
         for (const grupo of GRUPOS_NOMES_IGUAIS_EMPRESA) {
           for (let i = 0; i < grupo.length; i += 1) {
-            if (normalizarTexto(grupo[i]) === n) {
-              return normalizarTexto(grupo[0]);
+            if (normalizarNomeIgualdade(grupo[i]) === n) {
+              return normalizarNomeIgualdade(grupo[0]);
             }
           }
         }
@@ -3866,11 +3884,25 @@
         return 0;
       }
 
+      function nomeCanonicoSeAliasMesmoNegocio(nomeA, nomeB) {
+        const na = normalizarNomeIgualdade(nomeA);
+        const nb = normalizarNomeIgualdade(nomeB);
+        if (!na || !nb) return null;
+        for (const grupo of GRUPOS_NOMES_IGUAIS_EMPRESA) {
+          const norm = grupo.map((g) => normalizarNomeIgualdade(g));
+          if (norm.includes(na) && norm.includes(nb)) return grupo[0];
+        }
+        return null;
+      }
+
       function fusionarDuasEmpresas(a, b) {
         const prim = rankPlano(a.plano) >= rankPlano(b.plano) ? a : b;
         const sec = prim === a ? b : a;
-        const nome =
-          String(prim.nome || "").length >= String(sec.nome || "").length
+        const aliasCanon =
+          nomeCanonicoSeAliasMesmoNegocio(prim.nome, sec.nome) || null;
+        const nome = aliasCanon
+          ? aliasCanon
+          : String(prim.nome || "").length >= String(sec.nome || "").length
             ? prim.nome
             : sec.nome;
         const chaves = new Set([
@@ -3900,7 +3932,7 @@
         const mapa = new Map();
         const semNome = [];
         for (const empresa of lista || []) {
-          const k = normalizarTexto(empresa.nome);
+          const k = normalizarNomeIgualdade(empresa.nome);
           if (!k) {
             semNome.push(empresa);
             continue;
@@ -3914,7 +3946,7 @@
       }
 
       function obterDescricaoServico(empresa) {
-        const nome = normalizarTexto(empresa.nome);
+        const nome = normalizarNomeIgualdade(empresa.nome);
         const descricaoCustomizada = obterDescricaoCustomizada(empresa.nome);
         if (descricaoCustomizada) return descricaoCustomizada;
 
@@ -3946,6 +3978,8 @@
             "Peças em crochê feitas à mão com carinho, estilo e exclusividade.",
           "sempre bella":
             "Perfumaria e cosméticos para realçar sua beleza todos os dias.",
+          "samarina marino":
+            "Consultora de Beleza Natura e Avon — atendimento e pedidos com praticidade.",
           "samarina gomes marino":
             "Consultora de Beleza Natura e Avon — atendimento e pedidos com praticidade.",
           "cheiro de amor":
@@ -4276,6 +4310,41 @@
           .trim();
       }
 
+      /** Igual a normalizarTexto, mas remove ZWSP e colapsa espaços (NBSP, ideográfico etc.). */
+      function normalizarNomeIgualdade(texto) {
+        const limpo = String(texto || "")
+          .replace(/[\u200B-\u200D\uFEFF]/g, "")
+          .replace(/[\s\u00A0\u1680\u2000-\u200A\u202F\u205F\u3000]+/g, " ")
+          .trim();
+        return normalizarTexto(limpo);
+      }
+
+      /** Detecta variações do nome antigo que não batem com string literal (Unicode, pontuação). */
+      function tituloCorrigidoSamarinaMarino(nomeBruto) {
+        const n = normalizarNomeIgualdade(nomeBruto);
+        if (!n) return null;
+        if (n === "samarina gomes marino") return "Samarina Marino";
+        const soLetras = n.replace(/[^a-z]/g, "");
+        if (soLetras === "samarinagomesmarino") return "Samarina Marino";
+        return null;
+      }
+
+      /** Título exibido no card (corrige legado mesmo se o objeto ainda vier com nome antigo). */
+      function nomePublicoCard(empresa) {
+        if (!empresa) return "";
+        const t = tituloCorrigidoSamarinaMarino(empresa.nome);
+        if (t) return t;
+        return String(empresa.nome || "");
+      }
+
+      /** Site vazio, crop circular e mini-card: cobre nome “quebrado” no banco. */
+      function empresaEhSamarinaMarinoParaCard(empresa) {
+        if (!empresa) return false;
+        if (tituloCorrigidoSamarinaMarino(empresa.nome)) return true;
+        const k = normalizarNomeIgualdade(empresa.nome);
+        return k === "samarina marino" || k === "samarina gomes marino";
+      }
+
       function escaparHtml(valor) {
         return String(valor ?? "")
           .replace(/&/g, "&amp;")
@@ -4377,7 +4446,8 @@
         apib: "assets/apib.jpeg",
         "vitale croche": "assets/vitale.jpeg",
         "sempre bella": "assets/sempre-bela.jpeg",
-        "samarina gomes marino": "assets/samarina.png",
+        "samarina marino": "assets/samarina.jpeg",
+        "samarina gomes marino": "assets/samarina.jpeg",
         "cheiro de amor": "assets/cheiro-de-amor.jpeg",
         "sorvete americano": "assets/sorvete.jpeg",
         "limp gel": "assets/limpgel.jpeg",
@@ -4403,7 +4473,7 @@
 
         /* Logo local por nome vem antes de URL externa: assim todas as
            imagens em assets aparecem mesmo com link antigo no Supabase. */
-        const chaveNome = normalizarTexto(empresa.nome);
+        const chaveNome = normalizarNomeIgualdade(empresa.nome);
         if (chaveNome && LOGO_LOCAL_POR_NOME[chaveNome]) {
           return urlLogoPublico(LOGO_LOCAL_POR_NOME[chaveNome]);
         }
@@ -4535,23 +4605,23 @@
         });
 
         ordenada.forEach((e) => {
-          const nomeK = normalizarTexto(e.nome);
+          const nomeK = normalizarNomeIgualdade(e.nome);
           const telefone = normalizarTelefone(e.tel);
           const telWa = telefoneInternacionalBr(e.tel);
           const temWhatsApp = telefoneValido(e.tel);
           const temLigacao = telefone.length >= 10;
-          const nomeSeguro = escaparHtml(e.nome);
+          const nomeSeguro = escaparHtml(nomePublicoCard(e));
           const categoriaSegura = escaparHtml(e.categoria || "");
           const funcionamentoSeguro = escaparHtml(e.funcionamento || "");
           const descricaoServico = textoDescricaoCardPlano(e);
           const logoSeguro = logoUrlEmpresa(e);
           const siteSeguro = urlHttpSegura(
-            nomeK === "samarina gomes marino" ? "" : e.site,
+            empresaEhSamarinaMarinoParaCard(e) ? "" : e.site,
           );
           const instagramSeguro = urlHttpSegura(e.instagram);
           const hrefWhatsApp = temWhatsApp
             ? `https://wa.me/${telWa}?text=${encodeURIComponent(
-                mensagemWhatsAppCliente(e.nome),
+                mensagemWhatsAppCliente(nomePublicoCard(e)),
               )}`
             : "#";
           const hrefLigacao = temLigacao ? `tel:+${telefone}` : "#";
@@ -4559,7 +4629,7 @@
             ? `https://maps.google.com/?q=${encodeURIComponent(e.endereco)}`
             : "#";
 
-          const logoComCropCircular = nomeK === "samarina gomes marino";
+          const logoComCropCircular = empresaEhSamarinaMarinoParaCard(e);
           const blocoLogo = logoComCropCircular
             ? `<div class="card-logo-crop"><img src="${logoSeguro}" alt="Logo ${nomeSeguro}" loading="lazy"></div>`
             : `<img src="${logoSeguro}" alt="Logo ${nomeSeguro}" loading="lazy">`;
@@ -5109,6 +5179,7 @@ ${e.endereco ? `<a class="btn site" href="${hrefMapa}" target="_blank" rel="noop
         const valorNumero = normalizarTelefone(this.value);
         let filtrado = empresasAtivasNoPortal(empresas).filter(
           (e) =>
+            normalizarTexto(nomePublicoCard(e)).includes(valor) ||
             normalizarTexto(e.nome).includes(valor) ||
             normalizarTexto(e.categoria).includes(valor) ||
             normalizarTexto(obterDescricaoServico(e)).includes(valor) ||
@@ -5159,10 +5230,10 @@ ${e.endereco ? `<a class="btn site" href="${hrefMapa}" target="_blank" rel="noop
         const vitrine = [...base, ...base];
 
         vitrine.forEach((e) => {
-          const nomeKMini = normalizarTexto(e.nome);
-          const nomeSeguro = escaparHtml(e.nome);
+          const nomeKMini = normalizarNomeIgualdade(e.nome);
+          const nomeSeguro = escaparHtml(nomePublicoCard(e));
           const logoSeguro = logoUrlEmpresa(e);
-          const miniCrop = nomeKMini === "samarina gomes marino";
+          const miniCrop = empresaEhSamarinaMarinoParaCard(e);
           const miniImg = miniCrop
             ? `<div class="mini-card-logo-crop"><img src="${logoSeguro}" alt="Mini logo ${nomeSeguro}" loading="lazy"></div>`
             : `<img src="${logoSeguro}" alt="Mini logo ${nomeSeguro}" loading="lazy">`;
