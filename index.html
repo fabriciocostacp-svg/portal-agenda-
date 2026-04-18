@@ -26,9 +26,9 @@
     />
     <meta
       property="og:image"
-      content="https://portal-agenda-itirapina.vercel.app/assets/og-portal.png"
+      content="https://portal-agenda-itirapina.vercel.app/assets/og-portal.jpeg"
     />
-    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:type" content="image/jpeg" />
     <meta property="og:locale" content="pt_BR" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="MULTLar VARIEDADES — Guia local" />
@@ -38,7 +38,7 @@
     />
     <meta
       name="twitter:image"
-      content="https://portal-agenda-itirapina.vercel.app/assets/og-portal.png"
+      content="https://portal-agenda-itirapina.vercel.app/assets/og-portal.jpeg"
     />
 
     <style>
@@ -3762,8 +3762,19 @@
           palavrasChave,
           proxima_cobranca,
           ativo_ate,
+          instagram,
+          site,
           ...rest
         } = registro;
+        const ig = String(
+          instagram ??
+            registro.link_instagram ??
+            registro.instagram_url ??
+            "",
+        ).trim();
+        const sitio = String(
+          site ?? registro.url_site ?? registro.link_site ?? "",
+        ).trim();
         return normalizarEmpresa({
           ...rest,
           logo: registro.logo ?? logotipo ?? "",
@@ -3773,6 +3784,8 @@
           ),
           proximaCobranca: proxima_cobranca ?? undefined,
           ativoAte: ativo_ate ?? undefined,
+          ...(ig ? { instagram: ig } : {}),
+          ...(sitio ? { site: sitio } : {}),
         });
       }
 
@@ -3810,6 +3823,11 @@
       const EXTRAS_OBRIGATORIOS_PORTAL = [
         {
           nome: "MULTLar VARIEDADES",
+          aliases: [
+            "Multilar Variedades",
+            "Multilar VARIEDADES",
+            "MULTILAR VARIEDADES",
+          ],
           logo: "assets/multilar-logo.jpeg",
           tel: "5519971689501",
           instagram: "https://www.instagram.com/multlar_itirapina/",
@@ -3887,18 +3905,26 @@
         },
         {
           nome: "Rotisseria Arte do Sabor",
+          aliases: ["Rotiseria Arte do Sabor"],
           site: "https://deliveryapp.neemo.com.br/pedir/14398/PfvWHwxooksbqcqEFH9g",
         },
       ];
+
+      function indiceEmpresaParaExtraObrigatorio(base, extra) {
+        const nomes = [extra.nome, ...(Array.isArray(extra.aliases) ? extra.aliases : [])]
+          .map((n) => normalizarNomeIgualdade(n))
+          .filter(Boolean);
+        if (!nomes.length) return -1;
+        return base.findIndex((empresa) =>
+          nomes.includes(normalizarNomeIgualdade(empresa.nome)),
+        );
+      }
 
       function mesclarExtrasObrigatoriosNaLista(base, opcoes) {
         const permitirInserirNovos = opcoes?.permitirInserirNovos !== false;
         if (!Array.isArray(base)) return base;
         EXTRAS_OBRIGATORIOS_PORTAL.forEach((extra) => {
-          const i = base.findIndex(
-            (empresa) =>
-              normalizarTexto(empresa.nome) === normalizarTexto(extra.nome),
-          );
+          const i = indiceEmpresaParaExtraObrigatorio(base, extra);
           const ex = normalizarEmpresa(extra);
           const descExtra = String(ex.descricao || "").trim();
           const logoExtra = String(ex.logo || "").trim();
@@ -4666,9 +4692,11 @@
       }
 
       function urlHttpSegura(url) {
-        if (!url) return "";
+        const bruto = String(url ?? "").trim();
+        if (!bruto) return "";
+        const s = bruto.startsWith("//") ? `https:${bruto}` : bruto;
         try {
-          const parsed = new URL(String(url), window.location.origin);
+          const parsed = new URL(s, window.location.origin);
           if (parsed.protocol === "http:" || parsed.protocol === "https:") {
             return parsed.href;
           }
