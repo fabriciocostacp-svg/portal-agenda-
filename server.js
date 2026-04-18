@@ -31,6 +31,36 @@ app.use((_req, res, next) => {
 });
 
 const originAlvo = (process.env.APP_ORIGIN || "").trim();
+const FALLBACK_OG_ORIGIN = "https://portal-agenda-itirapina.vercel.app";
+
+let indexHtmlCache = null;
+function lerIndexHtml() {
+  if (!indexHtmlCache) {
+    indexHtmlCache = fs.readFileSync(path.join(__dirname, "index.html"), "utf8");
+  }
+  return indexHtmlCache;
+}
+
+function publicOriginParaOg(req) {
+  const pub = strEnv("PORTAL_PUBLIC_ORIGIN").replace(/\/$/, "");
+  if (pub) return pub;
+  const app = strEnv("APP_ORIGIN").replace(/\/$/, "");
+  if (app) return app;
+  const proto = String(req.get("x-forwarded-proto") || req.protocol || "http")
+    .split(",")[0]
+    .trim();
+  const host = String(req.get("x-forwarded-host") || req.get("host") || "")
+    .split(",")[0]
+    .trim();
+  if (host) return `${proto}://${host}`.replace(/\/$/, "");
+  return FALLBACK_OG_ORIGIN;
+}
+
+function indexHtmlComOgOrigin(req) {
+  const pub = publicOriginParaOg(req);
+  if (pub === FALLBACK_OG_ORIGIN) return lerIndexHtml();
+  return lerIndexHtml().split(FALLBACK_OG_ORIGIN).join(pub);
+}
 app.use(
   cors({
     origin: originAlvo || true,
@@ -243,8 +273,9 @@ app.use(
   }),
 );
 
-app.get("/", (_req, res) => {
-  res.sendFile(path.join(raiz, "index.html"));
+app.get("/", (req, res) => {
+  res.type("html; charset=utf-8");
+  res.send(indexHtmlComOgOrigin(req));
 });
 
 app.use((_req, res) => {
