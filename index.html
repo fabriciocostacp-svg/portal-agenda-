@@ -1657,6 +1657,18 @@
 
         <form id="adminForm" class="admin-hidden">
           <div class="admin-grid">
+            <div class="full admin-bloco-pausa" style="margin-bottom: 2px">
+              <p class="admin-bloco-pausa-texto" style="margin: 0 0 8px">
+                <strong>Salvar cliente</strong> adiciona ao guia. Se já existir
+                <strong>o mesmo nome</strong>, os dados são
+                <strong>atualizados</strong> (Supabase ou neste navegador). Use
+                <strong>Limpar</strong> entre um cadastro e outro.
+              </p>
+              <button type="button" class="admin-salvar-secundario" id="adminLimparForm">
+                Limpar formulário
+              </button>
+            </div>
+
             <label>
               Nome do cliente
               <input type="text" id="adminNome" required />
@@ -1740,6 +1752,15 @@
             <label class="full">
               Ou enviar imagem do logo
               <input type="file" id="adminLogoArquivo" accept="image/*" />
+            </label>
+
+            <label class="full">
+              Palavras-chave na busca (opcional, separadas por vírgula)
+              <input
+                type="text"
+                id="adminPalavrasChave"
+                placeholder="Ex.: marmita, almoço, delivery"
+              />
             </label>
 
             <label class="full">
@@ -4072,6 +4093,29 @@
         if (error) throw error;
       }
 
+      /** Insert ou update pelo nome exato (permite vários cadastos e regravar o mesmo). */
+      async function salvarOuAtualizarEmpresaNoBanco(empresa) {
+        const nomeTrim = String(empresa.nome || "").trim();
+        if (!nomeTrim) throw new Error("Nome obrigatório.");
+        const payload = mapearEmpresaParaBanco(empresa);
+        const { data: rows, error: errSel } = await supabaseClient
+          .from(SUPABASE_TABLE)
+          .select("nome")
+          .eq("nome", nomeTrim)
+          .limit(1);
+        if (errSel) throw errSel;
+        if (rows && rows.length > 0) {
+          const { error } = await supabaseClient
+            .from(SUPABASE_TABLE)
+            .update(payload)
+            .eq("nome", nomeTrim);
+          if (error) throw error;
+          return true;
+        }
+        await inserirEmpresaBanco(empresa);
+        return false;
+      }
+
       async function definirAtivoClienteNoBanco(nome, ativo) {
         const nomeTrim = String(nome || "").trim();
         if (!nomeTrim) {
@@ -4841,7 +4885,7 @@ ${e.endereco ? `<a class="btn site" href="${hrefMapa}" target="_blank" rel="noop
 
           if (!supabaseConfigurado()) {
             adminLoginMsg.textContent =
-              "Sem Supabase no .env: o cadastro já está liberado neste aparelho (dados locais). Configure SUPABASE_URL e SUPABASE_ANON_KEY para salvar na nuvem.";
+              "Sem Supabase: o cadastro é só neste navegador. Valide a senha local na entrada; este login por e-mail não se aplica. Para nuvem, configure SUPABASE_URL e SUPABASE_ANON_KEY.";
             return;
           }
 
@@ -5017,6 +5061,13 @@ ${e.endereco ? `<a class="btn site" href="${hrefMapa}" target="_blank" rel="noop
             .value.trim();
           const site = document.getElementById("adminSite").value.trim();
           const descricao = adminDescricao.value.trim();
+          const pkEl = document.getElementById("adminPalavrasChave");
+          const palavrasChaveExtra = pkEl
+            ? pkEl.value
+                .split(",")
+                .map((s) => s.trim())
+                .filter(Boolean)
+            : [];
           const logoUrl = document.getElementById("adminLogoUrl").value.trim();
           const logoArquivo =
             document.getElementById("adminLogoArquivo").files[0];
@@ -5055,6 +5106,12 @@ ${e.endereco ? `<a class="btn site" href="${hrefMapa}" target="_blank" rel="noop
             document.getElementById("adminProximaCobranca")?.value,
           );
 
+          const chavesBase = normalizarPalavrasChave([categoria, nome]);
+          const chavesExtras = normalizarPalavrasChave(palavrasChaveExtra);
+          const palavrasChaveUnicas = [
+            ...new Set([...chavesBase, ...chavesExtras]),
+          ];
+
           const novo = normalizarEmpresa({
             nome,
             logo,
@@ -5069,17 +5126,27 @@ ${e.endereco ? `<a class="btn site" href="${hrefMapa}" target="_blank" rel="noop
             endereco: endereco || undefined,
             instagram: instagramSeguro || undefined,
             site: siteSeguro || undefined,
-            palavrasChave: [categoria, nome],
+            palavrasChave: palavrasChaveUnicas,
           });
 
           salvarDescricaoCustomizada(nome, descricao);
 
+          let atualizado = false;
           try {
             if (supabaseConfigurado()) {
-              await inserirEmpresaBanco(novo);
+              atualizado = await salvarOuAtualizarEmpresaNoBanco(novo);
               empresas = aplicarAjustesEmpresas(await carregarEmpresasBanco());
             } else {
-              empresas.push(novo);
+              const k = normalizarNomeIgualdade(nome);
+              const idx = empresas.findIndex(
+                (e) => normalizarNomeIgualdade(e.nome) === k,
+              );
+              if (idx >= 0) {
+                empresas[idx] = novo;
+                atualizado = true;
+              } else {
+                empresas.push(novo);
+              }
               salvarEmpresasStorage(empresas);
             }
 
@@ -5094,10 +5161,24 @@ ${e.endereco ? `<a class="btn site" href="${hrefMapa}" target="_blank" rel="noop
           adminForm.reset();
           if (adminAtivo) adminAtivo.checked = true;
           aplicarCorPlanoSelecionado();
-          adminMsg.textContent = supabaseConfigurado()
-            ? "Cliente cadastrado no banco com sucesso."
-            : "Cliente cadastrado com sucesso.";
+          adminMsg.textContent = atualizado
+            ? supabaseConfigurado()
+              ? "Cliente atualizado no banco com sucesso."
+              : "Cliente atualizado neste navegador."
+            : supabaseConfigurado()
+              ? "Cliente cadastrado no banco com sucesso."
+              : "Cliente cadastrado com sucesso.";
         });
+
+        const adminLimparForm = document.getElementById("adminLimparForm");
+        if (adminLimparForm) {
+          adminLimparForm.addEventListener("click", () => {
+            adminForm.reset();
+            if (adminAtivo) adminAtivo.checked = true;
+            aplicarCorPlanoSelecionado();
+            adminMsg.textContent = "Formulário limpo. Pronto para outro cadastro.";
+          });
+        }
 
         if (supabaseConfigurado()) {
           supabaseClient.auth.onAuthStateChange(() => {
