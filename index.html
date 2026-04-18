@@ -413,25 +413,6 @@
         box-shadow: 0 10px 18px rgba(0, 0, 0, 0.18);
       }
 
-      /* Selo detalhado: slot maior que 80px para texto Natura/Avon legível */
-      .card .card-topo > img.logo-samarina {
-        width: 120px;
-        height: 120px;
-        border-radius: 50%;
-        background: #000;
-        object-fit: contain;
-        box-shadow:
-          inset 0 0 0 2px rgba(255, 209, 102, 0.42),
-          0 4px 14px rgba(0, 0, 0, 0.35);
-      }
-
-      .card:hover .card-topo > img.logo-samarina {
-        background: #050505;
-        box-shadow:
-          inset 0 0 0 2px rgba(255, 209, 102, 0.55),
-          0 10px 20px rgba(0, 0, 0, 0.3);
-      }
-
       .card h3 {
         margin: 2px 0 2px;
         padding: 0 4px 1px;
@@ -483,13 +464,14 @@
         min-height: 0;
         overflow-x: hidden;
         overflow-y: visible;
+        padding-bottom: 2px;
       }
 
       .card-descricao {
         flex: 0 1 auto;
         align-self: stretch;
         min-height: 0;
-        margin: -4px 0 0;
+        margin: 0 0 10px;
         padding: 6px 8px;
         border-radius: 10px;
         border: 1px dashed rgba(255, 255, 255, 0.2);
@@ -519,7 +501,7 @@
         flex-shrink: 0;
         margin-top: auto;
         width: 100%;
-        padding-top: 4px;
+        padding-top: 8px;
         display: flex;
         flex-direction: column;
         gap: 6px;
@@ -1245,14 +1227,6 @@
         object-fit: contain;
         border-radius: 8px;
         background: rgba(255, 255, 255, 0.06);
-      }
-
-      .mini-card img.logo-samarina-mini {
-        width: 76px;
-        height: 76px;
-        border-radius: 50%;
-        background: #000;
-        box-shadow: inset 0 0 0 1px rgba(255, 209, 102, 0.38);
       }
 
       .mini-nome {
@@ -4587,10 +4561,7 @@
             ? `https://maps.google.com/?q=${encodeURIComponent(e.endereco)}`
             : "#";
 
-          const clsLogo = empresaEhSamarinaMarinoParaCard(e)
-            ? ' class="logo-samarina"'
-            : "";
-          const blocoLogo = `<img${clsLogo} src="${logoSeguro}" alt="Logo ${nomeSeguro}" loading="lazy">`;
+          const blocoLogo = `<img src="${logoSeguro}" alt="Logo ${nomeSeguro}" loading="lazy">`;
 
           grid.innerHTML += `
 <div class="card ${e.patrocinado ? "patrocinado" : ""} ${e.plano === "vip" ? "vip" : ""}">
@@ -5190,10 +5161,7 @@ ${e.endereco ? `<a class="btn site" href="${hrefMapa}" target="_blank" rel="noop
         vitrine.forEach((e) => {
           const nomeSeguro = escaparHtml(nomePublicoCard(e));
           const logoSeguro = logoUrlEmpresa(e);
-          const clsMini = empresaEhSamarinaMarinoParaCard(e)
-            ? ' class="logo-samarina-mini"'
-            : "";
-          const miniImg = `<img${clsMini} src="${logoSeguro}" alt="Mini logo ${nomeSeguro}" loading="lazy">`;
+          const miniImg = `<img src="${logoSeguro}" alt="Mini logo ${nomeSeguro}" loading="lazy">`;
           let mini = `
 <div class="mini-card">
 ${miniImg}
