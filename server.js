@@ -220,6 +220,12 @@ app.get("/portal-config.js", (_req, res) => {
   res.send(`window.PORTAL_CONFIG=${JSON.stringify(payload)};\n`);
 });
 
+app.get("/api/portal-config-data", (_req, res) => {
+  res.type("application/json; charset=utf-8");
+  res.set("Cache-Control", "no-store, max-age=0");
+  res.json(montarPayloadPortalConfig());
+});
+
 const raiz = __dirname;
 
 app.use(

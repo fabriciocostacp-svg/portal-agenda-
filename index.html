@@ -1807,7 +1807,7 @@
       </div>
     </div>
 
-    <script src="/portal-config.js"></script>
+    <script src="/portal-config.js?v=cfg2"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
       (function mergePortalConfig() {
@@ -1948,7 +1948,7 @@
 
       const SUPABASE_LOGOS_PUBLIC_BASE = (P.supabaseLogosPublicBase || "").trim();
 
-      const supabaseClient =
+      let supabaseClient =
         SUPABASE_URL && SUPABASE_ANON_KEY && window.supabase
           ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
               auth: {
@@ -4829,7 +4829,48 @@ ${e.endereco ? `<a class="btn site" href="${hrefMapa}" target="_blank" rel="noop
           return o || "http://localhost:3000";
         }
 
+        /** Atualiza P e o cliente Supabase após redeploy (evita /portal-config.js antigo em cache). */
+        async function sincronizarPortalConfigDoServidor() {
+          try {
+            const base =
+              window.location.protocol === "file:"
+                ? originParaAcessoLocal()
+                : window.location.origin;
+            const u = new URL("/api/portal-config-data", base);
+            u.searchParams.set("cb", String(Date.now()));
+            const r = await fetch(u.href, { method: "GET", cache: "no-store" });
+            if (!r.ok) return;
+            const payload = await r.json();
+            if (!payload || typeof payload !== "object") return;
+            Object.assign(P, payload);
+            const su = (P.supabaseUrl || "").trim();
+            const sk = (P.supabaseAnonKey || "").trim();
+            if (
+              su &&
+              sk &&
+              typeof window.supabase !== "undefined" &&
+              !supabaseClient
+            ) {
+              supabaseClient = window.supabase.createClient(su, sk, {
+                auth: {
+                  persistSession: true,
+                  autoRefreshToken: true,
+                  detectSessionInUrl: true,
+                  storage: window.localStorage,
+                  storageKey: `${P.storagePrefix}_supabase_auth`,
+                },
+              });
+            }
+          } catch (e) {
+            console.warn(
+              "[portal] Falha ao sincronizar /api/portal-config-data.",
+              e,
+            );
+          }
+        }
+
         async function abrirAdminComProtecaoLocal() {
+          await sincronizarPortalConfigDoServidor();
           if (acessoLocalValido()) {
             adminLoginMsg.textContent = "";
             adminWrap.classList.add("active");
@@ -4998,6 +5039,8 @@ ${e.endereco ? `<a class="btn site" href="${hrefMapa}" target="_blank" rel="noop
             return;
           }
 
+          await sincronizarPortalConfigDoServidor();
+
           const usuario = adminUsuario.value.trim();
           const senha = adminSenha.value;
           if (!usuario || !senha) {
@@ -5008,7 +5051,7 @@ ${e.endereco ? `<a class="btn site" href="${hrefMapa}" target="_blank" rel="noop
           if (!supabaseConfigurado()) {
             const diag = `${window.location.origin}/api/admin/self-check`;
             adminLoginMsg.textContent =
-              `Supabase não configurado: defina SUPABASE_URL e SUPABASE_ANON_KEY (Vercel → Environment Variables → redeploy, ou .env + npm start). Diagnóstico: abra ${diag} e confira se supabaseEmAmbiente é true.`;
+              `Supabase não configurado: defina SUPABASE_URL e SUPABASE_ANON_KEY na Vercel (nomes exatos), guarde, faça Redeploy e feche/abra o admin. Diagnóstico: ${diag} → supabaseEmAmbiente deve ser true.`;
             return;
           }
 
