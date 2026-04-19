@@ -3929,9 +3929,9 @@
         ];
 
         extrasObrigatorios.forEach((extra) => {
+          const chEx = chaveFusaoNegocio(extra);
           const i = base.findIndex(
-            (empresa) =>
-              normalizarTexto(empresa.nome) === normalizarTexto(extra.nome),
+            (empresa) => chaveFusaoNegocio(empresa) === chEx,
           );
           const ex = normalizarEmpresa(extra);
           if (i === -1) {
@@ -3952,7 +3952,9 @@
           }
         });
 
-        return removerEmpresasDuplicadasPorNome(base);
+        return removerEmpresasDuplicadasPorNome(
+          fundirListaEmpresasMesmoNegocio(base),
+        );
       }
 
       function removerEmpresasDuplicadasPorNome(lista) {
@@ -4122,11 +4124,13 @@
         await carregarEmpresasPadraoJson();
         const doBanco = await carregarEmpresasBanco();
         if (P.applyDefaultCatalog === false) return doBanco;
-        const visto = new Set(
-          (doBanco || [])
-            .map((e) => normalizarTexto(e.nome))
-            .filter(Boolean),
-        );
+        /* Só bloqueia entrada do JSON se já existe linha ATIVA com o mesmo nome
+           (evita sumir MULTLar quando no banco há registro inativo/pausado). */
+        const visto = new Set();
+        for (const e of doBanco || []) {
+          const k = normalizarTexto(e.nome);
+          if (k && empresaAtivaNoPortal(e)) visto.add(k);
+        }
         const saida = [...(doBanco || [])];
         for (const item of empresasPadrao || []) {
           const k = normalizarTexto(item.nome);
@@ -4341,8 +4345,92 @@
         return String(texto || "")
           .normalize("NFD")
           .replace(/[\u0300-\u036f]/g, "")
+          .replace(/\u00e7/g, "c")
+          .replace(/\u00c7/g, "c")
           .toLowerCase()
           .trim();
+      }
+
+      const NOME_CANONICO_FUSAO = {
+        __ec_escavacoes__: "EC Escavações",
+        __multilar__: "MULTLar VARIEDADES",
+      };
+
+      /** Agrupa EC/Emilio (mesmo telefone) e variações MULTLar para um card só. */
+      function chaveFusaoNegocio(empresa) {
+        const nome = normalizarTexto(empresa.nome);
+        const tel = normalizarTelefone(empresa.tel);
+        if (!nome && !tel) return "";
+        if (tel === "5519998174773") return "__ec_escavacoes__";
+        if (
+          nome.includes("emilio campos") &&
+          (nome.includes("escava") || nome.includes("escavacao"))
+        ) {
+          return "__ec_escavacoes__";
+        }
+        if (nome === "ec escavacoes" || nome.startsWith("ec escava")) {
+          return "__ec_escavacoes__";
+        }
+        const compacto = nome.replace(/\s+/g, "");
+        if (
+          compacto.includes("multlar") ||
+          nome.includes("multi lar") ||
+          nome.includes("multilar")
+        ) {
+          return "__multilar__";
+        }
+        return nome;
+      }
+
+      function fundirParEmpresasFusao(a, b, chaveFusao) {
+        const canon = NOME_CANONICO_FUSAO[chaveFusao];
+        const ativo = empresaAtivaNoPortal(a) || empresaAtivaNoPortal(b);
+        const telA = normalizarTelefone(a.tel);
+        const telB = normalizarTelefone(b.tel);
+        const tel =
+          telA.length >= 12
+            ? a.tel
+            : telB.length >= 12
+              ? b.tel
+              : a.tel || b.tel;
+        const plano =
+          a.plano === "vip" || b.plano === "vip"
+            ? "vip"
+            : a.plano === "standard" || b.plano === "standard"
+              ? "standard"
+              : a.plano || b.plano;
+        const logo =
+          String(a.logo || "").trim() || String(b.logo || "").trim();
+        return normalizarEmpresa({
+          ...b,
+          ...a,
+          nome: canon || a.nome || b.nome,
+          tel,
+          logo,
+          ativo,
+          plano,
+          endereco: String(a.endereco || "").trim() || b.endereco,
+          instagram: String(a.instagram || "").trim() || b.instagram,
+          site: String(a.site || "").trim() || b.site,
+          descricao:
+            String(a.descricao || "").trim() || String(b.descricao || "").trim(),
+        });
+      }
+
+      function fundirListaEmpresasMesmoNegocio(lista) {
+        const mapa = new Map();
+        const semChave = [];
+        for (const e of lista || []) {
+          const k = chaveFusaoNegocio(e);
+          if (!k) {
+            semChave.push(e);
+            continue;
+          }
+          const cur = mapa.get(k);
+          if (!cur) mapa.set(k, e);
+          else mapa.set(k, fundirParEmpresasFusao(cur, e, k));
+        }
+        return [...mapa.values(), ...semChave];
       }
 
       function escaparHtml(valor) {
