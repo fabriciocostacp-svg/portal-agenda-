@@ -5,12 +5,41 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Portal Itirapina</title>
+    <title>MULTLar VARIEDADES</title>
     <meta
       name="description"
-      content="Guia local de Itirapina e Broa: empresas, contatos úteis, ônibus e previsão do tempo num só portal."
+      content="MULTLar VARIEDADES — guia local em Itirapina: empresas, contatos e utilidades."
     />
     <meta name="theme-color" content="#0b1518" />
+
+    <!-- Open Graph: URL base trocada pelo server.js se configurar APP_ORIGIN / PORTAL_PUBLIC_ORIGIN. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="MULTLar VARIEDADES" />
+    <meta property="og:title" content="MULTLar VARIEDADES — Guia local" />
+    <meta
+      property="og:description"
+      content="MULTLar VARIEDADES — guia local em Itirapina: empresas, contatos e utilidades."
+    />
+    <meta
+      property="og:url"
+      content="https://portal-agenda-itirapina.vercel.app/"
+    />
+    <meta
+      property="og:image"
+      content="https://portal-agenda-itirapina.vercel.app/assets/og-portal.jpeg"
+    />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="MULTLar VARIEDADES — Guia local" />
+    <meta
+      name="twitter:description"
+      content="MULTLar VARIEDADES — guia local em Itirapina: empresas, contatos e utilidades."
+    />
+    <meta
+      name="twitter:image"
+      content="https://portal-agenda-itirapina.vercel.app/assets/og-portal.jpeg"
+    />
 
     <style>
       @import url("https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=DM+Serif+Display&family=Outfit:wght@500;600;700&family=Space+Grotesk:wght@400;500;700&display=swap");
@@ -33,6 +62,8 @@
 
       html {
         scroll-behavior: smooth;
+        overflow-y: auto;
+        scrollbar-gutter: stable;
       }
 
       * {
@@ -256,6 +287,11 @@
         border-color: transparent;
         color: var(--btn-hover-text);
         box-shadow: 0 10px 18px rgba(0, 0, 0, 0.18);
+      }
+
+      .menu a.menu-acao.anuncie.is-disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
       }
 
       .busca {
@@ -1323,9 +1359,9 @@
     <div class="sidebar right"><div class="scroll" id="rightScroll"></div></div>
 
     <header class="hero">
-      <span class="hero-kicker">Guia local de Itirapina e Broa</span>
-      <h1>Tudo da cidade em um portal só</h1>
-      <p>
+      <span class="hero-kicker" id="portalRegionKicker">Guia local</span>
+      <h1 id="portalHeroTitle">Tudo da cidade em um portal só</h1>
+      <p id="portalHeroLead">
         Encontre empresas, contatos úteis e horários de ônibus com busca rápida
         e acesso direto.
       </p>
@@ -1335,7 +1371,9 @@
     <section class="clima-wrap">
       <div class="clima" id="climaBox">
         <div class="clima-topo">
-          <div class="clima-cidade">Previsão do tempo em Itirapina</div>
+          <div class="clima-cidade" id="portalClimateTitle">
+            Previsão do tempo
+          </div>
           <div class="clima-atual" id="climaAtual">Carregando...</div>
         </div>
         <div class="clima-atualizado" id="climaAtualizado"></div>
@@ -1367,9 +1405,9 @@
       </button>
       <a
         class="menu-acao anuncie"
-        href="https://wa.me/5519999717781?text=Ol%C3%A1%2C%20quero%20anunciar%20no%20Portal%20Itirapina."
-        target="_blank"
-        rel="noopener noreferrer"
+        id="portalLinkAnuncie"
+        href="#"
+        aria-label="Anunciar no portal"
         >🚀 <span class="menu-label-desktop">Anuncie</span
         ><span class="menu-label-mobile">Anunciar</span></a
       >
@@ -1456,11 +1494,10 @@
 
     <div class="sobre-wrap" id="sobreWrap">
       <div class="sobre-card">
-        <h3>Portal Itirapina</h3>
-        <p>
+        <h3 id="portalSobreTitulo">Portal local</h3>
+        <p id="portalSobreTexto">
           Guia local com empresas, contatos úteis, horários de ônibus e previsão
-          do tempo. Para mais informações, procure o administrador clicando no
-          botão Anuncie.
+          do tempo. Use o botão Anuncie para falar com quem opera o portal.
         </p>
         <div class="sobre-acoes">
           <button class="sobre-btn admin" id="abrirAdminNoSobre">
@@ -1475,8 +1512,18 @@
       <div class="acesso-local-card">
         <h3>Acesso Local</h3>
         <p>
-          Informe a senha do portal (a mesma de <code>ADMIN_LOCAL_PASS</code> no
-          arquivo <code>.env</code>) para abrir a Área Admin.
+          Com o <strong>servidor Node</strong> (<code>npm start</code>): informe a
+          senha igual a <code>ADMIN_LOCAL_PASS</code> no <code>.env</code> (pasta
+          do projeto, junto ao <code>server.js</code>), na mesma URL/porta (ex.:
+          <code>http://localhost:3000/</code>). Senha com <code>@</code>: use
+          aspas no <code>.env</code>, ex. <code>ADMIN_LOCAL_PASS="AGENDA@2026"</code>.
+        </p>
+        <p>
+          Se o site <strong>não tiver</strong> a API deste projeto (ex.: Vercel só
+          estático), o portal <strong>detecta</strong> e abre direto o login
+          Supabase. Para forçar esse modo: <code>PORTAL_SKIP_LOCAL_ADMIN_GATE=true</code>
+          no ambiente ou <code>skipLocalAdminGate: true</code> no
+          <code>portal-config.js</code>.
         </p>
         <form id="acessoLocalForm">
           <div class="acesso-local-grid">
@@ -1491,7 +1538,11 @@
             </label>
           </div>
           <div class="acesso-local-acoes">
-            <button type="submit" class="acesso-local-btn entrar">
+            <button
+              type="submit"
+              class="acesso-local-btn entrar"
+              id="acessoLocalEntrar"
+            >
               Entrar
             </button>
             <button
@@ -1755,273 +1806,235 @@
       </div>
     </div>
 
+    <script src="/portal-config.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-      /* EMPRESAS */
-      const STORAGE_EMPRESAS = "portal_itirapina_empresas";
-      const STORAGE_VISITAS = "portal_itirapina_visitas";
-      const STORAGE_DESCRICOES = "portal_itirapina_descricoes";
-      const SUPABASE_URL = "https://upvppojjkuwtbndjyugl.supabase.co";
-      const SUPABASE_ANON_KEY =
-        "sb_publishable_hO4aymyOY4NunXbbDCPubw_Oz3U6ES-";
-      const SUPABASE_TABLE = "empresas";
+      (function mergePortalConfig() {
+        const incoming =
+          window.PORTAL_CONFIG && typeof window.PORTAL_CONFIG === "object"
+            ? window.PORTAL_CONFIG
+            : {};
+        const def = {
+          siteName: "MULTLar VARIEDADES",
+          siteDescription:
+            "Guia local com variedades, empresas e utilidades em Itirapina e região.",
+          regionKicker: "Itirapina e região",
+          heroTitle: "Tudo que você procura em um só lugar",
+          heroLead:
+            "Empresas, contatos úteis, ônibus, CEP novo e mais — com busca rápida.",
+          climateTitle: "Previsão do tempo",
+          climateLatitude: -22.2528,
+          climateLongitude: -47.8169,
+          sobreTitulo: "MULTLar VARIEDADES",
+          sobreTexto:
+            "Guia local com empresas, contatos úteis, horários de ônibus e previsão do tempo. Use o botão Anuncie para falar com a MULTLar VARIEDADES.",
+          whatsappE164: "5519971689501",
+          whatsappAnuncieMessage:
+            "Olá! Vim pelo portal {portal} e tenho interesse em anunciar. Poderia me enviar opções e valores?",
+          whatsappClienteTemplate:
+            "Olá {nome}, vi seu anúncio no {portal} e gostaria de mais informações.",
+          whatsappRenewalTemplate:
+            "Olá {nome}! A assinatura do anúncio no {portal} está próxima do vencimento ({data}). Podemos renovar?",
+          storagePrefix: "portal_itirapina",
+          supabaseUrl: "",
+          supabaseAnonKey: "",
+          supabaseTable: "empresas",
+          supabaseLogosPublicBase: "",
+          applyDefaultCatalog: true,
+          skipLocalAdminGate: false,
+          localLoginOrigin: "",
+        };
+        const merged = { ...def, ...incoming };
+        const waIn = String(merged.whatsappE164 || "").replace(/\D/g, "");
+        const waDef = String(def.whatsappE164 || "").replace(/\D/g, "");
+        merged.whatsappE164 =
+          waIn.length >= 12 ? waIn : waDef.length >= 12 ? waDef : "";
+        const msgIn = String(merged.whatsappAnuncieMessage || "").trim();
+        merged.whatsappAnuncieMessage = msgIn || def.whatsappAnuncieMessage;
+        if (String(merged.whatsappE164 || "").replace(/\D/g, "").length < 12) {
+          merged.whatsappE164 = def.whatsappE164;
+        }
+        window.PORTAL_CONFIG = merged;
+      })();
 
-      /**
-       * Blindagem: se preencher com a URL pública do bucket (sem barra no final),
-       * todo caminho "assets/nome.jpeg" vira link estável no Supabase Storage.
-       * Crie um bucket público (ex.: portal-logos), envie os arquivos com os
-       * mesmos nomes da pasta assets/ e cole a URL base aqui.
-       * Ex.: https://upvppojjkuwtbndjyugl.supabase.co/storage/v1/object/public/portal-logos
-       * Deixe "" para usar só arquivos locais na pasta assets/.
-       * Só preencha a URL do Storage depois de enviar TODOS os arquivos ao bucket
-       * com os mesmos nomes; senão as imagens somem (404 no Storage).
-       */
-      const SUPABASE_LOGOS_PUBLIC_BASE = "";
+      const P = window.PORTAL_CONFIG;
+
+      function preencherPlaceholdersWhatsApp(
+        tpl,
+        { nome = "", data = "", portal = "" } = {},
+      ) {
+        return String(tpl ?? "")
+          .split("{nome}")
+          .join(String(nome))
+          .split("{data}")
+          .join(String(data))
+          .split("{portal}")
+          .join(String(portal));
+      }
+
+      function aplicarTextosPublicosDoPortal() {
+        document.title = P.siteName;
+        const md = document.querySelector('meta[name="description"]');
+        if (md) md.setAttribute("content", P.siteDescription);
+        const rk = document.getElementById("portalRegionKicker");
+        if (rk) rk.textContent = P.regionKicker || "Guia local";
+        const ht = document.getElementById("portalHeroTitle");
+        if (ht) ht.textContent = P.heroTitle || "";
+        const hl = document.getElementById("portalHeroLead");
+        if (hl) hl.textContent = P.heroLead || "";
+        const ct = document.getElementById("portalClimateTitle");
+        if (ct) ct.textContent = P.climateTitle || "Previsão do tempo";
+        const st = document.getElementById("portalSobreTitulo");
+        if (st) st.textContent = P.sobreTitulo || P.siteName || "";
+        const sp = document.getElementById("portalSobreTexto");
+        if (sp) sp.textContent = P.sobreTexto || "";
+        const wa = document.getElementById("portalLinkAnuncie");
+        if (wa) {
+          const tel = String(P.whatsappE164 || "").replace(/\D/g, "");
+          if (tel.length >= 12) {
+            const textoAnuncie = preencherPlaceholdersWhatsApp(
+              P.whatsappAnuncieMessage,
+              { portal: P.siteName || "portal local" },
+            ).trim();
+            const msg = encodeURIComponent(textoAnuncie);
+            const waUrl = `https://wa.me/${tel}?text=${msg}`;
+            wa.setAttribute("href", waUrl);
+            wa.setAttribute("data-wa-href", waUrl);
+            wa.setAttribute("target", "_blank");
+            wa.setAttribute("rel", "noopener noreferrer");
+            wa.classList.remove("is-disabled");
+            wa.removeAttribute("title");
+          } else {
+            wa.setAttribute("href", "#");
+            wa.removeAttribute("data-wa-href");
+            wa.removeAttribute("target");
+            wa.removeAttribute("rel");
+            wa.classList.add("is-disabled");
+            wa.setAttribute(
+              "title",
+              "Defina PORTAL_WHATSAPP_E164 no .env (DDI+DDD+número, ex.: 5519971689501).",
+            );
+          }
+        }
+      }
+
+      function mensagemWhatsAppCliente(nomeEmpresa) {
+        const tpl =
+          P.whatsappClienteTemplate ||
+          "Olá {nome}, vi seu anúncio no {portal} e gostaria de mais informações.";
+        return preencherPlaceholdersWhatsApp(tpl, {
+          nome: String(nomeEmpresa || "").trim(),
+          portal: P.siteName || "portal",
+        });
+      }
+
+      function mensagemWhatsAppRenovacao(nomeEmpresa, dataFmt) {
+        const tpl =
+          P.whatsappRenewalTemplate ||
+          "Olá {nome}! A assinatura do anúncio no {portal} está próxima do vencimento ({data}). Podemos renovar?";
+        return preencherPlaceholdersWhatsApp(tpl, {
+          nome: String(nomeEmpresa || "").trim(),
+          data: String(dataFmt || "").trim(),
+          portal: P.siteName || "portal",
+        });
+      }
+
+      const STORAGE_EMPRESAS = `${P.storagePrefix}_empresas`;
+      const STORAGE_VISITAS = `${P.storagePrefix}_visitas`;
+      const STORAGE_DESCRICOES = `${P.storagePrefix}_descricoes`;
+      const SUPABASE_URL = (P.supabaseUrl || "").trim();
+      const SUPABASE_ANON_KEY = (P.supabaseAnonKey || "").trim();
+      const SUPABASE_TABLE = (P.supabaseTable || "empresas").trim() || "empresas";
+
+      const SUPABASE_LOGOS_PUBLIC_BASE = (P.supabaseLogosPublicBase || "").trim();
 
       const supabaseClient =
         SUPABASE_URL && SUPABASE_ANON_KEY && window.supabase
-          ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+          ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+              auth: {
+                persistSession: true,
+                autoRefreshToken: true,
+                detectSessionInUrl: true,
+                storage: window.localStorage,
+                storageKey: `${P.storagePrefix}_supabase_auth`,
+              },
+            })
           : null;
 
       let descricoesCustomizadas = carregarDescricoesStorage();
 
-      const empresasPadrao = [
-        {
-          nome: "MULTLar VARIEDADES",
-          logo: "assets/multilar-logo.jpeg",
-          tel: "5519971689501",
-          instagram: "https://www.instagram.com/multlar_itirapina/",
-          endereco:
-            "R. Jaguarucu, 669 - Jardim Nova Itirapina, Itirapina - CEP 13530-268",
-          categoria: "Variedades / Loja",
-          descricao:
-            "Produtos de limpeza, utilidades domésticas, material escolar, brinquedos e eletrônicos.",
-          palavrasChave: [
-            "multilar",
-            "variedades",
-            "loja",
-            "itirapina",
-            "jaguarucu",
-            "limpeza",
-            "escolar",
-            "brinquedos",
-            "eletronicos",
-          ],
-          plano: "vip",
-          patrocinado: true,
-        },
-        {
-          nome: "FL Conecta",
-          logo: "assets/conecta.jpeg",
-          tel: "5519999717781",
-          instagram: "https://instagram.com/flconecta",
-          categoria: "Marketing",
-          palavrasChave: ["marketing", "midias", "publicidade", "social media"],
-          plano: "vip",
-          patrocinado: true,
-        },
-        {
-          nome: "Julia Corretora",
-          logo: "assets/julia.jpeg",
-          tel: "5519999322673",
-          categoria: "Seguros",
-          patrocinado: true,
-        },
-        {
-          nome: "Clinica Bem Viver",
-          logo: "assets/clinica.jpeg",
-          tel: "5519997731179",
-          endereco: "Avenida 2, nº 29 - Centro, Itirapina - SP",
-          categoria: "Saúde",
-          palavrasChave: ["clinica", "medico", "saude", "unimed", "iamspe"],
-          plano: "vip",
-          patrocinado: true,
-        },
-        {
-          nome: "Rotisseria Arte do Sabor",
-          logo: "assets/rotisseria.png",
-          tel: "5519998507034",
-          site: "https://deliveryapp.neemo.com.br/pedir/14398/PfvWHwxooksbqcqEFH9g",
-          endereco: "Rua 2 nº 409 - Centro, Itirapina - SP",
-          categoria: "Alimentação",
-          palavrasChave: ["restaurante", "comida", "marmita", "rotisseria"],
-        },
-        {
-          nome: "Gordo Lanches",
-          logo: "assets/gordo.jpeg",
-          tel: "5519997913079",
-          endereco: "Av. Perimetral, 721 - Jardim Nova Itirapina, Itirapina",
-          instagram: "https://instagram.com/gordolanchesitirapina",
-          categoria: "Alimentação",
-          funcionamento: "Quarta a domingo, das 18:30 às 22:40",
-          palavrasChave: ["lanches", "hamburguer", "lanche", "gordo"],
-          plano: "vip",
-          patrocinado: true,
-        },
-        {
-          nome: "Depósito de Bebida Alves",
-          logo: "assets/deposito.jpeg",
-          tel: "5519996662084",
-          categoria: "Bebidas",
-          palavrasChave: [
-            "deposito",
-            "bebidas",
-            "cerveja",
-            "agua",
-            "refrigerante",
-          ],
-        },
-        {
-          nome: "Lolana Lavanderia",
-          logo: "assets/lolana.jpeg",
-          tel: "5519997579086",
-          endereco: "Rua Cinco n°752 Vila Garbi (esquina com Av. 6)",
-          categoria: "Serviços",
-          palavrasChave: ["lavanderia", "lavar roupa", "roupas"],
-          plano: "vip",
-          patrocinado: true,
-        },
-        {
-          nome: "Margem Zero Gráfica",
-          logo: "assets/grafica.jpeg",
-          tel: "5519990195526",
-          categoria: "Gráfica",
-          palavrasChave: ["grafica", "impressao", "cartao", "banner"],
-        },
-        {
-          nome: "Criando Sonhos",
-          logo: "assets/criando-sonhos.jpeg",
-          tel: "5516992513881",
-          categoria: "Eventos",
-        },
-        {
-          nome: "APIB",
-          logo: "assets/apib.jpeg",
-          tel: "5519990000000",
-          categoria: "Associação",
-        },
-        {
-          nome: "Vitale Crochê",
-          logo: "assets/vitale.jpeg",
-          tel: "5519991457752",
-          categoria: "Artesanato",
-        },
-        {
-          nome: "Sempre Bella",
-          logo: "assets/sempre-bela.jpeg",
-          tel: "5519997168481",
-          categoria: "Beleza",
-          palavrasChave: ["perfumaria", "cosmeticos", "beleza"],
-        },
-        {
-          nome: "Samarina Marino",
-          logo: "assets/samarina.png",
-          tel: "5519997399970",
-          instagram: "https://www.instagram.com/samarinagomesmarino/",
-          categoria: "Beleza",
-          descricao:
-            "Consultora de Beleza Natura e Avon — atendimento e pedidos com praticidade.",
-          palavrasChave: [
-            "natura",
-            "avon",
-            "beleza",
-            "consultora",
-            "cosmeticos",
-            "perfumaria",
-            "samarina",
-            "marino",
-            "gomes",
-          ],
-          plano: "standard",
-          patrocinado: true,
-        },
-        {
-          nome: "Cheiro de Amor",
-          logo: "assets/cheiro-de-amor.jpeg",
-          tel: "5519996983282",
-          categoria: "Perfumaria",
-          palavrasChave: ["perfumaria", "perfume", "cosmeticos"],
-        },
-        {
-          nome: "Sorvete Americano",
-          logo: "assets/sorvete.jpeg",
-          tel: "5519993210001",
-          categoria: "Sobremesas",
-        },
-        {
-          nome: "Limp Gel",
-          logo: "assets/limpgel.jpeg",
-          tel: "5519997216659",
-          categoria: "Serviços",
-          plano: "basico",
-          palavrasChave: ["servicos", "limpeza", "limp gel"],
-        },
-        {
-          nome: "Impulsiona Veículos",
-          logo: "assets/impulsiona.jpeg",
-          tel: "5519981301140",
-          site: "https://impulsionaveiculos.com.br",
-          categoria: "Automóveis",
-          palavrasChave: ["veiculos", "carros", "automoveis"],
-          patrocinado: true,
-        },
-        {
-          nome: "Valdecir Alves",
-          logo: "assets/valdecir.jpeg",
-          tel: "5519999474489",
-          categoria: "Uber",
-          plano: "basico",
-          palavrasChave: ["uber", "motorista", "particular", "corridas"],
-        },
-        {
-          nome: "EC Escavações",
-          logo: "assets/escavacoes.jpeg",
-          tel: "5519998174773",
-          categoria: "Construção",
-          palavrasChave: [
-            "escavacoes",
-            "piscinas",
-            "alicerces",
-            "terraplenagem",
-          ],
-          plano: "vip",
-          patrocinado: true,
-        },
-        {
-          nome: "Gu Espetaria e Choperia",
-          logo: "assets/espetaria.jpeg",
-          tel: "5519996150744",
-          categoria: "Alimentação",
-          palavrasChave: ["espetaria", "choperia", "petiscos", "eventos"],
-        },
-        {
-          nome: "Buffet em Casa Gourmet",
-          logo: "assets/buffet.jpeg",
-          tel: "5519997750869",
-          categoria: "Eventos",
-          instagram: "https://instagram.com/buffetemcasagourmet",
-          descricao:
-            "Levamos o buffet completo até você! 🏠<br>🍱 Cardápios Gourmet | Garçons | Logística Completa<br>🎉 Casamentos, Aniversários e Eventos Corporativos",
-          palavrasChave: [
-            "buffet",
-            "casamentos",
-            "aniversarios",
-            "eventos corporativos",
-            "gourmet",
-            "gastronomia",
-            "@buffetemcasagourmet",
-          ],
-        },
-        {
-          nome: "Iara Ponfilio",
-          logo: "assets/iara.jpeg",
-          tel: "5519997606453",
-          categoria: "Uber",
-          palavrasChave: ["uber", "motorista", "conveniencias", "servicos"],
-          plano: "vip",
-          patrocinado: true,
-        },
-      ];
+      let empresasPadrao = [];
+
+      async function carregarEmpresasPadraoJson() {
+        const bust = "13";
+        const candidatos = [
+          new URL(`data/empresas-demo.json?v=${bust}`, window.location.href)
+            .href,
+          `${window.location.origin}/data/empresas-demo.json?v=${bust}`,
+        ];
+        for (let k = 0; k < candidatos.length; k += 1) {
+          const url = candidatos[k];
+          try {
+            const resposta = await fetch(url, { cache: "no-store" });
+            if (!resposta.ok) continue;
+            const dados = await resposta.json();
+            if (!Array.isArray(dados)) continue;
+            empresasPadrao = dados;
+            return;
+          } catch {
+            /* tenta próxima URL */
+          }
+        }
+        console.warn(
+          "[portal] Não foi possível carregar data/empresas-demo.json (Live Server: abra a pasta do projeto como raiz). Usando lista mínima.",
+        );
+        empresasPadrao = [
+          {
+            nome: "Exemplo Local",
+            logo: "assets/conecta.jpeg",
+            tel: "5511999999999",
+            categoria: "Serviços",
+            plano: "basico",
+          },
+          {
+            nome: "MULTLar VARIEDADES",
+            logo: "assets/multilar-logo.jpeg",
+            tel: "5519971689501",
+            instagram: "https://www.instagram.com/multlar_itirapina/",
+            endereco:
+              "R. Jaguarucu, 669 - Jardim Nova Itirapina, Itirapina - CEP 13530-268",
+            categoria: "Variedades / Loja",
+            descricao:
+              "Produtos de limpeza, utilidades domésticas, material escolar, brinquedos e eletrônicos.",
+            palavrasChave: [
+              "multilar",
+              "variedades",
+              "loja",
+              "itirapina",
+              "jaguarucu",
+              "limpeza",
+              "escolar",
+              "brinquedos",
+              "eletronicos",
+            ],
+            plano: "vip",
+            patrocinado: true,
+          },
+          {
+            nome: "Samarina Marino",
+            logo: "assets/samarina.png",
+            tel: "5519997399970",
+            instagram: "https://www.instagram.com/samarinagomesmarino/",
+            categoria: "Beleza",
+            descricao:
+              "Consultora de Beleza Natura e Avon — atendimento e pedidos com praticidade.",
+            palavrasChave: ["natura", "avon", "beleza", "consultora"],
+            plano: "standard",
+            patrocinado: true,
+          },
+        ];
+      }
+
 
       const cepNovoDados = [
         {
@@ -3441,7 +3454,24 @@
         const a = empresa && empresa.ativo;
         if (a === false || a === 0 || a === "0") return false;
         if (String(a).toLowerCase() === "false") return false;
+        const ate = normalizarDataIsoCobranca(
+          empresa.ativoAte ?? empresa.ativo_ate,
+        );
+        if (ate) {
+          const hoje = new Date().toISOString().slice(0, 10);
+          if (ate < hoje) return false;
+        }
         return true;
+      }
+
+      /** ISO yyyy-mm-dd, N dias a partir de hoje (calendário local). */
+      function somarDiasIsoDesdeHoje(dias) {
+        const n = Number(dias);
+        if (!Number.isFinite(n) || n <= 0) return undefined;
+        const d = new Date();
+        d.setHours(12, 0, 0, 0);
+        d.setDate(d.getDate() + n);
+        return d.toISOString().slice(0, 10);
       }
 
       function empresasAtivasNoPortal(lista) {
@@ -3455,15 +3485,51 @@
         return s;
       }
 
+      function normalizarNomeIgualdade(texto) {
+        const limpo = String(texto || "")
+          .replace(/[\u200B-\u200D\uFEFF]/g, "")
+          .replace(/[\s\u00A0\u1680\u2000-\u200A\u202F\u205F\u3000]+/g, " ")
+          .trim();
+        return normalizarTexto(limpo);
+      }
+
+      function tituloCorrigidoSamarinaMarino(nomeBruto) {
+        const n = normalizarNomeIgualdade(nomeBruto);
+        if (!n) return null;
+        if (n === "samarina gomes marino") return "Samarina Marino";
+        const soLetras = n.replace(/[^a-z]/g, "");
+        if (soLetras === "samarinagomesmarino") return "Samarina Marino";
+        return null;
+      }
+
+      function renomearLegadoSamarinaMarino(empresa) {
+        if (!empresa || empresa.nome == null) return empresa;
+        const t = tituloCorrigidoSamarinaMarino(empresa.nome);
+        if (t) return { ...empresa, nome: t };
+        return empresa;
+      }
+
       function normalizarEmpresa(empresa) {
+        empresa = renomearLegadoSamarinaMarino(empresa);
         const plano =
           empresa.plano || (empresa.patrocinado ? "standard" : "basico");
         const descricao = String(empresa.descricao || "").trim();
-        const ativo = empresaAtivaNoPortal(empresa);
+        const rawAte = empresa.ativoAte ?? empresa.ativo_ate;
+        const ativoAteNorm = normalizarDataIsoCobranca(rawAte);
+        const ativo = empresaAtivaNoPortal(
+          rawAte === null
+            ? { ...empresa, ativoAte: undefined, ativo_ate: undefined }
+            : {
+                ...empresa,
+                ...(ativoAteNorm
+                  ? { ativoAte: ativoAteNorm, ativo_ate: ativoAteNorm }
+                  : {}),
+              },
+        );
         const proximaCobranca = normalizarDataIsoCobranca(
           empresa.proximaCobranca ?? empresa.proxima_cobranca,
         );
-        return {
+        const base = {
           ...empresa,
           descricao: descricao || undefined,
           plano,
@@ -3471,6 +3537,15 @@
           ativo,
           ...(proximaCobranca ? { proximaCobranca } : {}),
         };
+        if (ativoAteNorm) {
+          base.ativoAte = ativoAteNorm;
+        } else if (rawAte === null) {
+          base.ativoAte = null;
+        } else {
+          delete base.ativoAte;
+          delete base.ativo_ate;
+        }
+        return base;
       }
 
       function carregarDescricoesStorage() {
@@ -3492,12 +3567,19 @@
       }
 
       function chaveDescricaoEmpresa(nome) {
-        return normalizarTexto(nome);
+        return normalizarNomeIgualdade(nome);
       }
 
       function obterDescricaoCustomizada(nome) {
         const chave = chaveDescricaoEmpresa(nome);
-        return String(descricoesCustomizadas[chave] || "").trim();
+        let t = String(descricoesCustomizadas[chave] || "").trim();
+        if (!t && chave === "samarina marino") {
+          t = String(descricoesCustomizadas["samarina gomes marino"] || "").trim();
+        }
+        if (!t && tituloCorrigidoSamarinaMarino(nome)) {
+          t = String(descricoesCustomizadas["samarina gomes marino"] || "").trim();
+        }
+        return t;
       }
 
       function salvarDescricaoCustomizada(nome, descricao) {
@@ -3524,6 +3606,15 @@
           }
           const lista = JSON.parse(bruto);
           if (!Array.isArray(lista)) throw new Error("Formato inválido");
+          if (
+            lista.length === 0 &&
+            Array.isArray(empresasPadrao) &&
+            empresasPadrao.length > 0
+          ) {
+            const iniciais = empresasPadrao.map(normalizarEmpresa);
+            localStorage.setItem(STORAGE_EMPRESAS, JSON.stringify(iniciais));
+            return iniciais;
+          }
           return lista.map(normalizarEmpresa);
         } catch (erro) {
           return empresasPadrao.map(normalizarEmpresa);
@@ -3559,9 +3650,17 @@
           palavras_chave,
           palavrasChave,
           proxima_cobranca,
+          ativo_ate,
+          instagram,
           site,
           ...rest
         } = registro;
+        const ig = String(
+          instagram ??
+            registro.link_instagram ??
+            registro.instagram_url ??
+            "",
+        ).trim();
         const sitio = String(
           site ?? registro.url_site ?? registro.link_site ?? "",
         ).trim();
@@ -3573,12 +3672,18 @@
             palavras_chave ?? palavrasChave,
           ),
           proximaCobranca: proxima_cobranca ?? undefined,
+          ativoAte: ativo_ate ?? undefined,
+          ...(ig ? { instagram: ig } : {}),
           ...(sitio ? { site: sitio } : {}),
         });
       }
 
       function mapearEmpresaParaBanco(empresa) {
-        return {
+        const desc = String(empresa.descricao || "").trim();
+        const ativoAteIso = normalizarDataIsoCobranca(
+          empresa.ativoAte ?? empresa.ativo_ate,
+        );
+        const out = {
           nome: empresa.nome,
           logotipo: empresa.logo,
           tel: empresa.tel,
@@ -3592,7 +3697,15 @@
           ativo: empresaAtivaNoPortal(empresa),
           proxima_cobranca:
             normalizarDataIsoCobranca(empresa.proximaCobranca) || null,
+          ...(desc ? { descricao: desc } : {}),
         };
+        if (
+          Object.prototype.hasOwnProperty.call(empresa, "ativoAte") ||
+          Object.prototype.hasOwnProperty.call(empresa, "ativo_ate")
+        ) {
+          out.ativo_ate = ativoAteIso || null;
+        }
+        return out;
       }
 
       function aplicarAjustesEmpresas(lista) {
@@ -4000,6 +4113,30 @@
         return (data || []).map(mapearEmpresaBanco);
       }
 
+      /**
+       * Com Supabase: carrega o JSON demo e acrescenta empresas cujo nome
+       * ainda não existe no banco (evita sumir cards quando a tabela tem só parte do guia).
+       * Desligue com PORTAL_APPLY_DEFAULT_CATALOG=false / applyDefaultCatalog: false.
+       */
+      async function carregarEmpresasDoPortalComCatalogo() {
+        await carregarEmpresasPadraoJson();
+        const doBanco = await carregarEmpresasBanco();
+        if (P.applyDefaultCatalog === false) return doBanco;
+        const visto = new Set(
+          (doBanco || [])
+            .map((e) => normalizarTexto(e.nome))
+            .filter(Boolean),
+        );
+        const saida = [...(doBanco || [])];
+        for (const item of empresasPadrao || []) {
+          const k = normalizarTexto(item.nome);
+          if (!k || visto.has(k)) continue;
+          visto.add(k);
+          saida.push(item);
+        }
+        return saida;
+      }
+
       async function inserirEmpresaBanco(empresa) {
         const { error } = await supabaseClient
           .from(SUPABASE_TABLE)
@@ -4156,7 +4293,9 @@
       async function inicializarEmpresas() {
         if (supabaseConfigurado()) {
           try {
-            empresas = aplicarAjustesEmpresas(await carregarEmpresasBanco());
+            empresas = aplicarAjustesEmpresas(
+              await carregarEmpresasDoPortalComCatalogo(),
+            );
             carregar(empresasAtivasNoPortal(empresas));
             criarEscada();
             atualizarDatalistNomesAdmin();
@@ -4172,6 +4311,7 @@
           }
         }
 
+        await carregarEmpresasPadraoJson();
         empresas = aplicarAjustesEmpresas(carregarEmpresasStorage());
         salvarEmpresasStorage(empresas);
         carregar(empresasAtivasNoPortal(empresas));
@@ -4542,7 +4682,7 @@ ${e.endereco ? `<a class="btn site" href="${hrefMapa}" target="_blank" rel="noop
         );
         let tentativasFalhasLogin = 0;
         let bloqueioLoginAte = 0;
-        const CHAVE_ACESSO_LOCAL = "portal_itirapina_acesso_local_ok_ate";
+        const CHAVE_ACESSO_LOCAL = `${P.storagePrefix}_acesso_local_ok_ate`;
         const ACESSO_LOCAL_TTL_MS = 30 * 60 * 1000;
 
         function acessoLocalValido() {
@@ -4557,8 +4697,55 @@ ${e.endereco ? `<a class="btn site" href="${hrefMapa}" target="_blank" rel="noop
           );
         }
 
-        function abrirAdminComProtecaoLocal() {
+        /** Só existe com npm start (server.js). Em Vercel/só estático → false. */
+        async function servicoLocalAdminDisponivel() {
+          try {
+            const base =
+              window.location.protocol === "file:"
+                ? originParaAcessoLocal()
+                : window.location.origin;
+            const r = await fetch(
+              new URL("/api/admin/self-check", base),
+              { method: "GET", cache: "no-store" },
+            );
+            if (!r.ok) return false;
+            const j = await r.json();
+            if (!j || !j.ok || !j.versao) return false;
+            /* Servidor antigo sem o campo: mantém comportamento de “há API de admin”. */
+            if (Object.prototype.hasOwnProperty.call(j, "localGate")) {
+              return j.localGate === true;
+            }
+            return true;
+          } catch {
+            return false;
+          }
+        }
+
+        function originParaAcessoLocal() {
+          if (window.location.protocol !== "file:") {
+            return window.location.origin;
+          }
+          const o = String(P.localLoginOrigin || "").trim().replace(/\/$/, "");
+          return o || "http://localhost:3000";
+        }
+
+        async function abrirAdminComProtecaoLocal() {
           if (acessoLocalValido()) {
+            adminLoginMsg.textContent = "";
+            adminWrap.classList.add("active");
+            aplicarEstadoAdmin();
+            return;
+          }
+          if (P.skipLocalAdminGate === true) {
+            adminLoginMsg.textContent = "";
+            adminWrap.classList.add("active");
+            aplicarEstadoAdmin();
+            return;
+          }
+          if (
+            P.skipLocalAdminGate !== false &&
+            !(await servicoLocalAdminDisponivel())
+          ) {
             adminLoginMsg.textContent = "";
             adminWrap.classList.add("active");
             aplicarEstadoAdmin();
@@ -4628,9 +4815,9 @@ ${e.endereco ? `<a class="btn site" href="${hrefMapa}" target="_blank" rel="noop
           }
         });
 
-        abrirAdminNoSobre.addEventListener("click", () => {
+        abrirAdminNoSobre.addEventListener("click", async () => {
           sobreWrap.classList.remove("active");
-          abrirAdminComProtecaoLocal();
+          await abrirAdminComProtecaoLocal();
         });
 
         acessoLocalCancelar.addEventListener("click", () => {
@@ -4657,10 +4844,7 @@ ${e.endereco ? `<a class="btn site" href="${hrefMapa}" target="_blank" rel="noop
           acessoLocalMsg.textContent = "Validando...";
 
           try {
-            const base =
-              window.location.protocol === "file:"
-                ? "http://localhost:3000"
-                : window.location.origin;
+            const base = originParaAcessoLocal();
             const loginUrl = new URL("/api/admin/local-login", base).href;
             const resposta = await fetch(loginUrl, {
               method: "POST",
@@ -4688,8 +4872,11 @@ ${e.endereco ? `<a class="btn site" href="${hrefMapa}" target="_blank" rel="noop
             adminWrap.classList.add("active");
             aplicarEstadoAdmin();
           } catch (erro) {
+            const msg = erro && erro.message ? String(erro.message) : "rede";
             acessoLocalMsg.textContent =
-              "Falha ao validar acesso local. Tente novamente.";
+              window.location.protocol === "file:"
+                ? `Sem servidor em ${originParaAcessoLocal()}: abra pelo Node (npm start) ou defina localLoginOrigin no portal-config. (${msg})`
+                : `Falha ao validar acesso local. Confirme npm start e .env com ADMIN_LOCAL_PASS. (${msg})`;
           }
         });
 
@@ -4767,7 +4954,9 @@ ${e.endereco ? `<a class="btn site" href="${hrefMapa}" target="_blank" rel="noop
           try {
             await definirAtivoClienteNoBanco(nome, false);
             if (supabaseConfigurado()) {
-              empresas = aplicarAjustesEmpresas(await carregarEmpresasBanco());
+              empresas = aplicarAjustesEmpresas(
+                await carregarEmpresasDoPortalComCatalogo(),
+              );
             }
             carregar(empresasAtivasNoPortal(empresas));
             criarEscada();
@@ -4797,7 +4986,9 @@ ${e.endereco ? `<a class="btn site" href="${hrefMapa}" target="_blank" rel="noop
           try {
             await definirAtivoClienteNoBanco(nome, true);
             if (supabaseConfigurado()) {
-              empresas = aplicarAjustesEmpresas(await carregarEmpresasBanco());
+              empresas = aplicarAjustesEmpresas(
+                await carregarEmpresasDoPortalComCatalogo(),
+              );
             }
             carregar(empresasAtivasNoPortal(empresas));
             criarEscada();
@@ -4824,7 +5015,9 @@ ${e.endereco ? `<a class="btn site" href="${hrefMapa}" target="_blank" rel="noop
             try {
               await definirProximaCobrancaNoBanco(nome, dataIso);
               if (supabaseConfigurado()) {
-                empresas = aplicarAjustesEmpresas(await carregarEmpresasBanco());
+                empresas = aplicarAjustesEmpresas(
+                  await carregarEmpresasDoPortalComCatalogo(),
+                );
               }
               atualizarDatalistNomesAdmin();
               adminMsg.textContent = "Data da próxima cobrança salva.";
@@ -4954,7 +5147,9 @@ ${e.endereco ? `<a class="btn site" href="${hrefMapa}" target="_blank" rel="noop
           try {
             if (supabaseConfigurado()) {
               await inserirEmpresaBanco(novo);
-              empresas = aplicarAjustesEmpresas(await carregarEmpresasBanco());
+              empresas = aplicarAjustesEmpresas(
+                await carregarEmpresasDoPortalComCatalogo(),
+              );
             } else {
               empresas.push(novo);
               salvarEmpresasStorage(empresas);

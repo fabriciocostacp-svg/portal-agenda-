@@ -159,10 +159,12 @@ const loginLimiter = rateLimit({
 
 /** Diagnóstico: confirme se a porta 3000 é ESTE projeto (caminho + tamanhos, sem revelar senha). */
 app.get("/api/admin/self-check", (_req, res) => {
+  res.setHeader("X-Mural-Portal", "admin-local-pass-1");
   const { pass: p } = credenciaisAdminLocal();
   res.json({
     ok: true,
     versao: "admin-local-pass-1",
+    localGate: p.length > 0,
     pastaDoServidor: __dirname,
     envNoDisco: fs.existsSync(path.join(__dirname, ".env")),
     localPassCaracteres: p.length,

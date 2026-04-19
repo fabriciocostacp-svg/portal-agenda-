@@ -28,7 +28,11 @@ window.PORTAL_CONFIG = {
   supabaseAnonKey: "",
   supabaseTable: "empresas",
   supabaseLogosPublicBase: "",
-  // true: insere empresas legadas (Valdecir, Gordo…). false: só dados do banco, mas
-  // Instagram/logo/descrição dos patrocinadores em EXTRAS ainda são mesclados no código.
+  // true: com Supabase, une a tabela com nomes que faltam do data/empresas-demo.json.
+  // false: somente linhas do banco (white-label).
   applyDefaultCatalog: false,
+  // true = sem modal de senha .env (só login Supabase). Em Vercel costuma ser true.
+  skipLocalAdminGate: true,
+  // file:// + Node noutra porta: "http://localhost:3010"
+  localLoginOrigin: "",
 };

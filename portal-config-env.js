@@ -60,7 +60,7 @@ function montarPayloadPortalConfig() {
       "PORTAL_WHATSAPP_RENEWAL_TEMPLATE",
       "Olá {nome}! A assinatura do anúncio no {portal} está próxima do vencimento ({data}). Podemos renovar?",
     ),
-    storagePrefix: strEnv("PORTAL_STORAGE_PREFIX", "portal_local").replace(
+    storagePrefix: strEnv("PORTAL_STORAGE_PREFIX", "portal_itirapina").replace(
       /[^a-zA-Z0-9_-]/g,
       "_",
     ),
@@ -69,6 +69,10 @@ function montarPayloadPortalConfig() {
     supabaseTable: strEnv("SUPABASE_TABLE", "empresas") || "empresas",
     supabaseLogosPublicBase: strEnv("SUPABASE_LOGOS_PUBLIC_BASE"),
     applyDefaultCatalog: envBool("PORTAL_APPLY_DEFAULT_CATALOG", true),
+    /** true = nunca pede senha ADMIN_LOCAL_PASS (só Supabase). false = sempre pede (ex.: proxy). */
+    skipLocalAdminGate: envBool("PORTAL_SKIP_LOCAL_ADMIN_GATE", false),
+    /** Com file://, URL base para /api/admin/* (ex.: http://localhost:3010). */
+    localLoginOrigin: strEnv("PORTAL_LOCAL_LOGIN_ORIGIN", ""),
   };
 }
 
