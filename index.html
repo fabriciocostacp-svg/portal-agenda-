@@ -52,6 +52,27 @@
       name="twitter:image"
       content="https://portal-agenda-lime.vercel.app/assets/og-portal.jpeg"
     />
+    <script>
+      (function () {
+        var u = location.origin.replace(/\/$/, "") + "/";
+        var tit =
+          (document.querySelector("title") &&
+            document.querySelector("title").textContent) ||
+          "Portal";
+        var descMeta = document.querySelector('meta[name="description"]');
+        var desc = descMeta ? String(descMeta.getAttribute("content") || "") : "";
+        var s = document.createElement("script");
+        s.type = "application/ld+json";
+        s.textContent = JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          name: tit.trim() || "Portal",
+          url: u,
+          description: desc.trim() || tit.trim(),
+        });
+        document.head.appendChild(s);
+      })();
+    </script>
 
     <style>
       @import url("https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=DM+Serif+Display&family=Outfit:wght@500;600;700&family=Space+Grotesk:wght@400;500;700&display=swap");
@@ -548,6 +569,26 @@
         background: rgba(255, 255, 255, 0.03);
       }
 
+      .rodape-seo {
+        display: flex;
+        align-items: center;
+        padding: 0 6px 0 2px;
+      }
+
+      .rodape-seo-link {
+        font-size: 0.72rem;
+        font-weight: 600;
+        color: var(--muted);
+        text-decoration: none;
+        white-space: nowrap;
+        opacity: 0.9;
+      }
+
+      .rodape-seo-link:hover {
+        color: var(--accent-2);
+        text-decoration: underline;
+      }
+
       .rodape-fixo {
         position: fixed;
         left: 50%;
@@ -555,7 +596,8 @@
         bottom: 12px;
         z-index: 1100;
         display: flex;
-        gap: 0;
+        align-items: center;
+        gap: 6px;
         background: rgba(7, 16, 20, 0.92);
         border: 1px solid rgba(255, 255, 255, 0.16);
         border-radius: 999px;
@@ -1502,6 +1544,9 @@
 
     <footer class="rodape-fixo">
       <button class="rodape-btn inicio" id="btnInicio">🏠 Início</button>
+      <nav class="rodape-seo" aria-label="Mapa do site">
+        <a href="/sitemap.xml" class="rodape-seo-link">Sitemap</a>
+      </nav>
     </footer>
 
     <div class="sobre-wrap" id="sobreWrap">
