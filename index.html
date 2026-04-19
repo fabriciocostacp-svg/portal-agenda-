@@ -11,8 +11,8 @@
       content="Portal — guia local em Itirapina: empresas, contatos e utilidades."
     />
     <meta name="theme-color" content="#0b1518" />
-    <link rel="icon" type="image/jpeg" href="assets/portal-favicon.jpeg" />
-    <link rel="apple-touch-icon" href="assets/portal-favicon.jpeg" />
+    <link rel="icon" type="image/jpeg" href="assets/portal-favicon.jpeg?v=2" />
+    <link rel="apple-touch-icon" href="assets/portal-favicon.jpeg?v=2" />
 
     <!-- Open Graph: URL base trocada pelo server.js se configurar APP_ORIGIN / PORTAL_PUBLIC_ORIGIN. -->
     <meta property="og:type" content="website" />
@@ -1843,7 +1843,6 @@
           supabaseTable: "empresas",
           supabaseLogosPublicBase: "",
           applyDefaultCatalog: true,
-          skipLocalAdminGate: false,
           localLoginOrigin: "",
         };
         const merged = { ...def, ...incoming };
@@ -4826,16 +4825,17 @@ ${e.endereco ? `<a class="btn site" href="${hrefMapa}" target="_blank" rel="noop
             aplicarEstadoAdmin();
             return;
           }
+          /* true = nunca pede senha local. false = sempre pede (Node + ADMIN_LOCAL_PASS). */
           if (P.skipLocalAdminGate === true) {
             adminLoginMsg.textContent = "";
             adminWrap.classList.add("active");
             aplicarEstadoAdmin();
             return;
           }
-          if (
-            P.skipLocalAdminGate !== false &&
-            !(await servicoLocalAdminDisponivel())
-          ) {
+          const precisaSenhaLocal =
+            P.skipLocalAdminGate === false ||
+            (await servicoLocalAdminDisponivel());
+          if (!precisaSenhaLocal) {
             adminLoginMsg.textContent = "";
             adminWrap.classList.add("active");
             aplicarEstadoAdmin();

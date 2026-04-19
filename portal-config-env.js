@@ -69,8 +69,11 @@ function montarPayloadPortalConfig() {
     supabaseTable: strEnv("SUPABASE_TABLE", "empresas") || "empresas",
     supabaseLogosPublicBase: strEnv("SUPABASE_LOGOS_PUBLIC_BASE"),
     applyDefaultCatalog: envBool("PORTAL_APPLY_DEFAULT_CATALOG", true),
-    /** true = nunca pede senha ADMIN_LOCAL_PASS (só Supabase). false = sempre pede (ex.: proxy). */
-    skipLocalAdminGate: envBool("PORTAL_SKIP_LOCAL_ADMIN_GATE", false),
+    /** true = só Supabase. false = sempre pede senha .env. Em Vercel o padrão é true (sem ADMIN_LOCAL_PASS no deploy). */
+    skipLocalAdminGate: envBool(
+      "PORTAL_SKIP_LOCAL_ADMIN_GATE",
+      Boolean(process.env.VERCEL),
+    ),
     /** Com file://, URL base para /api/admin/* (ex.: http://localhost:3010). */
     localLoginOrigin: strEnv("PORTAL_LOCAL_LOGIN_ORIGIN", ""),
   };
