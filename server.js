@@ -15,6 +15,7 @@ const {
   supabaseEmAmbiente,
   montarPayloadPortalConfig,
 } = require("./portal-config-env.js");
+const { conteudoSitemapXml, conteudoRobotsTxt } = require("./seo-origin.js");
 
 const express = require("express");
 const cors = require("cors");
@@ -37,7 +38,7 @@ app.use((_req, res, next) => {
 });
 
 const originAlvo = (process.env.APP_ORIGIN || "").trim();
-const FALLBACK_OG_ORIGIN = "https://portal-agenda-itirapina.vercel.app";
+const FALLBACK_OG_ORIGIN = "https://portal-agenda-lime.vercel.app";
 
 let indexHtmlCache = null;
 function lerIndexHtml() {
@@ -224,6 +225,20 @@ app.get("/api/portal-config-data", (_req, res) => {
   res.type("application/json; charset=utf-8");
   res.set("Cache-Control", "no-store, max-age=0");
   res.json(montarPayloadPortalConfig());
+});
+
+app.get("/sitemap.xml", (req, res) => {
+  const origin = publicOriginParaOg(req);
+  res.type("application/xml; charset=utf-8");
+  res.set("Cache-Control", "public, max-age=1800, s-maxage=1800");
+  res.send(conteudoSitemapXml(origin));
+});
+
+app.get("/robots.txt", (req, res) => {
+  const origin = publicOriginParaOg(req);
+  res.type("text/plain; charset=utf-8");
+  res.set("Cache-Control", "public, max-age=1800, s-maxage=1800");
+  res.send(conteudoRobotsTxt(origin));
 });
 
 const raiz = __dirname;

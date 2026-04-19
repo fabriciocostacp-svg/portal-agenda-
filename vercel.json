@@ -3,6 +3,14 @@
     {
       "source": "/portal-config.js",
       "destination": "/api/portal-config"
+    },
+    {
+      "source": "/sitemap.xml",
+      "destination": "/api/sitemap"
+    },
+    {
+      "source": "/robots.txt",
+      "destination": "/api/robots"
     }
   ]
 }
