@@ -1521,11 +1521,10 @@
           aspas no <code>.env</code>, ex. <code>ADMIN_LOCAL_PASS="AGENDA@2026"</code>.
         </p>
         <p>
-          Se o site <strong>não tiver</strong> a API deste projeto (ex.: Vercel só
-          estático), o portal <strong>detecta</strong> e abre direto o login
-          Supabase. Para forçar esse modo: <code>PORTAL_SKIP_LOCAL_ADMIN_GATE=true</code>
-          no ambiente ou <code>skipLocalAdminGate: true</code> no
-          <code>portal-config.js</code>.
+          Se a API responder que <strong>não há</strong> senha local (ex.: Vercel
+          sem <code>ADMIN_LOCAL_PASS</code>), o portal abre direto o login
+          Supabase. Para nunca pedir este passo: <code>PORTAL_SKIP_LOCAL_ADMIN_GATE=true</code>
+          ou <code>skipLocalAdminGate: true</code> no <code>portal-config.js</code>.
         </p>
         <form id="acessoLocalForm">
           <div class="acesso-local-grid">
@@ -4825,17 +4824,16 @@ ${e.endereco ? `<a class="btn site" href="${hrefMapa}" target="_blank" rel="noop
             aplicarEstadoAdmin();
             return;
           }
-          /* true = nunca pede senha local. false = sempre pede (Node + ADMIN_LOCAL_PASS). */
+          /* true = nunca pede senha local. Caso contrário: só modal se a API disser localGate (ADMIN_LOCAL_PASS no servidor). */
           if (P.skipLocalAdminGate === true) {
             adminLoginMsg.textContent = "";
             adminWrap.classList.add("active");
             aplicarEstadoAdmin();
             return;
           }
-          const precisaSenhaLocal =
-            P.skipLocalAdminGate === false ||
-            (await servicoLocalAdminDisponivel());
-          if (!precisaSenhaLocal) {
+          const temSenhaLocalNoServidor =
+            await servicoLocalAdminDisponivel();
+          if (!temSenhaLocalNoServidor) {
             adminLoginMsg.textContent = "";
             adminWrap.classList.add("active");
             aplicarEstadoAdmin();
