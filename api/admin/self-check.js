@@ -2,6 +2,8 @@
  * Vercel: GET /api/admin/self-check
  * localGate=false quando ADMIN_LOCAL_PASS não está no ambiente → o site pula o modal.
  */
+const { supabaseEmAmbiente } = require("../../portal-config-env.js");
+
 module.exports = (req, res) => {
   res.setHeader("X-Mural-Portal", "admin-local-pass-1");
   const p = String(process.env.ADMIN_LOCAL_PASS ?? "")
@@ -12,6 +14,7 @@ module.exports = (req, res) => {
     ok: true,
     versao: "admin-local-pass-1",
     localGate: p.length > 0,
-    vercel: true,
+    vercel: Boolean(process.env.VERCEL),
+    supabaseEmAmbiente: supabaseEmAmbiente(),
   });
 };

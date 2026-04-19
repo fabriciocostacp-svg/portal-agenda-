@@ -10,7 +10,11 @@ require("dotenv").config({
   override: true,
 });
 
-const { strEnv, montarPayloadPortalConfig } = require("./portal-config-env.js");
+const {
+  strEnv,
+  supabaseEmAmbiente,
+  montarPayloadPortalConfig,
+} = require("./portal-config-env.js");
 
 const express = require("express");
 const cors = require("cors");
@@ -168,6 +172,7 @@ app.get("/api/admin/self-check", (_req, res) => {
     pastaDoServidor: __dirname,
     envNoDisco: fs.existsSync(path.join(__dirname, ".env")),
     localPassCaracteres: p.length,
+    supabaseEmAmbiente: supabaseEmAmbiente(),
   });
 });
 

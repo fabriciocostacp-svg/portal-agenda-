@@ -17,6 +17,10 @@ function strEnv(nome, padrao = "") {
     .trim();
 }
 
+function supabaseEmAmbiente() {
+  return Boolean(strEnv("SUPABASE_URL") && strEnv("SUPABASE_ANON_KEY"));
+}
+
 function montarPayloadPortalConfig() {
   const lat = Number(process.env.PORTAL_CLIMATE_LAT);
   const lon = Number(process.env.PORTAL_CLIMATE_LON);
@@ -82,5 +86,6 @@ function montarPayloadPortalConfig() {
 module.exports = {
   envBool,
   strEnv,
+  supabaseEmAmbiente,
   montarPayloadPortalConfig,
 };
