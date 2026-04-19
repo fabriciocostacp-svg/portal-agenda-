@@ -1898,6 +1898,7 @@
           supabaseLogosPublicBase: "",
           applyDefaultCatalog: true,
           localLoginOrigin: "",
+          googleSiteVerification: "",
         };
         const merged = { ...def, ...incoming };
         const waIn = String(merged.whatsappE164 || "").replace(/\D/g, "");
@@ -1910,6 +1911,16 @@
           merged.whatsappE164 = def.whatsappE164;
         }
         window.PORTAL_CONFIG = merged;
+        const gv = String(merged.googleSiteVerification || "").trim();
+        if (gv) {
+          document
+            .querySelectorAll('meta[name="google-site-verification"]')
+            .forEach((el) => el.remove());
+          const metaG = document.createElement("meta");
+          metaG.name = "google-site-verification";
+          metaG.content = gv;
+          document.head.appendChild(metaG);
+        }
       })();
 
       const P = window.PORTAL_CONFIG;

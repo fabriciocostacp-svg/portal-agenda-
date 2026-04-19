@@ -35,4 +35,6 @@ window.PORTAL_CONFIG = {
   skipLocalAdminGate: true,
   // file:// + Node noutra porta: "http://localhost:3010"
   localLoginOrigin: "",
+  // Google Search Console (só o token do content da meta, sem aspas)
+  googleSiteVerification: "",
 };

@@ -80,6 +80,8 @@ function montarPayloadPortalConfig() {
     ),
     /** Com file://, URL base para /api/admin/* (ex.: http://localhost:3010). */
     localLoginOrigin: strEnv("PORTAL_LOCAL_LOGIN_ORIGIN", ""),
+    /** Google Search Console → verificação alternativa à etiqueta HTML (só o valor do atributo content). */
+    googleSiteVerification: strEnv("GOOGLE_SITE_VERIFICATION"),
   };
 }
 
