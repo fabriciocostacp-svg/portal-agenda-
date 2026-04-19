@@ -20,7 +20,7 @@ function strEnv(nome, padrao = "") {
 function montarPayloadPortalConfig() {
   const lat = Number(process.env.PORTAL_CLIMATE_LAT);
   const lon = Number(process.env.PORTAL_CLIMATE_LON);
-  const siteName = strEnv("PORTAL_SITE_NAME", "Portal local");
+  const siteName = strEnv("PORTAL_SITE_NAME", "Portal");
   return {
     siteName,
     siteDescription: strEnv(
