@@ -12,6 +12,14 @@ const FALLBACK_ORIGIN_INDEXACAO =
 function originPublicoParaIndexacaoSemReq() {
   const pub = strEnv("PORTAL_PUBLIC_ORIGIN").replace(/\/$/, "");
   if (pub) return pub;
+  /* Producao estavel (ex.: portal-agenda-lime.vercel.app); VERCEL_URL e o host do deploy isolado. */
+  const prod = String(process.env.VERCEL_PROJECT_PRODUCTION_URL || "")
+    .trim()
+    .replace(/\/$/, "");
+  if (prod) {
+    const host = prod.replace(/^https?:\/\//, "");
+    return `https://${host}`;
+  }
   const v = String(process.env.VERCEL_URL || "")
     .trim()
     .replace(/\/$/, "");
