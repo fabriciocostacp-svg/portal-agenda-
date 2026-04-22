@@ -4,7 +4,10 @@
 <html lang="pt-br">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
     <meta name="robots" content="index, follow, max-image-preview:large" />
     <script>
       (function () {
@@ -96,7 +99,10 @@
       html {
         scroll-behavior: smooth;
         overflow-y: auto;
+        overflow-x: hidden;
         scrollbar-gutter: stable;
+        -webkit-text-size-adjust: 100%;
+        text-size-adjust: 100%;
       }
 
       * {
@@ -105,6 +111,8 @@
 
       body {
         margin: 0;
+        width: 100%;
+        overflow-x: hidden;
         font-family: "Space Grotesk", sans-serif;
         background:
           radial-gradient(
@@ -160,7 +168,8 @@
 
       .hero h1 {
         margin: 18px auto 10px;
-        max-width: 22ch;
+        max-width: min(22ch, 100%);
+        padding-inline: clamp(4px, 2vw, 12px);
         font-family: "DM Serif Display", Georgia, "Times New Roman", serif;
         font-weight: 400;
         font-style: normal;
@@ -375,7 +384,13 @@
 
       .secao {
         display: none;
-        padding: 8px 20px 110px;
+        padding-top: 8px;
+        padding-right: max(16px, env(safe-area-inset-right, 0px));
+        padding-left: max(16px, env(safe-area-inset-left, 0px));
+        padding-bottom: max(
+          110px,
+          calc(96px + env(safe-area-inset-bottom, 0px))
+        );
       }
 
       .active {
@@ -1344,36 +1359,44 @@
         .hero,
         .busca,
         .clima-wrap {
-          padding-left: 14px;
-          padding-right: 14px;
+          padding-left: max(12px, env(safe-area-inset-left, 0px));
+          padding-right: max(12px, env(safe-area-inset-right, 0px));
         }
 
         .hero {
-          padding-top: 18px;
+          padding-top: max(18px, env(safe-area-inset-top, 0px));
         }
 
         .menu {
           display: grid;
           grid-template-columns: repeat(3, minmax(0, 1fr));
           gap: 8px;
-          padding: 16px 10px 14px;
+          padding: 16px max(10px, env(safe-area-inset-left, 0px))
+            max(14px, env(safe-area-inset-right, 0px)) 14px;
           max-width: 1160px;
           margin: 0 auto;
+          width: 100%;
         }
 
         .menu button,
         .menu a {
           min-width: 0;
           width: 100%;
-          padding: 11px 10px;
-          font-size: 13px;
+          min-height: 44px;
+          padding: 11px 8px;
+          font-size: clamp(11px, 3.2vw, 13px);
         }
 
         .grid {
           margin: 0;
-          padding: 10px 10px 24px;
+          width: 100%;
+          max-width: 100%;
+          box-sizing: border-box;
+          padding: 10px max(10px, env(safe-area-inset-left, 0px))
+            max(24px, env(safe-area-inset-bottom, 0px))
+            max(10px, env(safe-area-inset-right, 0px));
           gap: 14px;
-          grid-template-columns: repeat(2, minmax(min(100%, 160px), 1fr));
+          grid-template-columns: repeat(2, minmax(0, 1fr));
         }
 
         .card {
@@ -1409,8 +1432,9 @@
           left: 50%;
           right: auto;
           transform: translateX(-50%);
-          bottom: 8px;
+          bottom: max(8px, env(safe-area-inset-bottom, 0px));
           border-radius: 999px;
+          max-width: calc(100vw - max(24px, env(safe-area-inset-left) + env(safe-area-inset-right)));
         }
 
         .rodape-btn {
@@ -3859,11 +3883,7 @@
           "ec escavacoes",
           "iara ponfilio",
         ]);
-        const base = (lista || [])
-          .filter(
-            (empresa) => normalizarTexto(empresa.nome) !== "claudio montador",
-          )
-          .map((empresa) => {
+        const base = (lista || []).map((empresa) => {
             const nome = normalizarTexto(empresa.nome);
             if (
               nome === "lolana lavanderia" &&
