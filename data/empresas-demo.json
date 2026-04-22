@@ -211,6 +211,22 @@
     ]
   },
   {
+    "nome": "Pão de Queijo do Beto",
+    "logo": "assets/beto.jpeg",
+    "tel": "5519997189894",
+    "categoria": "Alimentação",
+    "descricao": "Pão de queijo artesanal, quentinho e cheio de sabor — ideal para café da manhã, lanches e encomendas.",
+    "palavrasChave": [
+      "pao de queijo",
+      "beto",
+      "lanches",
+      "salgados",
+      "alimentacao"
+    ],
+    "plano": "vip",
+    "patrocinado": true
+  },
+  {
     "nome": "Iara Ponfilio",
     "logo": "assets/iara.jpeg",
     "tel": "5519997606453",

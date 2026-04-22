@@ -65,6 +65,9 @@ where nome ilike 'gu espetaria e choperia' or nome ilike 'gu espetaria & choperi
 update empresas set logotipo = 'assets/buffet.jpeg'
 where nome ilike 'buffet em casa gourmet' or nome ilike 'buffet em casa';
 
+update empresas set logotipo = 'assets/beto.jpeg'
+where nome ilike 'pão de queijo do beto' or nome ilike 'pao de queijo do beto';
+
 update empresas set logotipo = 'assets/iara.jpeg' where nome ilike 'iara ponfilio';
 
 update empresas set logotipo = 'assets/cantinho.jpeg' where nome ilike 'cantinho da fé' or nome ilike 'cantinho da fe';
