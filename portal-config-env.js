@@ -50,7 +50,7 @@ function montarPayloadPortalConfig() {
     ),
     whatsappE164: (() => {
       const d = strEnv("PORTAL_WHATSAPP_E164").replace(/\D/g, "");
-      return d.length >= 12 ? d : "5519971689501";
+      return d.length >= 12 ? d : "5519999717781";
     })(),
     whatsappAnuncieMessage: strEnv(
       "PORTAL_WHATSAPP_ANUNCIE_MESSAGE",

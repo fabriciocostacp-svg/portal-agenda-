@@ -16,7 +16,7 @@ window.PORTAL_CONFIG = {
   sobreTitulo: "Portal",
   sobreTexto:
     "Guia local com empresas, contatos úteis e horários de ônibus. Use Anuncie para falar com quem opera o portal.",
-  whatsappE164: "5519971689501",
+  whatsappE164: "5519999717781",
   whatsappAnuncieMessage:
     "Olá! Vim pelo portal {portal} e tenho interesse em anunciar. Poderia me enviar opções e valores?",
   whatsappClienteTemplate:
