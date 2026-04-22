@@ -69,4 +69,7 @@ update empresas set logotipo = 'assets/iara.jpeg' where nome ilike 'iara ponfili
 
 update empresas set logotipo = 'assets/cantinho.jpeg' where nome ilike 'cantinho da fé' or nome ilike 'cantinho da fe';
 
+update empresas set logotipo = 'assets/claudio.jpeg'
+where nome ilike 'claudio montador' or nome ilike '%claudio%montador%';
+
 commit;
