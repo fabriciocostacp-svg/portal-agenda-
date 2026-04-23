@@ -441,7 +441,7 @@
       }
 
       .card:hover h3 {
-        color: var(--accent);
+        color: var(--text);
       }
 
       .card:hover .categoria {
@@ -491,8 +491,8 @@
         object-fit: contain;
         object-position: center;
         border-radius: 16px;
-        background: rgba(255, 255, 255, 0.07);
-        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+        background: transparent;
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
         transition:
           transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
           background 0.3s ease,
@@ -1298,7 +1298,7 @@
         flex-shrink: 0;
         object-fit: contain;
         border-radius: 8px;
-        background: rgba(255, 255, 255, 0.06);
+        background: transparent;
       }
 
       .mini-nome {
@@ -2116,7 +2116,7 @@
       let empresasPadrao = [];
 
       async function carregarEmpresasPadraoJson() {
-        const bust = "13";
+        const bust = "20";
         const candidatos = [
           new URL(`data/empresas-demo.json?v=${bust}`, window.location.href)
             .href,
@@ -3775,6 +3775,23 @@
         localStorage.setItem(STORAGE_EMPRESAS, JSON.stringify(lista));
       }
 
+      /** Live Server / sem Supabase: localStorage antigo não inclui novidades do JSON demo. */
+      function unirNovidadesCatalogoDemoNaLista(listaLocal) {
+        const base = Array.isArray(listaLocal)
+          ? listaLocal.map((e) => ({ ...e }))
+          : [];
+        const visto = new Set(
+          base.map((e) => normalizarTexto(e.nome)).filter(Boolean),
+        );
+        for (const item of empresasPadrao || []) {
+          const k = normalizarTexto(item.nome);
+          if (!k || visto.has(k)) continue;
+          visto.add(k);
+          base.push({ ...item });
+        }
+        return base;
+      }
+
       let empresas = [];
 
       function supabaseConfigurado() {
@@ -3866,6 +3883,7 @@
           "ec escavacoes",
           "iara ponfilio",
           "pao de queijo do beto",
+          "dona lena",
         ]);
         const base = (lista || []).map((empresa) => {
             const nome = normalizarTexto(empresa.nome);
@@ -3902,6 +3920,12 @@
                 funcionamento: "Quarta a domingo, das 18:30 às 22:40",
               };
             }
+            if (nome === "pao de queijo do beto") {
+              return {
+                ...empresa,
+                instagram: "https://www.instagram.com/paodequeijodobeto/",
+              };
+            }
             return empresa;
           })
           .map((empresa) =>
@@ -3912,7 +3936,22 @@
                   patrocinado: true,
                 })
               : empresa,
-          );
+          )
+          .map((empresa) => {
+            const nome = normalizarTexto(empresa.nome);
+            const claudioMontador =
+              nome === "claudio montador" ||
+              nome === "claudio montador de moveis" ||
+              (nome.includes("claudio") && nome.includes("montador"));
+            if (claudioMontador) {
+              return normalizarEmpresa({
+                ...empresa,
+                plano: "basico",
+                patrocinado: false,
+              });
+            }
+            return empresa;
+          });
 
         const existeValdecir = base.some(
           (empresa) => normalizarTexto(empresa.nome) === "valdecir alves",
@@ -4177,6 +4216,8 @@
             "Levamos o buffet completo até você! 🏠 Cardápios Gourmet | Garçons | Logística Completa\n🎉 Casamentos, Aniversários e Eventos Corporativos",
           "pao de queijo do beto":
             "Pão de queijo artesanal, quentinho e cheio de sabor — encomendas e retirada na região.",
+          "dona lena":
+            "Sabão artesanal multiuso para louça, roupas e limpeza geral — receita tradicional desde 1992, alto rendimento, econômico e durável.",
           "iara ponfilio":
             "Serviço de Baby Uber, corridas urbanas e conveniências com atendimento dedicado.",
         };
@@ -4465,7 +4506,9 @@
         }
 
         await carregarEmpresasPadraoJson();
-        empresas = aplicarAjustesEmpresas(carregarEmpresasStorage());
+        empresas = aplicarAjustesEmpresas(
+          unirNovidadesCatalogoDemoNaLista(carregarEmpresasStorage()),
+        );
         salvarEmpresasStorage(empresas);
         carregar(empresasAtivasNoPortal(empresas));
         criarEscada();
@@ -4609,12 +4652,26 @@
         if (!s) return s;
         if (s.startsWith("data:")) return s;
         if (/^https?:\/\//i.test(s)) return s;
+        let rel = s.replace(/^\.\//, "").replace(/^\/+/, "");
+        /* Logos versionados em /assets do repo: sempre na mesma origem do index
+           (Live Server, Vercel). SUPABASE_LOGOS_PUBLIC_BASE é para storage (ex. ativos/). */
+        if (/^assets\//i.test(rel)) {
+          try {
+            return new URL(rel, window.location.href).href;
+          } catch {
+            return rel;
+          }
+        }
         const base = String(SUPABASE_LOGOS_PUBLIC_BASE || "")
           .trim()
           .replace(/\/+$/, "");
-        if (!base) return s;
-        let rel = s.replace(/^\.\//, "").replace(/^\/+/, "");
-        if (rel.startsWith("assets/")) rel = rel.slice("assets/".length);
+        if (!base) {
+          try {
+            return new URL(rel, window.location.href).href;
+          } catch {
+            return rel;
+          }
+        }
         return `${base}/${rel}`;
       }
 
@@ -4627,6 +4684,10 @@
         }
         while (n.startsWith("./")) n = n.slice(2);
         if (n.startsWith("/assets/")) n = n.slice(1);
+        /* Banco ou legado com só o ficheiro ("beto.jpeg") → evita URL na raiz e imagem partida. */
+        if (!n.includes("/") && /\.(jpe?g|png|webp|gif)$/i.test(n)) {
+          n = `assets/${n}`;
+        }
 
         const chave = n.toLowerCase();
         const mapa = {
@@ -4642,6 +4703,8 @@
           "assets/ec-escavacoes.jpeg": "assets/escavacoes.jpeg",
           "assets/gu.jpeg": "assets/espetaria.jpeg",
           "assets/iara-uber.jpeg": "assets/iara.jpeg",
+          "assets/beto.jpeg": "assets/beto.png",
+          "assets/dona-lena.jpeg": "assets/dona-lena.png",
         };
         if (mapa[chave]) return mapa[chave];
         if (chave.startsWith("assets/")) return n;
@@ -4675,6 +4738,7 @@
         "julia corretora": "assets/julia.jpeg",
         "clinica bem viver": "assets/clinica.jpeg",
         "claudio montador": "assets/claudio.jpeg",
+        "claudio montador de moveis": "assets/claudio.jpeg",
         "multilar variedades": "assets/multilar-logo.jpeg",
         "samarina marino": "assets/samarina.png",
         "samarina gomes marino": "assets/samarina.png",
@@ -4701,7 +4765,8 @@
         "espetaria e choperia do gu": "assets/espetaria.jpeg",
         "buffet em casa gourmet": "assets/buffet.jpeg",
         "buffet em casa": "assets/buffet.jpeg",
-        "pao de queijo do beto": "assets/beto.jpeg",
+        "pao de queijo do beto": "assets/beto.png",
+        "dona lena": "assets/dona-lena.png",
         "emilio campos": "assets/escavacoes.jpeg",
         "iara ponfilio": "assets/iara.jpeg",
         "cantinho da fe": "assets/cantinho.jpeg",
@@ -4808,19 +4873,15 @@
         });
       }
 
-      /* CARDS */
-      function carregar(lista) {
-        const grid = document.getElementById("grid");
-        const estadoVazio = document.getElementById("estadoVazio");
-        grid.innerHTML = "";
-        estadoVazio.style.display = lista.length ? "none" : "block";
-
+      /** Ordem fixa na grelha / escada: VIP Dona Lena e Beto na 1.ª fila; depois Valdecir e Limp Gel. */
+      function ordenarEmpresasParaGrade(lista) {
         const prioridade = {
-          "valdecir alves": 0,
-          "limp gel": 1,
+          "dona lena": 0,
+          "pao de queijo do beto": 1,
+          "valdecir alves": 2,
+          "limp gel": 3,
         };
-
-        const ordenada = [...lista].sort((a, b) => {
+        return [...lista].sort((a, b) => {
           const nomeA = normalizarTexto(a.nome);
           const nomeB = normalizarTexto(b.nome);
           const ordemA =
@@ -4834,6 +4895,16 @@
             Number(Boolean(b.patrocinado)) - Number(Boolean(a.patrocinado))
           );
         });
+      }
+
+      /* CARDS */
+      function carregar(lista) {
+        const grid = document.getElementById("grid");
+        const estadoVazio = document.getElementById("estadoVazio");
+        grid.innerHTML = "";
+        estadoVazio.style.display = lista.length ? "none" : "block";
+
+        const ordenada = ordenarEmpresasParaGrade(lista);
 
         ordenada.forEach((e) => {
           const telefone = normalizarTelefone(e.tel);
@@ -4859,7 +4930,7 @@
 
           grid.innerHTML += `
 <div class="card ${e.patrocinado ? "patrocinado" : ""} ${e.plano === "vip" ? "vip" : ""}">
-<div class="card-logo-wrap"><img src="${logoSeguro}" alt="Logo ${nomeSeguro}" loading="lazy"></div>
+<div class="card-logo-wrap"><img src="${logoSeguro}" alt="" loading="lazy" decoding="async"></div>
 ${categoriaSegura ? `<div class="categoria">${categoriaSegura}</div>` : ""}
 <h3>${nomeSeguro}</h3>
 ${funcionamentoSeguro ? `<div class="card-funcionamento">${funcionamentoSeguro}</div>` : ""}
@@ -5539,7 +5610,9 @@ ${e.endereco ? `<a class="btn site" href="${hrefMapa}" target="_blank" rel="noop
         left.innerHTML = "";
         right.innerHTML = "";
 
-        const base = empresasAtivasNoPortal(empresas);
+        const base = ordenarEmpresasParaGrade(
+          empresasAtivasNoPortal(empresas),
+        );
         const vitrine = [...base, ...base];
 
         vitrine.forEach((e) => {
@@ -5547,7 +5620,7 @@ ${e.endereco ? `<a class="btn site" href="${hrefMapa}" target="_blank" rel="noop
           const logoSeguro = logoUrlEmpresa(e);
           let mini = `
 <div class="mini-card">
-<img src="${logoSeguro}" alt="Mini logo ${nomeSeguro}" loading="lazy">
+<img src="${logoSeguro}" alt="" loading="lazy" decoding="async">
 <p class="mini-nome">${nomeSeguro}</p>
 </div>`;
           left.innerHTML += mini;

@@ -212,8 +212,9 @@
   },
   {
     "nome": "Pão de Queijo do Beto",
-    "logo": "assets/beto.jpeg",
+    "logo": "assets/beto.png",
     "tel": "5519997189894",
+    "instagram": "https://www.instagram.com/paodequeijodobeto/",
     "categoria": "Alimentação",
     "descricao": "Pão de queijo artesanal, quentinho e cheio de sabor — ideal para café da manhã, lanches e encomendas.",
     "palavrasChave": [
@@ -222,6 +223,26 @@
       "lanches",
       "salgados",
       "alimentacao"
+    ],
+    "plano": "vip",
+    "patrocinado": true
+  },
+  {
+    "nome": "Dona Lena",
+    "logo": "assets/dona-lena.png",
+    "tel": "5519986003501",
+    "endereco": "Rua Jurupari, 105 - Jardim Nova Itirapina, Itirapina - SP",
+    "categoria": "Limpeza / Casa",
+    "descricao": "Sabão artesanal multiuso para louça, roupas e limpeza geral — receita tradicional desde 1992, alto rendimento, econômico e durável.",
+    "palavrasChave": [
+      "sabao",
+      "artesanal",
+      "limpeza",
+      "louca",
+      "roupas",
+      "dona lena",
+      "jurupari",
+      "nova itirapina"
     ],
     "plano": "vip",
     "patrocinado": true

@@ -65,7 +65,10 @@ where nome ilike 'gu espetaria e choperia' or nome ilike 'gu espetaria & choperi
 update empresas set logotipo = 'assets/buffet.jpeg'
 where nome ilike 'buffet em casa gourmet' or nome ilike 'buffet em casa';
 
-update empresas set logotipo = 'assets/beto.jpeg'
+update empresas set logotipo = 'assets/beto.png'
+where nome ilike 'pão de queijo do beto' or nome ilike 'pao de queijo do beto';
+
+update empresas set instagram = 'https://www.instagram.com/paodequeijodobeto/'
 where nome ilike 'pão de queijo do beto' or nome ilike 'pao de queijo do beto';
 
 update empresas set logotipo = 'assets/iara.jpeg' where nome ilike 'iara ponfilio';
@@ -74,5 +77,12 @@ update empresas set logotipo = 'assets/cantinho.jpeg' where nome ilike 'cantinho
 
 update empresas set logotipo = 'assets/claudio.jpeg'
 where nome ilike 'claudio montador' or nome ilike '%claudio%montador%';
+
+-- Card no portal: plano básico (não VIP)
+update empresas set plano = 'basico', patrocinado = false
+where nome ilike 'claudio montador' or nome ilike '%claudio%montador%';
+
+update empresas set logotipo = 'assets/dona-lena.png'
+where nome ilike 'dona lena';
 
 commit;
