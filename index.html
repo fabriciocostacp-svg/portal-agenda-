@@ -2533,6 +2533,7 @@
       const STORAGE_EMPRESAS = `${P.storagePrefix}_empresas`;
       const STORAGE_VISITAS = `${P.storagePrefix}_visitas`;
       const STORAGE_DESCRICOES = `${P.storagePrefix}_descricoes`;
+      const STORAGE_ROTACAO_VIP = `${P.storagePrefix}_rotacao_vip`;
       const SUPABASE_URL = (P.supabaseUrl || "").trim();
       const SUPABASE_ANON_KEY = (P.supabaseAnonKey || "").trim();
       const SUPABASE_TABLE = (P.supabaseTable || "empresas").trim() || "empresas";
@@ -2567,6 +2568,19 @@
       let descricoesCustomizadas = carregarDescricoesStorage();
 
       let empresasPadrao = [];
+
+      function obterIndiceRotacaoVip() {
+        try {
+          const atual = Number(localStorage.getItem(STORAGE_ROTACAO_VIP) || 0);
+          const seguro = Number.isFinite(atual) && atual >= 0 ? atual : 0;
+          localStorage.setItem(STORAGE_ROTACAO_VIP, String(seguro + 1));
+          return seguro;
+        } catch {
+          return Math.floor(Date.now() / 1000);
+        }
+      }
+
+      const INDICE_ROTACAO_VIP = obterIndiceRotacaoVip();
 
       async function carregarEmpresasPadraoJson() {
         const bust = "20";
@@ -5445,7 +5459,17 @@
         });
       }
 
-      /** Ordem fixa na grelha / escada: VIP Dona Lena e Beto na 1.ª fila; depois Valdecir e Limp Gel. */
+      function rotacionarLista(lista, indice) {
+        if (!lista.length) return lista;
+        const inicio = indice % lista.length;
+        return [...lista.slice(inicio), ...lista.slice(0, inicio)];
+      }
+
+      function empresaVipNaGrade(empresa) {
+        return empresa.plano === "vip" || Boolean(empresa.patrocinado);
+      }
+
+      /** VIPs alternam posição a cada nova abertura do portal; básicos ficam depois. */
       function ordenarEmpresasParaGrade(lista) {
         const prioridade = {
           "fl conecta": 0,
@@ -5454,7 +5478,7 @@
           "valdecir alves": 3,
           "limp gel": 4,
         };
-        return [...lista].sort((a, b) => {
+        const baseOrdenada = [...lista].sort((a, b) => {
           const nomeA = normalizarTexto(a.nome);
           const nomeB = normalizarTexto(b.nome);
           const ordemA =
@@ -5468,6 +5492,13 @@
             Number(Boolean(b.patrocinado)) - Number(Boolean(a.patrocinado))
           );
         });
+
+        const vips = baseOrdenada.filter(empresaVipNaGrade);
+        const demais = baseOrdenada.filter(
+          (empresa) => !empresaVipNaGrade(empresa),
+        );
+
+        return [...rotacionarLista(vips, INDICE_ROTACAO_VIP), ...demais];
       }
 
       /* CARDS */
