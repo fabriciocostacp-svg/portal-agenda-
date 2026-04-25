@@ -55,7 +55,34 @@
     "site": "https://deliveryapp.neemo.com.br/pedir/14398/PfvWHwxooksbqcqEFH9g",
     "endereco": "Rua 2 nº 409 - Centro, Itirapina - SP",
     "categoria": "Alimentação",
-    "palavrasChave": ["restaurante", "comida", "marmita", "rotisseria"]
+    "palavrasChave": ["restaurante", "comida", "marmita", "rotisseria"],
+    "plano": "vip",
+    "patrocinado": true
+  },
+  {
+    "nome": "Ponto de Encontro",
+    "logo": "assets/ponto de encontro.jpeg",
+    "tel": "5516981313518",
+    "instagram": "https://www.instagram.com/pontodeencontro53?utm_source=qr&igsh=cWFiMGxoaTU2M3li",
+    "endereco": "Rod. Mun. Ayrton Senna 1311 Est. Mun. Dr. Fernando de Arruda Botelho 1311, Itirapina, 13530-000, SP, BR",
+    "categoria": "Alimentação",
+    "descricao": "Lanchonete com entrega e retirada: carvão, gelo, lanches, bebidas, porções, sorvetes, marmitex e pastel.",
+    "palavrasChave": [
+      "ponto de encontro",
+      "lanchonete",
+      "lanches",
+      "bebidas",
+      "porcoes",
+      "sorvetes",
+      "marmitex",
+      "pastel",
+      "carvao",
+      "gelo",
+      "entrega",
+      "retirada"
+    ],
+    "plano": "vip",
+    "patrocinado": true
   },
   {
     "nome": "Gordo Lanches",
@@ -136,7 +163,7 @@
       "marino",
       "gomes"
     ],
-    "plano": "standard",
+    "plano": "vip",
     "patrocinado": true
   },
   {
@@ -208,7 +235,9 @@
       "gourmet",
       "gastronomia",
       "@buffetemcasagourmet"
-    ]
+    ],
+    "plano": "vip",
+    "patrocinado": true
   },
   {
     "nome": "Pão de Queijo do Beto",
