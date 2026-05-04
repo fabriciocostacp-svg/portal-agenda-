@@ -221,6 +221,14 @@ app.get("/portal-config.js", (_req, res) => {
   res.send(`window.PORTAL_CONFIG=${JSON.stringify(payload)};\n`);
 });
 
+/** Mesmo JS que `api/portal-config.js` na Vercel (o index tenta este URL antes de /portal-config.js). */
+app.get("/api/portal-config", (_req, res) => {
+  res.type("application/javascript; charset=utf-8");
+  res.set("Cache-Control", "no-store, max-age=0");
+  const payload = montarPayloadPortalConfig();
+  res.send(`window.PORTAL_CONFIG=${JSON.stringify(payload)};\n`);
+});
+
 app.get("/api/portal-config-data", (_req, res) => {
   res.type("application/json; charset=utf-8");
   res.set("Cache-Control", "no-store, max-age=0");

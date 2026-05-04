@@ -481,7 +481,36 @@
     </div>
 
     <script src="/portal-config.defaults.js?v=1"></script>
-    <script src="/portal-config.js?v=cfg2"></script>
+    <script>
+      /* Produção: /api/portal-config (env). Evita ficheiro estático portal-config.js na raiz
+         sobrepor o rewrite da Vercel. Fallback: /portal-config.js (npm start / cópia local). */
+      (function carregarPortalConfigSync() {
+        var urls = ["/api/portal-config?v=cfg3", "/portal-config.js?v=cfg3"];
+        for (var i = 0; i < urls.length; i += 1) {
+          try {
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", urls[i], false);
+            xhr.send(null);
+            if (xhr.status !== 200) continue;
+            var body = String(xhr.responseText || "");
+            if (!/window\.PORTAL_CONFIG\s*=/.test(body)) continue;
+            if (
+              urls[i].indexOf("/api/") !== -1 &&
+              body.trim().indexOf("window.PORTAL_CONFIG=") !== 0
+            ) {
+              continue;
+            }
+            (0, eval)(body);
+            return;
+          } catch (err) {
+            /* tenta próximo URL */
+          }
+        }
+        console.warn(
+          "[portal] Não foi possível carregar /api/portal-config nem portal-config.js; só defaults.",
+        );
+      })();
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/config.js" defer></script>
     <script src="js/utils.js" defer></script>

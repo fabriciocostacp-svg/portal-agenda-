@@ -174,7 +174,7 @@ if (!supabaseClient) {
     );
   } else if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
     console.warn(
-      "[portal] Defina SUPABASE_URL e SUPABASE_ANON_KEY. Na Vercel: Settings → Environment Variables → Redeploy. Confira no navegador (F12 → Rede) se GET /portal-config.js responde 200.",
+      "[portal] Defina SUPABASE_URL e SUPABASE_ANON_KEY. Na Vercel: Settings → Environment Variables → Redeploy. Confira no navegador (F12 → Rede) se GET /api/portal-config responde 200.",
     );
   }
 }
