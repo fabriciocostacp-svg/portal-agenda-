@@ -656,11 +656,6 @@ function removerEmpresasDuplicadasPorNome(lista) {
       saida.push(arr[0]);
       return;
     }
-    const pausada = arr.find((empresa) => !empresaAtivaNoPortal(empresa));
-    if (pausada) {
-      saida.push(pausada);
-      return;
-    }
     arr.sort((a, b) => {
       const atA = empresaAtivaNoPortal(a) ? 1 : 0;
       const atB = empresaAtivaNoPortal(b) ? 1 : 0;
