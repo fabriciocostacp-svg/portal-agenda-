@@ -784,6 +784,17 @@ function iniciarContadorVisitas() {
 
 
 
+function ordenarEmpresasComoConsultaBanco(lista) {
+  return [...(lista || [])].sort((a, b) => {
+    const pa = a.patrocinado ? 1 : 0;
+    const pb = b.patrocinado ? 1 : 0;
+    if (pb !== pa) return pb - pa;
+    return String(a.nome || "").localeCompare(String(b.nome || ""), "pt-BR", {
+      sensitivity: "base",
+    });
+  });
+}
+
 async function carregarEmpresasBanco() {
   const { data, error } = await supabaseClient
     .from(SUPABASE_TABLE)
@@ -797,9 +808,22 @@ async function carregarEmpresasBanco() {
 
 async function carregarEmpresasDoPortalComCatalogo() {
   const doBanco = await carregarEmpresasBanco();
-  /* Com Supabase, o banco precisa ser a fonte principal: se o JSON demo
-     completar nomes ausentes, um anúncio pausado pode voltar a aparecer. */
-  return doBanco;
+  const cfg = window.PORTAL_CONFIG || {};
+  if (cfg.applyDefaultCatalog === false) {
+    return doBanco;
+  }
+  await carregarEmpresasPadraoJson();
+  const visto = new Set(
+    doBanco.map((e) => normalizarTexto(e.nome)).filter(Boolean),
+  );
+  const extras = [];
+  for (const item of empresasPadrao || []) {
+    const k = normalizarTexto(item.nome);
+    if (!k || visto.has(k)) continue;
+    visto.add(k);
+    extras.push(normalizarEmpresa({ ...item }));
+  }
+  return ordenarEmpresasComoConsultaBanco([...doBanco, ...extras]);
 }
 
 function colunaAusenteSupabase(erro) {
