@@ -30,6 +30,10 @@
   ],
   "rewrites": [
     {
+      "source": "/",
+      "destination": "/index.html"
+    },
+    {
       "source": "/portal-config.js",
       "destination": "/api/portal-config"
     },
