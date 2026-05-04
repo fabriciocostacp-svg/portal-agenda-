@@ -1,7 +1,7 @@
 
 
 <!doctype html>
-<!-- root deploy rev 20260504-2 -->
+<!-- root deploy rev 20260504-3 -->
 <html lang="pt-br">
   <head>
     <meta charset="UTF-8" />
@@ -481,12 +481,12 @@
       </div>
     </div>
 
-    <script src="/portal-config.defaults.js?v=1"></script>
+    <script src="/portal-config.defaults.js?v=3"></script>
     <script>
       /* Produção: /api/portal-config (env). Evita ficheiro estático portal-config.js na raiz
          sobrepor o rewrite da Vercel. Fallback: /portal-config.js (npm start / cópia local). */
       (function carregarPortalConfigSync() {
-        var urls = ["/api/portal-config?v=cfg3", "/portal-config.js?v=cfg3"];
+        var urls = ["/api/portal-config?v=cfg4", "/portal-config.js?v=cfg4"];
         for (var i = 0; i < urls.length; i += 1) {
           try {
             var xhr = new XMLHttpRequest();
@@ -513,13 +513,13 @@
       })();
     </script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="js/config.js" defer></script>
+    <script src="js/config.js?v=20260504-3" defer></script>
     <script src="js/utils.js" defer></script>
     <script src="js/clima.js" defer></script>
     <script src="js/ceps-embutido.js" defer></script>
     <script src="js/cep.js" defer></script>
     <script src="js/modais.js" defer></script>
-    <script src="js/empresas.js?v=20260204" defer></script>
+    <script src="js/empresas.js?v=20260504-3" defer></script>
     <script src="js/admin.js" defer></script>
     <script src="js/main.js" defer></script>
 
