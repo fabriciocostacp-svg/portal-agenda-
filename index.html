@@ -1,7 +1,7 @@
 
 
 <!doctype html>
-<!-- root deploy rev 20260504-4 -->
+<!-- root deploy rev 20260504-5 -->
 <html lang="pt-br">
   <head>
     <meta charset="UTF-8" />
@@ -481,12 +481,28 @@
       </div>
     </div>
 
-    <script src="/portal-config.defaults.js?v=3"></script>
+    <script src="/portal-config.defaults.js?v=4"></script>
     <script>
-      /* Produção: /api/portal-config (env). Evita ficheiro estático portal-config.js na raiz
-         sobrepor o rewrite da Vercel. Fallback: /portal-config.js (npm start / cópia local). */
+      /* Produção: /api/portal-config (env). Preferimos JSON.parse ao eval (menos “baixar”/bloqueios).
+         Fallback: /portal-config.js (stub local vira <script> in-line). */
       (function carregarPortalConfigSync() {
-        var urls = ["/api/portal-config?v=cfg4", "/portal-config.js?v=cfg4"];
+        function aplicarBodyConfigJs(body) {
+          var t = String(body || "").trim();
+          var prefix = "window.PORTAL_CONFIG=";
+          if (t.indexOf(prefix) === 0) {
+            var chunk = t.slice(prefix.length).replace(/;[\s\n]*$/, "").trim();
+            try {
+              window.PORTAL_CONFIG = JSON.parse(chunk);
+              return true;
+            } catch (ignore) {}
+          }
+          var s = document.createElement("script");
+          s.textContent = t;
+          (document.head || document.documentElement).appendChild(s);
+          if (s.parentNode) s.parentNode.removeChild(s);
+          return true;
+        }
+        var urls = ["/api/portal-config?v=cfg5", "/portal-config.js?v=cfg5"];
         for (var i = 0; i < urls.length; i += 1) {
           try {
             var xhr = new XMLHttpRequest();
@@ -501,7 +517,7 @@
             ) {
               continue;
             }
-            (0, eval)(body);
+            aplicarBodyConfigJs(body);
             return;
           } catch (err) {
             /* tenta próximo URL */
@@ -513,13 +529,13 @@
       })();
     </script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="js/config.js?v=20260504-3" defer></script>
+    <script src="js/config.js?v=20260504-5" defer></script>
     <script src="js/utils.js" defer></script>
     <script src="js/clima.js" defer></script>
     <script src="js/ceps-embutido.js" defer></script>
     <script src="js/cep.js" defer></script>
     <script src="js/modais.js" defer></script>
-    <script src="js/empresas.js?v=20260504-4" defer></script>
+    <script src="js/empresas.js?v=20260504-5" defer></script>
     <script src="js/admin.js" defer></script>
     <script src="js/main.js" defer></script>
 
