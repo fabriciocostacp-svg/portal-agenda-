@@ -813,17 +813,29 @@ async function carregarEmpresasDoPortalComCatalogo() {
     return doBanco;
   }
   await carregarEmpresasPadraoJson();
-  const visto = new Set(
-    doBanco.map((e) => normalizarTexto(e.nome)).filter(Boolean),
+  const ativosBanco = doBanco.filter((e) => empresaAtivaNoPortal(e));
+  const inativosBanco = doBanco.filter((e) => !empresaAtivaNoPortal(e));
+  const nomesComAtivoNoBanco = new Set(
+    ativosBanco.map((e) => normalizarTexto(e.nome)).filter(Boolean),
   );
   const extras = [];
   for (const item of empresasPadrao || []) {
     const k = normalizarTexto(item.nome);
-    if (!k || visto.has(k)) continue;
-    visto.add(k);
+    if (!k || nomesComAtivoNoBanco.has(k)) continue;
+    nomesComAtivoNoBanco.add(k);
     extras.push(normalizarEmpresa({ ...item }));
   }
-  return ordenarEmpresasComoConsultaBanco([...doBanco, ...extras]);
+  const nomesResgatadosPeloDemo = new Set(
+    extras.map((e) => normalizarTexto(e.nome)).filter(Boolean),
+  );
+  const inativosSemFallbackDemo = inativosBanco.filter(
+    (e) => !nomesResgatadosPeloDemo.has(normalizarTexto(e.nome)),
+  );
+  return ordenarEmpresasComoConsultaBanco([
+    ...ativosBanco,
+    ...extras,
+    ...inativosSemFallbackDemo,
+  ]);
 }
 
 function colunaAusenteSupabase(erro) {
