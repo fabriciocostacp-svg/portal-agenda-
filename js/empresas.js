@@ -310,8 +310,9 @@ function dadosPontoDeEncontro(extra = {}) {
   });
 }
 
-function aplicarAjustesEmpresas(lista) {
-  const permitirCatalogoLocal = !supabaseConfigurado();
+function aplicarAjustesEmpresas(lista, opts = {}) {
+  const permitirCatalogoLocal =
+    !supabaseConfigurado() || opts.catalogoLocal === true;
   const nomesForcarVip = new Set([
     "fl conecta",
     "julia corretora",
@@ -1120,23 +1121,65 @@ function exibirErroConexaoBanco(erro) {
   }
 }
 
+async function montarListaSomenteDemoComAjustes() {
+  await carregarEmpresasPadraoJson();
+  const raw = empresasPadrao || [];
+  if (!raw.length) return [];
+  return aplicarAjustesEmpresas(
+    ordenarEmpresasComoConsultaBanco(raw.map((item) => normalizarEmpresa({ ...item }))),
+    { catalogoLocal: true },
+  );
+}
+
 async function inicializarEmpresas() {
   if (supabaseConfigurado()) {
+    const cfg = window.PORTAL_CONFIG || {};
     try {
       empresas = aplicarAjustesEmpresas(
         await carregarEmpresasDoPortalComCatalogo(),
       );
+      if (
+        cfg.applyDefaultCatalog !== false &&
+        empresasAtivasNoPortal(empresas).length === 0
+      ) {
+        const fallback = await montarListaSomenteDemoComAjustes();
+        if (empresasAtivasNoPortal(fallback).length > 0) {
+          empresas = fallback;
+        }
+      }
+      const estadoVazio = document.getElementById("estadoVazio");
+      if (estadoVazio && empresasAtivasNoPortal(empresas).length > 0) {
+        estadoVazio.textContent = "Nenhuma empresa encontrada.";
+      }
       carregar(empresasAtivasNoPortal(empresas));
       criarEscada();
       atualizarDatalistNomesAdmin();
       return;
     } catch (erro) {
       console.error("Falha ao carregar empresas do Supabase:", erro);
-      empresas = [];
+      let recuperou = false;
+      if (cfg.applyDefaultCatalog !== false) {
+        const fallback = await montarListaSomenteDemoComAjustes();
+        if (empresasAtivasNoPortal(fallback).length > 0) {
+          empresas = fallback;
+          recuperou = true;
+        }
+      }
+      if (!recuperou) {
+        empresas = [];
+        exibirErroConexaoBanco(erro);
+      } else {
+        const estadoVazio = document.getElementById("estadoVazio");
+        if (estadoVazio) {
+          estadoVazio.textContent = "Nenhuma empresa encontrada.";
+        }
+        console.warn(
+          "[portal] Supabase indisponível ou com erro; exibindo catálogo demo até o banco voltar.",
+        );
+      }
       carregar(empresasAtivasNoPortal(empresas));
       criarEscada();
       atualizarDatalistNomesAdmin();
-      exibirErroConexaoBanco(erro);
       return;
     }
   }
