@@ -4,3 +4,5 @@ index_teste.html
 .vercel
 node_modules
 download
+# Ficheiro local (gitignored); se for enviado, substitui o rewrite vercel.json -> /api/portal-config.
+portal-config.js
