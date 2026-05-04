@@ -1,4 +1,11 @@
 {
+  "redirects": [
+    {
+      "source": "/",
+      "destination": "/index.html",
+      "permanent": false
+    }
+  ],
   "headers": [
     {
       "source": "/",
@@ -29,10 +36,6 @@
     }
   ],
   "rewrites": [
-    {
-      "source": "/",
-      "destination": "/index.html"
-    },
     {
       "source": "/portal-config.js",
       "destination": "/api/portal-config"
