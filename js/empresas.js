@@ -1188,7 +1188,21 @@ async function inicializarEmpresas() {
   empresas = aplicarAjustesEmpresas(
     unirNovidadesCatalogoDemoNaLista(carregarEmpresasStorage()),
   );
+  const cfgLocal = window.PORTAL_CONFIG || {};
+  if (
+    cfgLocal.applyDefaultCatalog !== false &&
+    empresasAtivasNoPortal(empresas).length === 0
+  ) {
+    const fallbackLocal = await montarListaSomenteDemoComAjustes();
+    if (empresasAtivasNoPortal(fallbackLocal).length > 0) {
+      empresas = fallbackLocal;
+    }
+  }
   salvarEmpresasStorage(empresas);
+  const estadoVazioL = document.getElementById("estadoVazio");
+  if (estadoVazioL && empresasAtivasNoPortal(empresas).length > 0) {
+    estadoVazioL.textContent = "Nenhuma empresa encontrada.";
+  }
   carregar(empresasAtivasNoPortal(empresas));
   criarEscada();
   atualizarDatalistNomesAdmin();
