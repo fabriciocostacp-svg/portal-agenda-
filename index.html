@@ -1,7 +1,7 @@
 
 
 <!doctype html>
-<!-- root deploy rev 20260504-7 -->
+<!-- root deploy rev 20260504-8-chrome -->
 <html lang="pt-br">
   <head>
     <meta charset="UTF-8" />
@@ -481,61 +481,20 @@
       </div>
     </div>
 
-    <script src="/portal-config.defaults.js?v=4"></script>
-    <script>
-      /* Produção: /api/portal-config (env). Preferimos JSON.parse ao eval (menos “baixar”/bloqueios).
-         Fallback: /portal-config.js (stub local vira <script> in-line). */
-      (function carregarPortalConfigSync() {
-        function aplicarBodyConfigJs(body) {
-          var t = String(body || "").trim();
-          var prefix = "window.PORTAL_CONFIG=";
-          if (t.indexOf(prefix) === 0) {
-            var chunk = t.slice(prefix.length).replace(/;[\s\n]*$/, "").trim();
-            try {
-              window.PORTAL_CONFIG = JSON.parse(chunk);
-              return true;
-            } catch (ignore) {}
-          }
-          var s = document.createElement("script");
-          s.textContent = t;
-          (document.head || document.documentElement).appendChild(s);
-          if (s.parentNode) s.parentNode.removeChild(s);
-          return true;
-        }
-        var urls = ["/api/portal-config?v=cfg5", "/portal-config.js?v=cfg5"];
-        for (var i = 0; i < urls.length; i += 1) {
-          try {
-            var xhr = new XMLHttpRequest();
-            xhr.open("GET", urls[i], false);
-            xhr.send(null);
-            if (xhr.status !== 200) continue;
-            var body = String(xhr.responseText || "");
-            if (!/window\.PORTAL_CONFIG\s*=/.test(body)) continue;
-            if (
-              urls[i].indexOf("/api/") !== -1 &&
-              body.trim().indexOf("window.PORTAL_CONFIG=") !== 0
-            ) {
-              continue;
-            }
-            aplicarBodyConfigJs(body);
-            return;
-          } catch (err) {
-            /* tenta próximo URL */
-          }
-        }
-        console.warn(
-          "[portal] Não foi possível carregar /api/portal-config nem portal-config.js; só defaults.",
-        );
-      })();
-    </script>
+    <script src="/portal-config.defaults.js?v=5"></script>
+    <!-- Chrome: evitar XHR síncrono; script externo executa em ordem antes dos defer. -->
+    <script
+      src="/api/portal-config?v=cfg6-chrome"
+      onerror="(function(){var s=document.createElement('script');s.src='/portal-config.js?v=cfg6-chrome';document.head.appendChild(s);})();"
+    ></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="js/config.js?v=20260504-7" defer></script>
+    <script src="js/config.js?v=20260504-8" defer></script>
     <script src="js/utils.js" defer></script>
     <script src="js/clima.js" defer></script>
     <script src="js/ceps-embutido.js" defer></script>
     <script src="js/cep.js" defer></script>
     <script src="js/modais.js" defer></script>
-    <script src="js/empresas.js?v=20260504-7" defer></script>
+    <script src="js/empresas.js?v=20260504-8" defer></script>
     <script src="js/admin.js" defer></script>
     <script src="js/main.js" defer></script>
 
