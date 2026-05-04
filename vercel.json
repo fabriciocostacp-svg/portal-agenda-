@@ -1,4 +1,5 @@
 {
+  "framework": null,
   "rewrites": [
     {
       "source": "/portal-config.js",
