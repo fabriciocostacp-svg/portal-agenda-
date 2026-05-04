@@ -54,7 +54,7 @@ function montarPayloadPortalConfig() {
     })(),
     whatsappAnuncieMessage: strEnv(
       "PORTAL_WHATSAPP_ANUNCIE_MESSAGE",
-      "Olá! Vim pelo portal {portal} e tenho interesse em anunciar. Poderia me enviar opções e valores?",
+      "Quero anunciar no Portal Itirapina",
     ),
     whatsappClienteTemplate: strEnv(
       "PORTAL_WHATSAPP_CLIENT_TEMPLATE",
@@ -72,6 +72,7 @@ function montarPayloadPortalConfig() {
     supabaseAnonKey: strEnv("SUPABASE_ANON_KEY"),
     supabaseTable: strEnv("SUPABASE_TABLE", "empresas") || "empresas",
     supabaseLogosPublicBase: strEnv("SUPABASE_LOGOS_PUBLIC_BASE"),
+    supabaseLogosBucket: strEnv("SUPABASE_LOGOS_BUCKET", "logos") || "logos",
     applyDefaultCatalog: envBool("PORTAL_APPLY_DEFAULT_CATALOG", true),
     /** true = só Supabase. false = sempre pede senha .env. Em Vercel o padrão é true (sem ADMIN_LOCAL_PASS no deploy). */
     skipLocalAdminGate: envBool(

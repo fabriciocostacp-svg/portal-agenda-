@@ -17,17 +17,17 @@ window.PORTAL_CONFIG = {
   sobreTexto:
     "Guia local com empresas, contatos úteis e horários de ônibus. Use Anuncie para falar com quem opera o portal.",
   whatsappE164: "5519999717781",
-  whatsappAnuncieMessage:
-    "Olá! Vim pelo portal {portal} e tenho interesse em anunciar. Poderia me enviar opções e valores?",
+  whatsappAnuncieMessage: "Quero anunciar no Portal Itirapina",
   whatsappClienteTemplate:
     "Olá {nome}, vi seu anúncio no {portal} e gostaria de mais informações.",
   whatsappRenewalTemplate:
     "Olá {nome}! A assinatura do anúncio no {portal} está próxima do vencimento ({data}). Podemos renovar?",
   storagePrefix: "portal_local",
-  supabaseUrl: "",
-  supabaseAnonKey: "",
+  supabaseUrl: "https://SEU-PROJETO.supabase.co",
+  supabaseAnonKey: "COLE_AQUI_A_SUPABASE_ANON_KEY",
   supabaseTable: "empresas",
   supabaseLogosPublicBase: "",
+  supabaseLogosBucket: "logos",
   // true: com Supabase, une a tabela com nomes que faltam do data/empresas-demo.json.
   // false: somente linhas do banco (white-label).
   applyDefaultCatalog: false,

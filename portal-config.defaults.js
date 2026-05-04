@@ -19,8 +19,7 @@ window.PORTAL_CONFIG = {
   sobreTexto:
     "Guia local com empresas, contatos úteis e horários de ônibus. Use Anuncie para falar com quem opera o portal.",
   whatsappE164: "5519999717781",
-  whatsappAnuncieMessage:
-    "Olá! Vim pelo portal {portal} e tenho interesse em anunciar. Poderia me enviar opções e valores?",
+  whatsappAnuncieMessage: "Quero anunciar no Portal Itirapina",
   whatsappClienteTemplate:
     "Olá {nome}, vi seu anúncio no {portal} e gostaria de mais informações.",
   whatsappRenewalTemplate:
@@ -30,6 +29,7 @@ window.PORTAL_CONFIG = {
   supabaseAnonKey: "",
   supabaseTable: "empresas",
   supabaseLogosPublicBase: "",
+  supabaseLogosBucket: "logos",
   applyDefaultCatalog: true,
   skipLocalAdminGate: true,
   localLoginOrigin: "",

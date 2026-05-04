@@ -25,6 +25,7 @@
     "nome": "FL Conecta",
     "logo": "assets/conecta.jpeg",
     "tel": "5519999717781",
+    "site": "https://flconectadigital.com.br/",
     "instagram": "https://instagram.com/flconecta",
     "categoria": "Marketing",
     "palavrasChave": ["marketing", "midias", "publicidade", "social media"],
@@ -36,6 +37,7 @@
     "logo": "assets/julia.jpeg",
     "tel": "5519999322673",
     "categoria": "Seguros",
+    "plano": "vip",
     "patrocinado": true
   },
   {
@@ -278,10 +280,19 @@
   },
   {
     "nome": "Iara Ponfilio",
-    "logo": "assets/iara.jpeg",
-    "tel": "5519997606453",
-    "categoria": "Uber",
-    "palavrasChave": ["uber", "motorista", "conveniencias", "servicos"],
+    "logo": "assets/iara-sexshop.png",
+    "tel": "5519998040555",
+    "site": "https://loja.menu/ipsexshop",
+    "categoria": "Sex Shop / Vendas Online",
+    "descricao": "Sex shop e vendas online com atendimento direto pelo WhatsApp.",
+    "palavrasChave": [
+      "iara",
+      "ponfilio",
+      "sex shop",
+      "vendas online",
+      "loja online",
+      "produtos adultos"
+    ],
     "plano": "vip",
     "patrocinado": true
   }

@@ -2,7 +2,7 @@
 -- Rode no Supabase: SQL Editor → colar → Run (pode rodar de novo: remove policies antigas).
 --
 -- Pré-requisitos:
--- 1) Tabela empresas com colunas usadas pelo portal (nome, logotipo, tel, tiposerv, ...).
+-- 1) Tabela empresas com colunas usadas pelo portal (nome, logo, tel, categoria, ...).
 -- 2) Rodar também: supabase-adicionar-ativo.sql e supabase-adicionar-proxima-cobranca.sql se ainda não rodou.
 -- 3) Em Authentication → Users: criar um usuário (e-mail + senha) para quem opera o admin.
 
@@ -12,12 +12,26 @@ begin;
 alter table public.empresas
   add column if not exists descricao text;
 
+alter table public.empresas
+  add column if not exists logo text,
+  add column if not exists categoria text,
+  add column if not exists instagram text,
+  add column if not exists site text,
+  add column if not exists plano text default 'basico',
+  add column if not exists patrocinado boolean default false,
+  add column if not exists ativo boolean default true;
+
 alter table public.empresas enable row level security;
+
+grant usage on schema public to anon, authenticated;
+grant select on table public.empresas to anon, authenticated;
+grant insert, update, delete on table public.empresas to authenticated;
 
 drop policy if exists "empresas_select_anon_ativas" on public.empresas;
 drop policy if exists "empresas_select_authenticated" on public.empresas;
 drop policy if exists "empresas_insert_authenticated" on public.empresas;
 drop policy if exists "empresas_update_authenticated" on public.empresas;
+drop policy if exists "empresas_delete_authenticated" on public.empresas;
 
 -- Visitantes do site (chave anon): só veem anúncios ativos
 create policy "empresas_select_anon_ativas"
@@ -45,5 +59,11 @@ create policy "empresas_update_authenticated"
   to authenticated
   using (true)
   with check (true);
+
+create policy "empresas_delete_authenticated"
+  on public.empresas
+  for delete
+  to authenticated
+  using (true);
 
 commit;
