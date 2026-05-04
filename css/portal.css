@@ -18,6 +18,13 @@
         --radius-panel: 12px;
         --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35);
         --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.22);
+        --overlay-scrim: rgba(5, 10, 12, 0.82);
+        --btn-primary-bg: var(--info);
+        --btn-primary-fg: #0a1a28;
+        --btn-ok-bg: var(--accent-2);
+        --btn-ok-fg: #0a1f14;
+        --info-muted: rgba(74, 159, 230, 0.14);
+        --info-border: rgba(74, 159, 230, 0.42);
       }
 
       html {
@@ -264,15 +271,15 @@
       .clima-atualizado {
         width: fit-content;
         max-width: 100%;
-        color: rgba(236, 247, 244, 0.82);
+        color: var(--muted);
         font-size: 0.78rem;
         margin: -4px 0 14px auto;
         padding: 7px 11px;
         border-radius: var(--radius-chip);
-        background: rgba(47, 152, 255, 0.1);
-        border: 1px solid rgba(47, 152, 255, 0.18);
+        background: var(--info-muted);
+        border: 1px solid var(--info-border);
         letter-spacing: 0.02em;
-        opacity: 0.88;
+        opacity: 0.95;
       }
 
       .clima-lista {
@@ -452,9 +459,9 @@
           max(16px, env(safe-area-inset-right, 0px))
           max(16px, env(safe-area-inset-bottom, 0px))
           max(16px, env(safe-area-inset-left, 0px));
-        background: rgba(2, 8, 10, 0.78);
-        -webkit-backdrop-filter: blur(10px);
-        backdrop-filter: blur(10px);
+        background: var(--overlay-scrim);
+        -webkit-backdrop-filter: blur(8px);
+        backdrop-filter: blur(8px);
       }
 
       .info-modal-wrap.active {
@@ -470,7 +477,7 @@
         border-radius: var(--radius-panel);
         border: 1px solid var(--line);
         background: var(--card);
-        box-shadow: 0 16px 48px rgba(0, 0, 0, 0.45);
+        box-shadow: var(--shadow-md);
         animation: fade 0.5s ease;
       }
 
@@ -480,7 +487,7 @@
         justify-content: space-between;
         gap: 16px;
         padding: 20px clamp(16px, 3vw, 26px);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        border-bottom: 1px solid var(--line);
       }
 
       .info-modal-kicker {
@@ -507,13 +514,13 @@
 
       .info-modal-fechar {
         flex: 0 0 auto;
-        border: 1px solid rgba(255, 255, 255, 0.18);
+        border: 1px solid var(--line);
         border-radius: var(--radius-chip);
         padding: 9px 12px;
         color: var(--text);
-        background: rgba(255, 255, 255, 0.08);
+        background: var(--bg-soft);
         font: inherit;
-        font-weight: 800;
+        font-weight: 700;
         cursor: pointer;
       }
 
@@ -530,33 +537,20 @@
 
       .telefone-card,
       .onibus-card {
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        border-radius: 10px;
-        background:
-          linear-gradient(145deg, rgba(255, 255, 255, 0.075), transparent 52%),
-          rgba(255, 255, 255, 0.045);
+        border: 1px solid var(--line);
+        border-radius: var(--radius-chip);
+        background: var(--bg-soft);
         padding: 16px;
-        box-shadow:
-          0 10px 24px rgba(0, 0, 0, 0.22),
-          inset 0 1px 0 rgba(255, 255, 255, 0.06);
+        box-shadow: var(--shadow-sm);
         transition:
-          transform 0.22s ease,
-          border-color 0.22s ease,
-          background 0.22s ease,
-          box-shadow 0.22s ease;
+          border-color 0.2s ease,
+          background 0.2s ease;
       }
 
       .telefone-card:hover,
       .onibus-card:hover {
-        transform: translateY(-3px);
-        border-color: rgba(44, 230, 159, 0.34);
-        background:
-          linear-gradient(145deg, rgba(44, 230, 159, 0.08), transparent 50%),
-          rgba(255, 255, 255, 0.068);
-        box-shadow:
-          0 16px 32px rgba(0, 0, 0, 0.28),
-          0 0 18px rgba(44, 230, 159, 0.08),
-          inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        border-color: rgba(43, 191, 143, 0.35);
+        background: rgba(0, 0, 0, 0.15);
       }
 
       .telefone-card strong {
@@ -569,10 +563,10 @@
       .telefone-card span {
         display: block;
         margin-top: 10px;
-        color: #d7eee7;
+        color: var(--muted);
         font-family: "Archivo", sans-serif;
         font-size: 1.08rem;
-        font-weight: 800;
+        font-weight: 700;
       }
 
       .telefone-ligar {
@@ -583,22 +577,17 @@
         width: 100%;
         margin-top: 14px;
         padding: 10px 12px;
-        border-radius: 12px;
-        background: linear-gradient(135deg, #22c55e, #2ce69f);
-        color: #032016;
+        border-radius: var(--radius-chip);
+        background: var(--btn-ok-bg);
+        color: var(--btn-ok-fg);
         text-decoration: none;
-        font-weight: 900;
-        box-shadow: 0 10px 22px rgba(34, 197, 94, 0.2);
-        transition:
-          transform 0.18s ease,
-          filter 0.18s ease,
-          box-shadow 0.18s ease;
+        font-weight: 700;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        transition: filter 0.15s ease;
       }
 
       .telefone-ligar:hover {
-        transform: translateY(-1px);
         filter: brightness(1.05);
-        box-shadow: 0 14px 28px rgba(34, 197, 94, 0.26);
       }
 
       .info-modal-nota {
@@ -622,17 +611,10 @@
         position: relative;
         overflow: hidden;
         padding: clamp(16px, 2.6vw, 20px);
-        border-radius: 10px;
-        border-color: rgba(255, 255, 255, 0.16);
-        background:
-          radial-gradient(circle at 18% 0%, rgba(47, 152, 255, 0.18), transparent 38%),
-          radial-gradient(circle at 92% 18%, rgba(255, 209, 102, 0.12), transparent 34%),
-          linear-gradient(145deg, rgba(255, 255, 255, 0.08), transparent 50%),
-          rgba(8, 22, 30, 0.84);
-        box-shadow:
-          0 18px 42px rgba(0, 0, 0, 0.3),
-          0 0 26px rgba(47, 152, 255, 0.1),
-          inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        border-radius: var(--radius-chip);
+        border: 1px solid var(--line);
+        background: var(--card);
+        box-shadow: var(--shadow-sm);
       }
 
       .onibus-card::before {
@@ -640,8 +622,12 @@
         position: absolute;
         inset: 0;
         pointer-events: none;
-        background: linear-gradient(120deg, rgba(255, 255, 255, 0.12), transparent 34%);
-        opacity: 0.72;
+        background: linear-gradient(
+          165deg,
+          rgba(255, 255, 255, 0.03) 0%,
+          transparent 45%
+        );
+        opacity: 1;
       }
 
       .onibus-card > * {
@@ -663,13 +649,9 @@
         height: 48px;
         flex: 0 0 auto;
         border-radius: 8px;
-        background:
-          linear-gradient(135deg, rgba(47, 152, 255, 0.32), rgba(6, 214, 160, 0.18)),
-          rgba(255, 255, 255, 0.08);
-        border: 1px solid rgba(255, 255, 255, 0.16);
-        box-shadow:
-          0 12px 24px rgba(47, 152, 255, 0.12),
-          inset 0 1px 0 rgba(255, 255, 255, 0.16);
+        background: var(--info-muted);
+        border: 1px solid var(--info-border);
+        box-shadow: none;
       }
 
       .onibus-card-label {
@@ -677,14 +659,14 @@
         margin-bottom: 2px;
         color: var(--accent);
         font-size: 0.72rem;
-        font-weight: 900;
-        letter-spacing: 0.12em;
+        font-weight: 800;
+        letter-spacing: 0.1em;
         text-transform: uppercase;
       }
 
       .onibus-card h3 {
         margin: 0;
-        color: #e9fffb;
+        color: var(--text);
         font-family: "Archivo", sans-serif;
         font-size: clamp(1.12rem, 2.6vw, 1.32rem);
         letter-spacing: -0.02em;
@@ -693,12 +675,10 @@
       .onibus-rota {
         margin: 12px 0 0;
         padding: 14px;
-        border-radius: 10px;
-        background:
-          linear-gradient(145deg, rgba(255, 255, 255, 0.06), transparent 50%),
-          rgba(0, 0, 0, 0.22);
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+        border-radius: var(--radius-chip);
+        background: var(--bg-soft);
+        border: 1px solid var(--line);
+        box-shadow: none;
       }
 
       .onibus-rota:first-of-type {
@@ -722,9 +702,9 @@
         height: 28px;
         flex: 0 0 auto;
         border-radius: var(--radius-chip);
-        color: #04291f;
-        background: linear-gradient(135deg, #ffd166, #2ce69f);
-        box-shadow: 0 8px 18px rgba(6, 214, 160, 0.14);
+        color: var(--btn-ok-fg);
+        background: var(--accent);
+        box-shadow: none;
       }
 
       .onibus-horarios {
@@ -739,18 +719,14 @@
         justify-content: center;
         min-height: 42px;
         padding: 9px 12px;
-        border-radius: 14px;
-        color: #effcff;
-        background:
-          linear-gradient(145deg, rgba(47, 152, 255, 0.22), rgba(6, 214, 160, 0.09)),
-          rgba(255, 255, 255, 0.055);
-        border: 1px solid rgba(47, 152, 255, 0.28);
+        border-radius: var(--radius-chip);
+        color: var(--text);
+        background: var(--info-muted);
+        border: 1px solid var(--info-border);
         font-family: "Archivo", sans-serif;
         font-size: 1rem;
-        font-weight: 800;
-        box-shadow:
-          0 8px 18px rgba(0, 0, 0, 0.16),
-          inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        font-weight: 700;
+        box-shadow: none;
       }
 
       .busca {
@@ -1331,7 +1307,7 @@
       .sobre-wrap {
         position: fixed;
         inset: 0;
-        background: rgba(2, 8, 12, 0.75);
+        background: var(--overlay-scrim);
         display: none;
         align-items: center;
         justify-content: center;
@@ -1345,10 +1321,11 @@
 
       .sobre-card {
         width: min(560px, 100%);
-        background: linear-gradient(180deg, #102028, #0d1a20);
-        border: 1px solid rgba(255, 255, 255, 0.18);
-        border-radius: 10px;
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: var(--radius-panel);
         padding: 16px;
+        box-shadow: var(--shadow-md);
       }
 
       .sobre-card h3 {
@@ -1368,28 +1345,30 @@
       }
 
       .sobre-btn {
-        border: none;
-        border-radius: 10px;
+        border: 1px solid transparent;
+        border-radius: var(--radius-chip);
         padding: 10px 12px;
         font-family: inherit;
-        font-weight: 700;
+        font-weight: 600;
         cursor: pointer;
       }
 
       .sobre-btn.admin {
-        background: linear-gradient(135deg, #2f98ff, #62b9ff);
-        color: #03223d;
+        background: var(--btn-primary-bg);
+        color: var(--btn-primary-fg);
+        border-color: rgba(0, 0, 0, 0.1);
       }
 
       .sobre-btn.fechar {
-        background: rgba(255, 255, 255, 0.1);
+        background: var(--bg-soft);
         color: var(--text);
+        border-color: var(--line);
       }
 
       .acesso-local-wrap {
         position: fixed;
         inset: 0;
-        background: rgba(2, 8, 12, 0.8);
+        background: var(--overlay-scrim);
         display: none;
         align-items: center;
         justify-content: center;
@@ -1403,10 +1382,11 @@
 
       .acesso-local-card {
         width: min(420px, 100%);
-        background: linear-gradient(180deg, #102028, #0d1a20);
-        border: 1px solid rgba(255, 255, 255, 0.18);
-        border-radius: 10px;
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: var(--radius-panel);
         padding: 16px;
+        box-shadow: var(--shadow-md);
       }
 
       .acesso-local-card h3 {
@@ -1445,9 +1425,9 @@
       .acesso-local-grid input {
         width: 100%;
         padding: 10px 12px;
-        border-radius: 10px;
-        border: 1px solid rgba(255, 255, 255, 0.14);
-        background: rgba(8, 19, 24, 0.7);
+        border-radius: var(--radius-chip);
+        border: 1px solid var(--line);
+        background: var(--bg-soft);
         color: var(--text);
         font-family: inherit;
       }
@@ -1460,22 +1440,24 @@
       }
 
       .acesso-local-btn {
-        border: none;
-        border-radius: 10px;
+        border: 1px solid transparent;
+        border-radius: var(--radius-chip);
         padding: 10px 12px;
         font-family: inherit;
-        font-weight: 800;
+        font-weight: 700;
         cursor: pointer;
       }
 
       .acesso-local-btn.entrar {
-        background: linear-gradient(135deg, #2f98ff, #62b9ff);
-        color: #03223d;
+        background: var(--btn-primary-bg);
+        color: var(--btn-primary-fg);
+        border-color: rgba(0, 0, 0, 0.1);
       }
 
       .acesso-local-btn.cancelar {
-        background: rgba(255, 255, 255, 0.1);
+        background: var(--bg-soft);
         color: var(--text);
+        border-color: var(--line);
       }
 
       .acesso-local-msg {
@@ -1488,7 +1470,7 @@
       .admin-wrap {
         position: fixed;
         inset: 0;
-        background: rgba(2, 8, 12, 0.75);
+        background: var(--overlay-scrim);
         display: none;
         align-items: center;
         justify-content: center;
@@ -1504,13 +1486,11 @@
         width: min(720px, 100%);
         max-height: 92vh;
         overflow: auto;
-        background:
-          linear-gradient(145deg, rgba(255, 255, 255, 0.06), transparent 44%),
-          linear-gradient(180deg, #102028, #0d1a20);
-        border: 1px solid rgba(255, 255, 255, 0.18);
-        border-radius: 12px;
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: var(--radius-panel);
         padding: 20px;
-        box-shadow: 0 24px 72px rgba(0, 0, 0, 0.42);
+        box-shadow: var(--shadow-md);
       }
 
       .admin-topo {
@@ -1533,20 +1513,20 @@
       }
 
       .admin-fechar {
-        background: transparent;
+        background: var(--bg-soft);
         color: var(--text);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        border-radius: 10px;
+        border: 1px solid var(--line);
+        border-radius: var(--radius-chip);
         padding: 8px 10px;
         cursor: pointer;
         font-family: inherit;
       }
 
       .admin-sair {
-        background: rgba(255, 255, 255, 0.08);
+        background: var(--bg-soft);
         color: var(--text);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        border-radius: 10px;
+        border: 1px solid var(--line);
+        border-radius: var(--radius-chip);
         padding: 8px 10px;
         cursor: pointer;
         font-family: inherit;
@@ -1554,10 +1534,10 @@
       }
 
       .admin-login {
-        border: 1px solid rgba(255, 255, 255, 0.14);
-        border-radius: 12px;
+        border: 1px solid var(--line);
+        border-radius: var(--radius-panel);
         padding: 12px;
-        background: rgba(255, 255, 255, 0.03);
+        background: var(--bg-soft);
         margin-bottom: 12px;
       }
 
@@ -1583,9 +1563,9 @@
       .admin-login-grid input {
         width: 100%;
         padding: 10px 12px;
-        border-radius: 10px;
-        border: 1px solid rgba(255, 255, 255, 0.14);
-        background: rgba(8, 19, 24, 0.7);
+        border-radius: var(--radius-chip);
+        border: 1px solid var(--line);
+        background: var(--card);
         color: var(--text);
         font-family: inherit;
       }
@@ -1598,12 +1578,12 @@
       }
 
       .admin-entrar {
-        background: linear-gradient(135deg, #2f98ff, #62b9ff);
-        color: #03223d;
-        border: none;
-        border-radius: 10px;
+        background: var(--btn-primary-bg);
+        color: var(--btn-primary-fg);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: var(--radius-chip);
         padding: 10px 12px;
-        font-weight: 800;
+        font-weight: 700;
         cursor: pointer;
         font-family: inherit;
       }
@@ -1614,7 +1594,7 @@
 
       .admin-subtitle {
         margin: -2px 0 16px;
-        color: rgba(195, 224, 218, 0.78);
+        color: var(--muted);
         font-size: 0.9rem;
         line-height: 1.45;
       }
@@ -1642,9 +1622,9 @@
       .admin-grid textarea {
         width: 100%;
         padding: 12px 13px;
-        border-radius: 12px;
-        border: 1px solid rgba(255, 255, 255, 0.14);
-        background: rgba(8, 19, 24, 0.78);
+        border-radius: var(--radius-chip);
+        border: 1px solid var(--line);
+        background: var(--bg-soft);
         color: var(--text);
         font-family: inherit;
       }
@@ -1653,8 +1633,8 @@
       .admin-grid select:focus,
       .admin-grid textarea:focus {
         outline: none;
-        border-color: rgba(6, 214, 160, 0.58);
-        box-shadow: 0 0 0 3px rgba(6, 214, 160, 0.14);
+        border-color: rgba(43, 191, 143, 0.55);
+        box-shadow: 0 0 0 2px rgba(43, 191, 143, 0.12);
       }
 
       .admin-grid textarea {
@@ -1672,44 +1652,36 @@
       }
 
       #adminPlano.plano-basico {
-        background: rgba(255, 255, 255, 0.06);
-        border-color: rgba(255, 255, 255, 0.2);
-        color: #d8ebe7;
+        background: var(--bg-soft);
+        border-color: var(--line);
+        color: var(--muted);
       }
 
       #adminPlano.plano-standard {
-        background: linear-gradient(
-          135deg,
-          rgba(255, 209, 102, 0.25),
-          rgba(255, 209, 102, 0.1)
-        );
-        border-color: rgba(255, 209, 102, 0.55);
-        color: #ffe8b7;
+        background: rgba(232, 188, 92, 0.14);
+        border-color: rgba(232, 188, 92, 0.45);
+        color: #f0e0b8;
       }
 
       #adminPlano.plano-vip {
-        background: linear-gradient(
-          135deg,
-          rgba(47, 152, 255, 0.35),
-          rgba(80, 200, 255, 0.2)
-        );
-        border-color: rgba(47, 152, 255, 0.85);
-        color: #d8efff;
-        box-shadow: 0 0 0 2px rgba(47, 152, 255, 0.22);
+        background: var(--info-muted);
+        border-color: var(--info-border);
+        color: #c5dff5;
+        box-shadow: none;
       }
 
       .admin-telefone-wrap {
         display: flex;
         align-items: center;
-        border: 1px solid rgba(255, 255, 255, 0.14);
-        border-radius: 10px;
-        background: rgba(8, 19, 24, 0.7);
+        border: 1px solid var(--line);
+        border-radius: var(--radius-chip);
+        background: var(--bg-soft);
       }
 
       .admin-telefone-prefixo {
         padding: 10px 10px 10px 12px;
         color: var(--muted);
-        border-right: 1px solid rgba(255, 255, 255, 0.12);
+        border-right: 1px solid var(--line);
         font-size: 13px;
       }
 
@@ -1734,7 +1706,7 @@
       .admin-status-panel {
         margin-top: 18px;
         padding-top: 16px;
-        border-top: 1px solid rgba(255, 255, 255, 0.12);
+        border-top: 1px solid var(--line);
       }
 
       .admin-status-head {
@@ -1753,7 +1725,7 @@
 
       .admin-status-head p {
         margin: 4px 0 0;
-        color: rgba(195, 224, 218, 0.72);
+        color: var(--muted);
         font-size: 0.84rem;
       }
 
@@ -1768,17 +1740,17 @@
       .admin-status-tools input {
         width: 100%;
         padding: 10px 12px;
-        border-radius: 12px;
-        border: 1px solid rgba(255, 255, 255, 0.14);
-        background: rgba(8, 19, 24, 0.78);
+        border-radius: var(--radius-chip);
+        border: 1px solid var(--line);
+        background: var(--bg-soft);
         color: var(--text);
         font: inherit;
       }
 
       .admin-status-tools input:focus {
         outline: none;
-        border-color: rgba(6, 214, 160, 0.58);
-        box-shadow: 0 0 0 3px rgba(6, 214, 160, 0.14);
+        border-color: rgba(43, 191, 143, 0.55);
+        box-shadow: 0 0 0 2px rgba(43, 191, 143, 0.12);
       }
 
       .admin-status-resumo {
@@ -1802,9 +1774,9 @@
         align-items: center;
         gap: 10px;
         padding: 10px 12px;
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        border-radius: 12px;
-        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid var(--line);
+        border-radius: var(--radius-chip);
+        background: var(--bg-soft);
       }
 
       .admin-status-nome {
@@ -1837,8 +1809,9 @@
       }
 
       .admin-status-badge.ativo {
-        color: #04140a;
-        background: linear-gradient(180deg, #47ff91, #1db954);
+        color: var(--btn-ok-fg);
+        background: var(--btn-ok-bg);
+        border: 1px solid rgba(0, 0, 0, 0.08);
       }
 
       .admin-status-badge.inativo {
@@ -1848,14 +1821,14 @@
       }
 
       .admin-status-toggle {
-        border: 1px solid rgba(255, 255, 255, 0.18);
+        border: 1px solid var(--line);
         border-radius: var(--radius-chip);
         padding: 8px 11px;
         color: var(--text);
-        background: rgba(255, 255, 255, 0.08);
+        background: var(--bg-soft);
         font: inherit;
         font-size: 0.82rem;
-        font-weight: 800;
+        font-weight: 700;
         cursor: pointer;
       }
 
@@ -1867,21 +1840,21 @@
       }
 
       .admin-status-editar {
-        border: 1px solid rgba(47, 152, 255, 0.38);
+        border: 1px solid var(--info-border);
         border-radius: var(--radius-chip);
         padding: 8px 11px;
-        color: #d8efff;
-        background: rgba(47, 152, 255, 0.12);
+        color: var(--text);
+        background: var(--info-muted);
         font: inherit;
         font-size: 0.82rem;
-        font-weight: 800;
+        font-weight: 700;
         cursor: pointer;
       }
 
       .admin-status-toggle.ativar {
-        color: #06130d;
-        background: linear-gradient(180deg, #47ff91, #1db954);
-        border-color: rgba(255, 255, 255, 0.28);
+        color: var(--btn-ok-fg);
+        background: var(--btn-ok-bg);
+        border-color: rgba(0, 0, 0, 0.1);
       }
 
       .admin-status-toggle.desativar {
@@ -1891,28 +1864,28 @@
       }
 
       .admin-salvar {
-        background: linear-gradient(135deg, #06d6a0, #52f2c5);
-        color: #04291f;
-        border: none;
-        border-radius: 10px;
+        background: var(--btn-ok-bg);
+        color: var(--btn-ok-fg);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: var(--radius-chip);
         padding: 10px 12px;
-        font-weight: 800;
+        font-weight: 700;
         cursor: pointer;
         font-family: inherit;
       }
 
       .admin-limpar,
       .admin-excluir {
-        border: 1px solid rgba(255, 255, 255, 0.18);
-        border-radius: 10px;
+        border: 1px solid var(--line);
+        border-radius: var(--radius-chip);
         padding: 10px 12px;
-        font-weight: 800;
+        font-weight: 700;
         cursor: pointer;
         font-family: inherit;
       }
 
       .admin-limpar {
-        background: rgba(255, 255, 255, 0.1);
+        background: var(--bg-soft);
         color: var(--text);
       }
 
@@ -1923,12 +1896,12 @@
       }
 
       .admin-salvar-secundario {
-        background: rgba(255, 255, 255, 0.1);
+        background: var(--bg-soft);
         color: var(--text);
-        border: 1px solid rgba(255, 255, 255, 0.22);
-        border-radius: 10px;
+        border: 1px solid var(--line);
+        border-radius: var(--radius-chip);
         padding: 10px 12px;
-        font-weight: 800;
+        font-weight: 700;
         cursor: pointer;
         font-family: inherit;
       }
@@ -2020,13 +1993,13 @@
       .admin-btn-wa {
         flex-shrink: 0;
         padding: 8px 12px;
-        border-radius: 10px;
-        border: none;
-        font-weight: 800;
+        border-radius: var(--radius-chip);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        font-weight: 700;
         font-family: inherit;
         cursor: pointer;
-        background: linear-gradient(135deg, #25d366, #1ebe5b);
-        color: #042210;
+        background: #1fa855;
+        color: var(--btn-ok-fg);
         text-decoration: none;
         font-size: 12px;
       }
@@ -2043,17 +2016,11 @@
         margin: auto;
         line-height: 1.8;
         color: var(--muted);
-        background:
-          linear-gradient(145deg, rgba(255, 255, 255, 0.07), transparent 45%),
-          rgba(255, 255, 255, 0.045);
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        border-radius: 12px;
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: var(--radius-panel);
         padding: clamp(18px, 3vw, 26px);
-        box-shadow:
-          0 14px 34px rgba(0, 0, 0, 0.22),
-          inset 0 1px 0 rgba(255, 255, 255, 0.06);
-        -webkit-backdrop-filter: blur(10px);
-        backdrop-filter: blur(10px);
+        box-shadow: var(--shadow-sm);
       }
 
       .cep-wrap {
