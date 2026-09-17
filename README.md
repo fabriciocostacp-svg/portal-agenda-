@@ -1,48 +1,81 @@
-# 📅 Portal Agenda
+# 🌐 Portal Itirapina & Broa
 
-Aplicação web desenvolvida para centralizar e organizar informações em um portal com estrutura própria de front-end e servidor Node.js.
+Portal regional criado para reunir, em um único lugar, informações úteis para moradores, turistas e empresas de **Itirapina/SP e região do Broa**.
 
-O projeto utiliza uma arquitetura simples e prática, com páginas web integradas a uma API em Express e configuração preparada para publicação em ambiente web.
+O projeto nasceu da ideia de fortalecer o comércio local e facilitar o acesso da população a serviços, contatos e informações do dia a dia.
+
+🔗 **Projeto online:** https://portal.flconectadigital.com.br
 
 ---
 
-## 🚀 Recursos do projeto
+## 🚀 Principais funcionalidades
 
-- 🌐 Portal web responsivo
-- ⚙️ Backend em Node.js com Express
-- 🔐 Configuração segura de servidor com Helmet
-- 🚦 Controle de requisições com rate limiting
-- 🔄 Suporte a CORS
-- 🔧 Configurações por variáveis de ambiente
-- ☁️ Estrutura preparada para deploy
-- 📦 Organização de arquivos para manutenção e evolução do sistema
+- 🏢 Guia de empresas e serviços locais
+- 🔎 Busca por nome, categoria e telefone
+- 📞 Telefones úteis
+- 🚌 Horários de ônibus
+- 📍 Consulta de CEP por rua, bairro ou CEP
+- 🌤️ Previsão do tempo
+- 📊 Contador de acessos
+- 📱 Layout responsivo para celular e computador
+- 💬 Contato direto via WhatsApp
+- ⭐ Planos de destaque para empresas
+- 🖼️ Exibição de fotos e informações dos estabelecimentos
+- 🔐 Área administrativa para gerenciamento do portal
+- ☁️ Integração com banco de dados
+- 🔧 Backend Node.js para configuração e serviços auxiliares
 
 ---
 
 ## 🛠️ Tecnologias utilizadas
 
-- HTML
-- CSS
+- HTML5
+- CSS3
 - JavaScript
 - Node.js
 - Express
+- Supabase
+- Git & GitHub
+- Vercel
+- cPanel
+
+Também foram aplicados recursos de segurança e configuração com:
+
 - dotenv
 - Helmet
 - express-rate-limit
 - CORS
-- Git & GitHub
 
 ---
 
-## 🎯 Objetivo
+## 🎯 Objetivo do projeto
 
-O Portal Agenda foi desenvolvido como uma solução web para concentrar informações e funcionalidades em uma única aplicação, permitindo evolução contínua e integração entre interface e servidor.
+O Portal Itirapina & Broa foi desenvolvido para funcionar como um **guia digital regional**, aproximando empresas, moradores e visitantes.
 
-O projeto faz parte do meu portfólio de desenvolvimento e demonstra experiência prática com front-end, Node.js, configuração de servidor, publicação e versionamento de código.
+Além de divulgar negócios locais, o sistema oferece utilidades públicas e informações que podem ser acessadas rapidamente pelo celular.
+
+O projeto é uma aplicação real em constante evolução e faz parte do meu portfólio como Desenvolvedor Web.
 
 ---
 
-## ▶️ Como executar localmente
+## 💡 Recursos de administração
+
+A área administrativa permite gerenciar os estabelecimentos exibidos no portal, incluindo informações como:
+
+- Nome
+- Categoria
+- Telefone / WhatsApp
+- Plano
+- Instagram
+- Site ou cardápio
+- Status ativo/inativo
+- Informações e imagens do estabelecimento
+
+Isso permite que o conteúdo do portal seja atualizado sem precisar alterar manualmente a página pública a cada mudança.
+
+---
+
+## ▶️ Execução local
 
 ```bash
 npm install
@@ -63,7 +96,7 @@ npm run dev
 
 Estudante de Análise e Desenvolvimento de Sistemas e Desenvolvedor Web Júnior.
 
-🌐 Portfólio: https://flconectadigital.com.br
+🌐 FL Conecta Digital: https://flconectadigital.com.br
 
 💼 LinkedIn: https://www.linkedin.com/in/fabricio-costa-b71b293a9
 
@@ -71,4 +104,4 @@ Estudante de Análise e Desenvolvimento de Sistemas e Desenvolvedor Web Júnior.
 
 ---
 
-> Projeto em evolução, com melhorias contínuas de estrutura, desempenho e funcionalidades.
+> Projeto real em evolução contínua, com novas funcionalidades e melhorias sendo adicionadas conforme as necessidades dos usuários e empresas locais.
