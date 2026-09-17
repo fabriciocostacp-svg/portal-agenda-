@@ -1,14 +1,28 @@
 # 🌐 Portal Itirapina & Broa
 
-Portal regional criado para reunir, em um único lugar, informações úteis para moradores, turistas e empresas de **Itirapina/SP e região do Broa**.
+<p align="center">
+  <img src="https://raw.githubusercontent.com/fabriciocostacp-svg/portal-agenda-/main/assets/og-portal.jpeg" alt="Portal Itirapina e Broa" width="100%" />
+</p>
 
-O projeto nasceu da ideia de fortalecer o comércio local e facilitar o acesso da população a serviços, contatos e informações do dia a dia.
+<p align="center">
+  <strong>Guia digital regional para moradores, turistas e empresas de Itirapina/SP e região do Broa.</strong>
+</p>
 
-🔗 **Projeto online:** https://portal.flconectadigital.com.br
+<p align="center">
+  <a href="https://portal.flconectadigital.com.br"><strong>🌐 Acessar projeto online</strong></a>
+</p>
 
 ---
 
-## 🚀 Principais funcionalidades
+## 📌 Sobre o projeto
+
+O **Portal Itirapina & Broa** foi criado para reunir informações úteis da região em um único ambiente digital, aproximando moradores, visitantes e comércio local.
+
+Além da divulgação de empresas e serviços, o portal disponibiliza utilidades públicas e recursos de acesso rápido para celular e computador.
+
+Este é um **projeto real em evolução contínua**, desenvolvido e mantido como parte do meu portfólio de desenvolvimento web.
+
+## ✨ Principais funcionalidades
 
 - 🏢 Guia de empresas e serviços locais
 - 🔎 Busca por nome, categoria e telefone
@@ -17,65 +31,50 @@ O projeto nasceu da ideia de fortalecer o comércio local e facilitar o acesso d
 - 📍 Consulta de CEP por rua, bairro ou CEP
 - 🌤️ Previsão do tempo
 - 📊 Contador de acessos
-- 📱 Layout responsivo para celular e computador
+- 📱 Interface responsiva
 - 💬 Contato direto via WhatsApp
 - ⭐ Planos de destaque para empresas
-- 🖼️ Exibição de fotos e informações dos estabelecimentos
-- 🔐 Área administrativa para gerenciamento do portal
+- 🖼️ Fotos, logotipos e informações dos estabelecimentos
+- 🔐 Área administrativa
 - ☁️ Integração com banco de dados
-- 🔧 Backend Node.js para configuração e serviços auxiliares
+- ⚙️ Backend Node.js para rotinas e serviços auxiliares
 
----
+## 🛠️ Tecnologias
 
-## 🛠️ Tecnologias utilizadas
+**Front-end:** `HTML5` · `CSS3` · `JavaScript`
 
-- HTML5
-- CSS3
-- JavaScript
-- Node.js
-- Express
-- Supabase
-- Git & GitHub
-- Vercel
-- cPanel
+**Back-end:** `Node.js` · `Express`
 
-Também foram aplicados recursos de segurança e configuração com:
+**Banco de dados:** `Supabase`
 
-- dotenv
-- Helmet
-- express-rate-limit
-- CORS
+**Publicação e infraestrutura:** `Vercel` · `cPanel`
 
----
+**Versionamento:** `Git` · `GitHub`
 
-## 🎯 Objetivo do projeto
+Também são utilizados `dotenv`, `Helmet`, `express-rate-limit` e `CORS` para configuração e segurança da aplicação.
 
-O Portal Itirapina & Broa foi desenvolvido para funcionar como um **guia digital regional**, aproximando empresas, moradores e visitantes.
+## 🔐 Área administrativa
 
-Além de divulgar negócios locais, o sistema oferece utilidades públicas e informações que podem ser acessadas rapidamente pelo celular.
+A área administrativa permite gerenciar os estabelecimentos exibidos no portal, incluindo:
 
-O projeto é uma aplicação real em constante evolução e faz parte do meu portfólio como Desenvolvedor Web.
+- nome e categoria;
+- telefone e WhatsApp;
+- plano de destaque;
+- Instagram;
+- site ou cardápio;
+- status ativo/inativo;
+- informações adicionais;
+- imagens e logotipos.
 
----
+Com isso, o conteúdo pode ser atualizado sem precisar editar manualmente a página pública a cada alteração.
 
-## 💡 Recursos de administração
+## 🔒 Configuração e segurança
 
-A área administrativa permite gerenciar os estabelecimentos exibidos no portal, incluindo informações como:
+As configurações sensíveis são tratadas por variáveis de ambiente. Arquivos `.env` não são versionados no repositório.
 
-- Nome
-- Categoria
-- Telefone / WhatsApp
-- Plano
-- Instagram
-- Site ou cardápio
-- Status ativo/inativo
-- Informações e imagens do estabelecimento
+O projeto inclui um arquivo de exemplo de configuração para facilitar a execução em outros ambientes sem publicar credenciais privadas.
 
-Isso permite que o conteúdo do portal seja atualizado sem precisar alterar manualmente a página pública a cada mudança.
-
----
-
-## ▶️ Execução local
+## ▶️ Como executar localmente
 
 ```bash
 npm install
@@ -88,20 +87,15 @@ Para desenvolvimento:
 npm run dev
 ```
 
----
-
 ## 👨‍💻 Desenvolvedor
 
-**Fabricio Costa Cyrillo Pereira**
+**Fabricio Costa Cyrillo Pereira**  
+Estudante de Análise e Desenvolvimento de Sistemas · Desenvolvedor Web Júnior
 
-Estudante de Análise e Desenvolvimento de Sistemas e Desenvolvedor Web Júnior.
-
-🌐 FL Conecta Digital: https://flconectadigital.com.br
-
-💼 LinkedIn: https://www.linkedin.com/in/fabricio-costa-b71b293a9
-
-🐙 GitHub: https://github.com/fabriciocostacp-svg
+- 🌐 [FL Conecta Digital](https://flconectadigital.com.br)
+- 💼 [LinkedIn](https://www.linkedin.com/in/fabricio-costa-b71b293a9)
+- 🐙 [GitHub](https://github.com/fabriciocostacp-svg)
 
 ---
 
-> Projeto real em evolução contínua, com novas funcionalidades e melhorias sendo adicionadas conforme as necessidades dos usuários e empresas locais.
+> Projeto real desenvolvido para atender necessidades locais e evoluído continuamente com novas funcionalidades e melhorias.
