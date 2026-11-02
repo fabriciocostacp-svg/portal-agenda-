@@ -19,6 +19,7 @@ const { conteudoSitemapXml, conteudoRobotsTxt } = require("./seo-origin.js");
 
 const express = require("express");
 const cors = require("cors");
+const crypto = require("crypto");
 const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
 
@@ -153,6 +154,13 @@ function credenciaisAdminLocal() {
   return { user: u, pass: p };
 }
 
+/** Compara senhas em tempo constante (evita descobrir a senha medindo o tempo de resposta). */
+function senhasIguais(a, b) {
+  const ha = crypto.createHash("sha256").update(String(a)).digest();
+  const hb = crypto.createHash("sha256").update(String(b)).digest();
+  return crypto.timingSafeEqual(ha, hb);
+}
+
 const windowMs = Number(process.env.ADMIN_LOCAL_WINDOW_MS) || 15 * 60 * 1000;
 const maxAttempts = Number(process.env.ADMIN_LOCAL_MAX_ATTEMPTS) || 120;
 const loginLimiter = rateLimit({
@@ -194,23 +202,15 @@ app.post("/api/admin/local-login", loginLimiter, (req, res) => {
     return res.status(401).json({ error: "Preencha a senha." });
   }
 
-  if (senha === passEsp) {
+  if (senhasIguais(senha, passEsp)) {
     return res.status(204).send();
   }
 
   // eslint-disable-next-line no-console
-  console.warn("[local-login] negado", {
-    passOk: false,
-    lenSenha: senha.length,
-    lenPassEnv: passEsp.length,
-  });
+  console.warn("[local-login] negado");
 
-  const dicaComprimento =
-    passEsp.length > 0 && senha.length !== passEsp.length
-      ? ` (a senha configurada tem ${passEsp.length} caracteres)`
-      : "";
   return res.status(401).json({
-    error: `Senha inválida.${dicaComprimento} Confira o .env na pasta do projeto (junto ao server.js), reinicie o servidor após alterar e use a mesma URL (ex.: http://localhost:${PORT}/).`,
+    error: `Senha inválida. Confira o .env na pasta do projeto (junto ao server.js), reinicie o servidor após alterar e use a mesma URL (ex.: http://localhost:${PORT}/).`,
   });
 });
 
@@ -251,6 +251,14 @@ app.get("/robots.txt", (req, res) => {
 
 const raiz = __dirname;
 
+/** Arquivos internos (código do servidor, SQL do banco, configs) não devem ser servidos ao navegador. */
+const ARQUIVOS_PRIVADOS =
+  /(\.sql$|\.md$|^\/(server|seo-origin|portal-config-env)\.js$|^\/package(-lock)?\.json$|^\/vercel\.json$|^\/api\/)/i;
+app.use((req, res, next) => {
+  if (ARQUIVOS_PRIVADOS.test(req.path)) return res.status(404).send("Não encontrado");
+  next();
+});
+
 app.use(
   express.static(raiz, {
     index: false,
@@ -271,6 +279,6 @@ app.listen(PORT, () => {
   const { pass: p } = credenciaisAdminLocal();
   // eslint-disable-next-line no-console
   console.log(
-    `Portal: http://localhost:${PORT}/  | Acesso local: senha ${p.length} caracteres no .env (ADMIN_LOCAL_PASS)`,
+    `Portal: http://localhost:${PORT}/  | Acesso local: ${p.length ? "ativo" : "desativado"} (ADMIN_LOCAL_PASS no .env)`,
   );
 });

@@ -2,6 +2,15 @@
  * Vercel: POST /api/admin/local-login
  * Defina ADMIN_LOCAL_PASS nas Environment Variables do projeto (mesmo valor do .env local).
  */
+const crypto = require("crypto");
+
+/** Compara senhas em tempo constante. */
+function senhasIguais(a, b) {
+  const ha = crypto.createHash("sha256").update(String(a)).digest();
+  const hb = crypto.createHash("sha256").update(String(b)).digest();
+  return crypto.timingSafeEqual(ha, hb);
+}
+
 function sanitizarTextoCredencial(s) {
   return String(s ?? "")
     .replace(/[\u200B-\u200D\uFEFF]/g, "")
@@ -47,15 +56,12 @@ module.exports = (req, res) => {
     return res.status(401).json({ error: "Preencha a senha." });
   }
 
-  if (senha === passEsp) {
+  if (senhasIguais(senha, passEsp)) {
     return res.status(204).send();
   }
 
-  const dicaComprimento =
-    passEsp.length > 0 && senha.length !== passEsp.length
-      ? ` (a senha configurada tem ${passEsp.length} caracteres)`
-      : "";
-  return res.status(401).json({
-    error: `Senha inválida.${dicaComprimento} Confira ADMIN_LOCAL_PASS no painel Vercel → Settings → Environment Variables.`,
-  });
+  // Atraso fixo dificulta tentativas em massa (a função da Vercel não tem limitador próprio).
+  return setTimeout(() => {
+    res.status(401).json({ error: "Senha inválida." });
+  }, 800);
 };
