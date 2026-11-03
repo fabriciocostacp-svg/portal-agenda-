@@ -6,3 +6,7 @@ node_modules
 download
 # Só a raiz: ignorar /portal-config.js local. NÃO use "portal-config.js" — isso exclui api/portal-config.js.
 /portal-config.js
+
+# Arquivos internos que não precisam ir para o site
+*.sql
+README.md
